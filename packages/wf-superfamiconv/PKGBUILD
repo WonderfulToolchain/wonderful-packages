@@ -1,0 +1,37 @@
+# Maintainer: Adrian Siekierka <kontakt@asie.pl>
+pkgname=wf-superfamiconv
+_pkgver=0.9.2
+pkgver=0.9.2.r173.9440a56
+pkgrel=1
+epoch=
+pkgdesc="Flexible and composable tile graphics converter"
+arch=("i686" "x86_64")
+url="https://github.com/WonderfulToolchain/SuperFamiconv"
+license=("MIT")
+source=("$pkgname::git+https://github.com/WonderfulToolchain/SuperFamiconv#branch=master")
+depends=(runtime-musl)
+makedepends=(runtime-musl-dev)
+sha256sums=('SKIP')
+
+. "/wf/config/runtime-env-vars.sh"
+
+pkgver() {
+	pushd "$pkgname" >/dev/null
+	printf "%s.r%s.%s" "$_pkgver" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+	popd >/dev/null
+}
+
+build() {
+	# TODO: Once runtime-libstdc++/runtime-libgcc exists, use that in place
+	# of static compilation.
+	CFLAGS="-O3 -flto -U_FORTIFY_SOURCE" \
+	CXXFLAGS="-O3 -flto -U_FORTIFY_SOURCE" \
+	LDFLAGS="-static -static-libgcc -static-libstdc++" \
+		cmake -B build -S "$pkgname" -DCMAKE_BUILD_TYPE=Release
+	cmake --build build
+}
+
+package() {
+	mkdir -p "$pkgdir"/bin
+	cp -a build/superfamiconv "$pkgdir"/bin/wf-superfamiconv
+}

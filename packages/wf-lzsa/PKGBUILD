@@ -1,0 +1,33 @@
+# Maintainer: Adrian Siekierka <kontakt@asie.pl>
+pkgname=wf-lzsa
+_pkgver=1.3.12
+pkgver=1.3.12.r459.284cfaa
+pkgrel=1
+epoch=
+pkgdesc="Byte-aligned, efficient lossless packer that is optimized for fast decompression on 8-bit micros"
+arch=("i686" "x86_64")
+url="https://github.com/WonderfulToolchain/lzsa"
+license=("zlib")
+source=("$pkgname::git+https://github.com/WonderfulToolchain/lzsa#branch=master")
+depends=(runtime-musl)
+makedepends=(runtime-musl-dev)
+sha256sums=('SKIP')
+
+. "/wf/config/runtime-env-vars.sh"
+
+pkgver() {
+	pushd "$pkgname" >/dev/null
+	printf "%s.r%s.%s" "$_pkgver" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+	popd >/dev/null
+}
+
+build() {
+	cd "$pkgname"
+	make APP=wf-lzsa LDFLAGS="$WF_RUNTIME_LDFLAGS"
+}
+
+package() {
+	cd "$pkgname"
+	mkdir -p "$pkgdir"/bin
+	cp -a wf-lzsa "$pkgdir"/bin
+}

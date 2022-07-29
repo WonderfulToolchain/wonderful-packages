@@ -1,0 +1,40 @@
+# Maintainer: Adrian Siekierka <kontakt@asie.pl>
+pkgname=(runtime-musl runtime-musl-dev)
+pkgver=1.2.3
+pkgrel=1
+epoch=
+pkgdesc="musl runtime"
+arch=("i686" "x86_64")
+url="http://www.musl-libc.org"
+license=("MIT")
+source=("https://www.musl-libc.org/releases/musl-1.2.3.tar.gz")
+sha256sums=('7d5b0b6062521e4627e099e4c9dc8248d32a30285e959b7eecaa780cf8cfd4a4')
+
+prepare() {
+	mkdir -p "musl-$pkgver-build"
+}
+
+build() {
+	cd "musl-$pkgver"-build
+	../"musl-$pkgver"/configure --prefix=/ --syslibdir=/lib
+	make
+}
+
+package_runtime-musl() {
+	cd "musl-$pkgver"-build
+	mkdir -p "$pkgdir"/bin
+	mkdir -p "$pkgdir"/lib
+	cp lib/*.so "$pkgdir"/lib/
+	ln -s ../lib/libc.so "$pkgdir"/bin/ldd
+	ln -s libc.so "$pkgdir"/lib/ld-musl-$CARCH.so.1
+}
+
+package_runtime-musl-dev() {
+	pkgdesc="musl runtime development files"
+	depends=(runtime-musl)
+
+	cd "musl-$pkgver"-build
+	make DESTDIR="$pkgdir" install
+	rm "$pkgdir"/lib/*.so
+	rm "$pkgdir"/lib/*.so.*
+}

@@ -1,0 +1,57 @@
+# Maintainer: Adrian Siekierka <kontakt@asie.pl>
+pkgname=toolchain-gcc-ia16-elf-binutils
+_pkgver=2.38
+pkgver=2.38.r108932.d0134702cc
+pkgrel=1
+epoch=
+pkgdesc="GNU binary utilities (ia16 fork)"
+arch=("i686" "x86_64")
+url="https://github.com/WonderfulToolchain/binutils-ia16"
+license=("GPL-3.0-or-later")
+source=("$pkgname::git+https://github.com/WonderfulToolchain/binutils-ia16#branch=binutils-2_38-ia16")
+depends=(runtime-musl)
+makedepends=(runtime-musl-dev)
+groups=(toolchain-gcc-ia16-elf)
+sha256sums=('SKIP')
+
+. "/wf/config/runtime-env-vars.sh"
+
+prepare() {
+	mkdir -p binutils-build
+}
+
+pkgver() {
+	pushd "$pkgname" >/dev/null
+	printf "%s.r%s.%s" "$_pkgver" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+	popd >/dev/null
+}
+
+build() {
+	cd binutils-build
+	../"$pkgname"/configure \
+		--prefix="$WF_PATH"/toolchain/gcc-ia16-elf \
+		--target=ia16-elf \
+		--enable-targets=ia16-elf \
+		--enable-x86-hpa-segelf=yes \
+		--with-bugurl=https://github.com/WonderfulToolchain/binutils-ia16/issues \
+		--enable-gold \
+		--enable-ld-default \
+		--enable-plugins \
+		--disable-gdb \
+		--disable-gprof \
+		--disable-libdecnumber \
+		--disable-nls \
+		--disable-shared \
+		--disable-sim \
+		--disable-werror
+	make configure-host
+	make LDFLAGS="$WF_RUNTIME_LDFLAGS"
+}
+
+package() {
+	cd binutils-build
+	make DESTDIR="$pkgdir" install
+	cd "$pkgdir"
+	wf_relocate_path_to_destdir
+	rm toolchain/gcc-ia16-elf/share/info/dir
+}
