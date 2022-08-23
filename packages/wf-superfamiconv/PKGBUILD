@@ -9,7 +9,7 @@ arch=("i686" "x86_64")
 url="https://github.com/WonderfulToolchain/SuperFamiconv"
 license=("MIT")
 source=("$pkgname::git+https://github.com/WonderfulToolchain/SuperFamiconv#branch=master")
-depends=(runtime-musl)
+depends=(runtime-gcc-libs runtime-musl)
 makedepends=(runtime-musl-dev)
 sha256sums=('SKIP')
 
@@ -22,11 +22,8 @@ pkgver() {
 }
 
 build() {
-	# TODO: Once runtime-libstdc++/runtime-libgcc exists, use that in place
-	# of static compilation.
 	CFLAGS="-O3 -flto -U_FORTIFY_SOURCE" \
 	CXXFLAGS="-O3 -flto -U_FORTIFY_SOURCE" \
-	LDFLAGS="-static -static-libgcc -static-libstdc++" \
 		cmake -B build -S "$pkgname" -DCMAKE_BUILD_TYPE=Release
 	cmake --build build
 }

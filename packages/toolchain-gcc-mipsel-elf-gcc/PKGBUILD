@@ -9,7 +9,7 @@ _islver=0.21
 epoch=
 pkgdesc="The GNU Compiler Collection"
 arch=("i686" "x86_64")
-depends=(runtime-musl toolchain-gcc-mipsel-elf-binutils)
+depends=(runtime-gcc-libs runtime-musl toolchain-gcc-mipsel-elf-binutils)
 makedepends=(runtime-musl-dev)
 groups=(toolchain-gcc-mipsel-elf)
 url="https://gcc.gnu.org"
@@ -57,7 +57,7 @@ build() {
 		--prefix="/opt/wonderful/toolchain/gcc-mipsel-elf" \
 		--target=mipsel-elf \
 		--with-bugurl="http://github.com/WonderfulToolchain/wonderful-packages/issues" \
-		--with-stage1-ldflags="$WF_RUNTIME_LDFLAGS -static-libgcc -static-libstdc++" \
+		--with-stage1-ldflags="$WF_RUNTIME_LDFLAGS" \
 		--without-headers \
 		--enable-languages=c,lto \
 		--enable-lto \
@@ -95,5 +95,4 @@ package_toolchain-gcc-mipsel-elf-gcc-libs() {
 	make DESTDIR="$pkgdir" install-target-libgcc
 	cd "$pkgdir"
 	wf_relocate_path_to_destdir
-	rm toolchain/mipsel-elf/lib/gcc/mipsel-elf/$pkgver/include/unwind.h
 }

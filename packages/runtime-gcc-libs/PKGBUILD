@@ -1,0 +1,30 @@
+# Maintainer: Adrian Siekierka <kontakt@asie.pl>
+pkgname=(runtime-gcc-libs)
+pkgver=0.1.0
+pkgrel=1
+epoch=
+pkgdesc="GCC runtime libraries"
+arch=("i686" "x86_64")
+url=""
+license=("GPL-3.0-or-later")
+source=()
+sha256sums=()
+groups=(wonderful-base)
+
+. "/wf/config/runtime-env-vars.sh"
+	
+package() {
+	# Copy libgcc_s.so and libstdc++.so from the base system,
+	# which is guaranteed to be correct for the compiled binaries
+	# due to the janky way in which the containerized build works.
+
+	# ...
+	# I'm sorry.
+
+	cd "$pkgdir"
+	mkdir lib
+	cp -d /usr/lib/libstdc++.so* lib/
+	wf_runtime_patchelf lib/libstdc++.so
+	cp -d /usr/lib/libgcc_s.so* lib/
+	wf_runtime_patchelf lib/libgcc_s.so.1
+}

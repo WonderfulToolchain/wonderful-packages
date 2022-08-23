@@ -21,6 +21,8 @@ build() {
 }
 
 package_runtime-musl() {
+	groups=(wonderful-base)
+
 	cd "musl-$pkgver"-build
 	mkdir -p "$pkgdir"/bin
 	mkdir -p "$pkgdir"/lib
