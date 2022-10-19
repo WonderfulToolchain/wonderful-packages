@@ -2,7 +2,7 @@
 
 # Maintainer: Adrian Siekierka <kontakt@asie.pl>
 pkgname=(runtime-ffmpeg runtime-ffmpeg-dev)
-pkgver=5.0.1
+pkgver=5.1.2
 pkgrel=1
 epoch=
 pkgdesc="ffmpeg video library"
@@ -12,7 +12,7 @@ license=("MIT")
 source=("https://www.ffmpeg.org/releases/ffmpeg-$pkgver.tar.xz")
 depends=(runtime-musl)
 makedepends=(runtime-musl-dev)
-sha256sums=('ef2efae259ce80a240de48ec85ecb062cecca26e4352ffb3fda562c21a93007b')
+sha256sums=('SKIP')
 
 . "/wf/config/runtime-env-vars.sh"
 
