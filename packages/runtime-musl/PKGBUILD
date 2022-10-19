@@ -1,7 +1,7 @@
 # Maintainer: Adrian Siekierka <kontakt@asie.pl>
 pkgname=(runtime-musl runtime-musl-dev)
 pkgver=1.2.3
-pkgrel=1
+pkgrel=2
 epoch=
 pkgdesc="musl runtime"
 arch=("i686" "x86_64")
@@ -27,7 +27,7 @@ package_runtime-musl() {
 	mkdir -p "$pkgdir"/bin
 	mkdir -p "$pkgdir"/lib
 	cp lib/*.so "$pkgdir"/lib/
-	ln -s ../lib/libc.so "$pkgdir"/bin/ldd
+	ln -s ../lib/libc.so "$pkgdir"/bin/wf-runtime-ldd
 	ln -s libc.so "$pkgdir"/lib/ld-musl-$CARCH.so.1
 }
 

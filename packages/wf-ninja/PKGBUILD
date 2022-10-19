@@ -1,0 +1,33 @@
+# Maintainer: Adrian Siekierka <kontakt@asie.pl>
+pkgname=wf-ninja
+pkgver=1.11.1
+pkgrel=1
+epoch=
+pkgdesc="Small build system with a focus on speed"
+arch=("i686" "x86_64")
+url="https://ninja-build.org/"
+license=("Apache")
+source=(https://github.com/martine/ninja/archive/v$pkgver.zip)
+depends=(runtime-musl)
+makedepends=(runtime-musl-dev)
+sha256sums=('SKIP')
+
+. "/wf/config/runtime-env-vars.sh"
+
+build() {
+	cd ninja-"$pkgver"
+	CFLAGS="$WF_RUNTIME_INCLUDES" LDFLAGS="$WF_RUNTIME_LDFLAGS" \
+	cmake -Bbuild -DCMAKE_BUILD_TYPE=Release
+	cmake --build build
+}
+
+check() {
+	cd ninja-"$pkgver"
+	./build/ninja_test
+}
+
+package() {
+	cd ninja-"$pkgver"
+	mkdir -p "$pkgdir"/bin
+	cp -a build/ninja "$pkgdir"/bin/wf-ninja
+}
