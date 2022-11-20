@@ -2,7 +2,7 @@
 pkgname=(toolchain-gcc-ia16-elf-gcc)
 # toolchain-gcc-ia16-elf-gcc-libs)
 _pkgver=6.3.0
-pkgver=6.3.0.r147094.1291757c78e
+pkgver=6.3.0.r147112.c763cb6e365
 pkgrel=1
 _gmpver=6.1.2
 _mpfrver=3.1.5
@@ -16,7 +16,7 @@ makedepends=(runtime-musl-dev)
 groups=(toolchain-gcc-ia16-elf)
 url="https://github.com/WonderfulToolchain/gcc-ia16"
 license=("GPL-3.0-or-later")
-source=("$pkgname::git+https://github.com/WonderfulToolchain/gcc-ia16#branch=gcc-6_3_0-ia16-tkchia"
+source=("$pkgname::git+https://github.com/WonderfulToolchain/gcc-ia16#branch=wonderful-main"
         "http://gmplib.org/download/gmp/gmp-$_gmpver.tar.xz"
         "http://www.mpfr.org/mpfr-$_mpfrver/mpfr-$_mpfrver.tar.xz"
         "http://ftp.gnu.org/gnu/mpc/mpc-$_mpcver.tar.gz"
