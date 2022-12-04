@@ -1,14 +1,14 @@
 # Maintainer: Adrian Siekierka <kontakt@asie.pl>
 pkgname=toolchain-gcc-ia16-elf-binutils
-_pkgver=2.38
-pkgver=2.38.r108932.d0134702cc
+_pkgver=2.39
+pkgver=2.39.r110776.a350f9e672
 pkgrel=1
 epoch=
 pkgdesc="GNU binary utilities (ia16 fork)"
 arch=("i686" "x86_64")
 url="https://github.com/WonderfulToolchain/binutils-ia16"
 license=("GPL-3.0-or-later")
-source=("$pkgname::git+https://github.com/WonderfulToolchain/binutils-ia16#branch=binutils-2_38-ia16")
+source=("$pkgname::git+https://github.com/WonderfulToolchain/binutils-ia16#branch=binutils-2_39-ia16")
 depends=(runtime-musl)
 makedepends=(runtime-musl-dev)
 groups=(toolchain-gcc-ia16-elf)
