@@ -1,3 +1,9 @@
 #!/bin/sh
-podman build -t wonderful-x86_64 .
-podman run -i -v $(pwd):/wf wonderful-x86_64 su -c "cd /wf/build/packages && ( rm wonderful.* ; repo-add wonderful.db.tar.gz *.pkg.tar* )" wfbuilder
+ROOT_DIR=$(pwd)
+
+for i in `ls build/packages/`; do
+	pushd containers/x86_64
+	podman build -t wonderful-x86_64 .
+	podman run -i -v "$ROOT_DIR":/wf wonderful-x86_64 su -c "cd /wf/build/packages/"$i" && ( rm wonderful.* ; repo-add wonderful.db.tar.gz *.pkg.tar* )" wfbuilder
+	popd
+done

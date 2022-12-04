@@ -5,7 +5,7 @@ pkgver=0.9.2.r173.9440a56
 pkgrel=1
 epoch=
 pkgdesc="Flexible and composable tile graphics converter"
-arch=("i686" "x86_64")
+arch=("i686" "x86_64" "armv6h" "aarch64")
 url="https://github.com/WonderfulToolchain/SuperFamiconv"
 license=("MIT")
 source=("$pkgname::git+https://github.com/WonderfulToolchain/SuperFamiconv#branch=master")

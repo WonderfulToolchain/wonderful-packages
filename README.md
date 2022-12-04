@@ -8,3 +8,15 @@
 | x86_64 | x86_64 | x86_64 |
 | ARMv6+, hard float | arm32v6 | armv6h |
 | AArch64 | aarch64 | aarch64 |
+
+## Known issues
+
+### sudo: effective uid is not 0, is /usr/bin/sudo on a file system with the 'nosuid' option set or an NFS file system without root privileges?
+
+On Arch Linux, this can be resolved by editing the following files:
+
+ * `/usr/lib/binfmt.d/qemu-arm-static.conf`
+ * `/usr/lib/binfmt.d/qemu-aarch64-static.conf`
+ * etc.
+
+to replace the trailing flag `F` with `FOC`.
