@@ -1,10 +1,10 @@
 # Maintainer: Adrian Siekierka <kontakt@asie.pl>
 pkgname=(runtime-gcc-libs)
-pkgver=0.1.0
+pkgver=0.2.0
 pkgrel=1
 epoch=
 pkgdesc="GCC runtime libraries"
-arch=("i686" "x86_64")
+arch=("i686" "x86_64" "armv6h" "aarch64")
 url=""
 license=("GPL-3.0-or-later")
 source=()
