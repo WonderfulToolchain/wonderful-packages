@@ -12,6 +12,9 @@ RUN apk add --no-cache build-base fakeroot git pacman pacman-makepkg curl xz zst
 # Configure pacman/makepkg
 RUN mkdir -p /opt/wonderful/pacman/db
 COPY makepkg.conf pacman.conf /etc
+# wf-pacman/gpgme workaround: if no pkgconfig directory exists in any of the library
+# search paths, the check for gpg-error will fail
+RUN mkdir -p /usr/lib/pkgconfig
 # Add build user
 RUN adduser -D wfbuilder
 RUN sh -c 'echo "wfbuilder ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/wfbuilder && chmod 0440 /etc/sudoers.d/wfbuilder'

@@ -17,7 +17,8 @@ if [[ z"$1" == "z" || z"$1" == "zall" ]]; then
 	if grep -q "arch=(any)" packages/$PKGNAME/PKGBUILD; then
 		build_package x86_64
 	else
-		for i in i686 x86_64 arm32v6 aarch64; do
+		# i686
+		for i in x86_64 arm32v6 aarch64; do
 			build_package "$i"
 		done
 	fi
