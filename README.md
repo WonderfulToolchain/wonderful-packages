@@ -1,5 +1,13 @@
 # wonderful-packages
 
+Repository used to build binary packages for Wonderful's Pacman repo. Somewhat internal.
+
+## Hints
+
+    $ ./build-package.sh packages/wf-pacman [x86_64]
+    $ ./rebuild-repository.sh
+    $ ./build-bootstrap.sh x86_64
+
 ## Supported architectures
 
 | Description | Container/Shell argument | makepkg/pacman | Supported |
