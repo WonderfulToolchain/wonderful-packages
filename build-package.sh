@@ -4,6 +4,11 @@ PKGNAME=${1##*/}
 shift
 ROOT_DIR=$(pwd)
 
+if [[ z"$PKGNAME" == "z" ]]; then
+	echo "Usage: build-package.sh <name> [architectures...|all]"
+	exit 1
+fi
+
 build_package() {
 	PKGARCH="$1"
 	pushd containers/"$PKGARCH"/
@@ -13,7 +18,13 @@ build_package() {
 	popd
 }
 
-if [[ z"$1" == "z" || z"$1" == "zall" ]]; then
+build_package_native() {
+	sh -c 'pacman -Syu && su -c "cd /wf/packages/'$PKGNAME' && makepkg -C --clean --syncdeps --force --noconfirm --skippgpcheck '$PKGNAME'" wfbuilder'
+}
+
+if [[ z"$1" == "znative" ]]; then
+	build_package_native
+elif [[ z"$1" == "z" || z"$1" == "zall" ]]; then
 	if grep -q "arch=(any)" packages/$PKGNAME/PKGBUILD; then
 		build_package x86_64
 	else
