@@ -1,7 +1,7 @@
 # Maintainer: Adrian Siekierka <kontakt@asie.pl>
 pkgname=(toolchain-gcc-ia16-elf-gcc toolchain-gcc-ia16-elf-gcc-libs)
 _pkgver=6.3.0
-pkgver=6.3.0.r147116.4d1c55329da
+pkgver=6.3.0.r147129.c8f0f13e700
 pkgrel=1
 _gmpver=6.1.2
 _mpfrver=3.1.5
@@ -58,6 +58,7 @@ build() {
 		--with-stage1-ldflags="$WF_RUNTIME_LDFLAGS" \
 		--without-headers \
 		--enable-languages=c,c++ \
+		--enable-lto \
 		--disable-bootstrap \
 		--disable-gcov \
 		--disable-nls \
@@ -90,7 +91,7 @@ package_toolchain-gcc-ia16-elf-gcc-libs() {
 	cd gcc-build
 
 	# WSwan memory model versions of libgcc
-	for MEMORY_MODEL in small medium; do
+	for MEMORY_MODEL in tiny small medium; do
 	        make clean-target-libgcc
         	make all-target-libgcc \
 			CFLAGS_FOR_TARGET="-O2 -march=v30mz -mtune=v30mz -mregparmcall -mcmodel=$MEMORY_MODEL -msegelf" \
