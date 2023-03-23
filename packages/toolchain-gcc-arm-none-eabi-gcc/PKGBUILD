@@ -1,0 +1,14 @@
+# Maintainer: Adrian Siekierka <kontakt@asie.pl>
+
+GCC_TARGET=arm-none-eabi
+GCC_EXTRA_ARGS=(--enable-languages=c,c++,lto --enable-lto --enable-interwork --enable-multilib)
+
+. "../templates/toolchain-gcc-gcc12.PKGBUILD"
+
+package_toolchain-gcc-arm-none-eabi-gcc() {
+	package_toolchain-gcc-template-gcc
+}
+
+package_toolchain-gcc-arm-none-eabi-gcc-libs() {
+	package_toolchain-gcc-template-gcc-libs
+}

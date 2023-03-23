@@ -1,98 +1,14 @@
 # Maintainer: Adrian Siekierka <kontakt@asie.pl>
-pkgname=(toolchain-gcc-mipsel-elf-gcc toolchain-gcc-mipsel-elf-gcc-libs)
-pkgver=12.1.0
-pkgrel=1
-_gmpver=6.1.2
-_mpfrver=4.0.2
-_mpcver=1.1.0
-_islver=0.21
-epoch=
-pkgdesc="The GNU Compiler Collection"
-arch=("i686" "x86_64")
-depends=(runtime-gcc-libs runtime-musl toolchain-gcc-mipsel-elf-binutils)
-makedepends=(runtime-musl-dev)
-groups=(toolchain-gcc-mipsel-elf)
-url="https://gcc.gnu.org"
-license=("GPL-3.0-or-later")
-source=("http://ftp.gnu.org/gnu/gcc/gcc-$pkgver/gcc-$pkgver.tar.xz"
-        "http://gmplib.org/download/gmp/gmp-$_gmpver.tar.xz"
-        "http://www.mpfr.org/mpfr-$_mpfrver/mpfr-$_mpfrver.tar.xz"
-        "http://ftp.gnu.org/gnu/mpc/mpc-$_mpcver.tar.gz"
-	"https://libisl.sourceforge.io/isl-$_islver.tar.xz"
-	"gcc12-poison-system-directories.patch"
-	"poisoned-calloc-fix-libcc1.patch"
-	"poisoned-calloc-fix-libgccjit.patch")
-sha256sums=(
-	'62fd634889f31c02b64af2c468f064b47ad1ca78411c45abe6ac4b5f8dd19c7b'
-	'87b565e89a9a684fe4ebeeddb8399dce2599f9c9049854ca8c0dfbdea0e21912'
-	'1d3be708604eae0e42d578ba93b390c2a145f17743a744d8f3f8c2ad5855a38a'
-	'6985c538143c1208dcb1ac42cedad6ff52e267b47e5f970183a3e75125b43c2e'
-	'777058852a3db9500954361e294881214f6ecd4b594c00da5eee974cd6a54960'
-	'ff867cbed6b359235122e5ee91708b931f8154dadc6cc3f6412be53eff76ca7b'
-	'f220ef752d1ff9b9de040a32468671b3c7980463c61bd677c8a36a86339b8daf'
-	'f512d658a3a6183163e4fe6f52a5abb9b30ba45c046c83729add099a77394a1b'
-)
 
-. "/wf/config/runtime-env-vars.sh"
+GCC_TARGET=mipsel-elf
+GCC_EXTRA_ARGS=(--enable-languages=c,c++,lto --enable-lto)
 
-prepare() {
-	mkdir -p "gcc-build"
-	cd "gcc-$pkgver"
-	patch -p1 <../poisoned-calloc-fix-libcc1.patch
-	patch -p1 <../poisoned-calloc-fix-libgccjit.patch
-	patch -p1 <../gcc12-poison-system-directories.patch
-
-	# HACK: hijack RTEMS's libstdc++ crossconfig for our own purposes (which has the dynamic feature checks we want)
-	sed -i "s/\*-rtems\*/*-unknown*/" libstdc++-v3/configure
-
-	ln -s ../"gmp-$_gmpver" gmp
-	ln -s ../"mpfr-$_mpfrver" mpfr
-	ln -s ../"mpc-$_mpcver" mpc
-	ln -s ../"isl-$_islver" isl
-}
-
-build() {
-	cd gcc-build
-	../"gcc-$pkgver"/configure \
-		--prefix="/opt/wonderful/toolchain/gcc-mipsel-elf" \
-		--target=mipsel-elf \
-		--with-bugurl="http://github.com/WonderfulToolchain/wonderful-packages/issues" \
-		--with-stage1-ldflags="$WF_RUNTIME_LDFLAGS" \
-		--without-headers \
-		--enable-languages=c,lto \
-		--enable-lto \
-		--enable-poison-system-directories \
-		--disable-bootstrap \
-		--disable-gcov \
-		--disable-nls \
-		--disable-shared \
-		--disable-werror \
-		--disable-libquadmath \
-		--disable-libssp \
-		--disable-libstdcxx \
-		--disable-libstdcxx-pch \
-		--disable-libunwind-exceptions \
-		--with-float=soft \
-		--with-isl
-
-	make
-}
+. "../templates/toolchain-gcc-gcc12.PKGBUILD"
 
 package_toolchain-gcc-mipsel-elf-gcc() {
-	cd gcc-build
-	make DESTDIR="$pkgdir" install-gcc install-libcc1
-	cd "$pkgdir"
-	wf_relocate_path_to_destdir
-	rm toolchain/gcc-mipsel-elf/share/info/dir
+	package_toolchain-gcc-template-gcc
 }
 
 package_toolchain-gcc-mipsel-elf-gcc-libs() {
-	pkgdesc="GCC-provided libraries"
-	depends=("toolchain-gcc-mipsel-elf-binutils" "toolchain-gcc-mipsel-elf-gcc")
-	options=(!strip)
-
-	cd gcc-build
-	make DESTDIR="$pkgdir" install-target-libgcc
-	cd "$pkgdir"
-	wf_relocate_path_to_destdir
+	package_toolchain-gcc-template-gcc-libs
 }
