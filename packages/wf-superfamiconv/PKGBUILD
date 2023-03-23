@@ -15,11 +15,7 @@ sha256sums=('SKIP')
 
 . "/wf/config/runtime-env-vars.sh"
 
-pkgver() {
-	pushd "$pkgname" >/dev/null
-	printf "%s.r%s.%s" "$_pkgver" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
-	popd >/dev/null
-}
+. "../templates/git-pkgver.PKGBUILD"
 
 build() {
 	CFLAGS="-O3 -flto -U_FORTIFY_SOURCE $WF_RUNTIME_INCLUDES" \

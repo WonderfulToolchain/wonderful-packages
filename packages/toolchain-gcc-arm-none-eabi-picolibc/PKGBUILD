@@ -1,0 +1,66 @@
+# Maintainer: Adrian Siekierka <kontakt@asie.pl>
+pkgname=toolchain-gcc-arm-none-eabi-picolibc-generic
+_pkgver=1.8
+pkgver=1.8.r22944.0694a78fc
+pkgrel=1
+epoch=
+pkgdesc="GNU binary utilities (ia16 fork)"
+arch=(any)
+url="https://github.com/picolibc/picolibc"
+license=("BSD-3-Clause")
+source=(
+	"picolibc::git+https://github.com/picolibc/picolibc#branch=main"
+	"cross-thumb.txt"
+)
+depends=(runtime-musl toolchain-gcc-arm-none-eabi-binutils toolchain-gcc-arm-none-eabi-gcc)
+makedepends=(runtime-musl-dev)
+groups=(toolchain-gcc-arm-none-eabi)
+sha256sums=(
+	'SKIP'
+	'SKIP'
+)
+
+. "/wf/config/runtime-env-vars.sh"
+
+prepare() {
+	mkdir -p picolibc-build
+}
+
+GIT_REPO_DIR=picolibc
+. "../templates/git-pkgver.PKGBUILD"
+
+build() {
+	cd picolibc-build
+	export PATH=/opt/wonderful/toolchain/gcc-arm-none-eabi/bin:$PATH
+
+	meson setup \
+		--cross-file=../cross-thumb.txt \
+		-Dmultilib=false \
+		-Dpicocrt=false \
+		-Dpicolib=false \
+		-Dsemihost=false \
+		-Dspecsdir=none \
+		-Dtests=false \
+		\
+		-Dio-long-long=true \
+		-Dio-pos-args=true \
+		\
+		-Dposix-console=true \
+		-Dformat-default=double \
+		\
+		-Dnewlib-nano-malloc=false \
+		\
+		-Dprefix="$WF_PATH"/toolchain/gcc-arm-none-eabi \
+		-Dlibdir=lib \
+		-Dincludedir=include \
+		../picolibc
+
+	ninja
+}
+
+package() {
+	cd picolibc-build
+	DESTDIR="$pkgdir" ninja install
+	cd "$pkgdir"
+	wf_relocate_path_to_destdir
+}

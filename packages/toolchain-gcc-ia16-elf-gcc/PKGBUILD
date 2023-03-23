@@ -43,11 +43,7 @@ prepare() {
 	ln -s ../"isl-$_islver" isl
 }
 
-pkgver() {
-	pushd "$pkgname" >/dev/null
-	printf "%s.r%s.%s" "$_pkgver" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
-	popd >/dev/null
-}
+. "../templates/git-pkgver.PKGBUILD"
 
 build() {
 	cd gcc-build
