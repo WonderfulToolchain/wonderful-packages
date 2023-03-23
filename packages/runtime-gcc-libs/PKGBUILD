@@ -1,4 +1,7 @@
-# Maintainer: Adrian Siekierka <kontakt@asie.pl>
+# SPDX-License-Identifier: CC0-1.0
+#
+# SPDX-FileContributor: Adrian "asie" Siekierka, 2023
+
 pkgname=(runtime-gcc-libs)
 pkgver=0.2.0
 pkgrel=1

@@ -1,10 +1,15 @@
-# Maintainer: Adrian Siekierka <kontakt@asie.pl>
+# SPDX-License-Identifier: CC0-1.0
+#
+# SPDX-FileContributor: Adrian "asie" Siekierka, 2023
+
 if [ "x$GCC_IS_LIBSTDCXX" = "xyes" ]; then
 	pkgname=(toolchain-gcc-$GCC_TARGET-libstdcxx-picolibc)
-	depends=(toolchain-gcc-$GCC_TARGET-gcc toolchain-gcc-$GCC_TARGET-picolibc)
+	depends=(toolchain-gcc-$GCC_TARGET-gcc toolchain-gcc-$GCC_TARGET-picolibc-generic)
+	arch=(any)
 else
 	pkgname=(toolchain-gcc-$GCC_TARGET-gcc toolchain-gcc-$GCC_TARGET-gcc-libs)
 	depends=(runtime-gcc-libs runtime-musl toolchain-gcc-$GCC_TARGET-binutils)
+	arch=("i686" "x86_64")
 fi
 pkgver=12.2.0
 pkgrel=1
@@ -14,7 +19,6 @@ _mpcver=1.1.0
 _islver=0.21
 epoch=
 pkgdesc="The GNU Compiler Collection"
-arch=("i686" "x86_64")
 makedepends=(runtime-musl-dev)
 groups=(toolchain-gcc-$GCC_TARGET)
 url="https://gcc.gnu.org"
@@ -59,11 +63,12 @@ prepare() {
 build() {
 	if [ "x$GCC_IS_LIBSTDCXX" = "xyes" ]; then
 		build_libstdcxx_arg="--enable-libstdcxx"
+		export PATH=/opt/wonderful/toolchain/gcc-$GCC_TARGET/bin:$PATH
 	else
 		build_libstdcxx_arg="--disable-libstdcxx"
 	fi
 	cd gcc-build
-	../"gcc-$pkgver"/configure \
+	../"gcc-$pkgver"/libstdc++-v3/configure \
 		--prefix="/opt/wonderful/toolchain/gcc-$GCC_TARGET" \
 		--target=$GCC_TARGET \
 		--with-bugurl="http://github.com/WonderfulToolchain/wonderful-packages/issues" \
@@ -79,7 +84,11 @@ build() {
 		--disable-libquadmath \
 		--disable-libssp \
 		--disable-libstdcxx-pch \
+		--disable-libstdcxx-threads \
+		--disable-libstdcxx-verbose \
 		--disable-libunwind-exceptions \
+		--disable-threads \
+		--enable-tls \
 		--with-float=soft \
 		--with-isl \
 		$build_libstdcxx_arg \
@@ -105,6 +114,21 @@ package_toolchain-gcc-template-gcc-libs() {
 	make DESTDIR="$pkgdir" install-target-libgcc
 	cd "$pkgdir"
 	wf_relocate_path_to_destdir
-
 	rm toolchain/gcc-$GCC_TARGET/lib/gcc/$GCC_TARGET/*/include/unwind.h
+}
+
+package_toolchain-gcc-template-libstdcxx-picolibc() {
+	pkgdesc="GCC-provided libstdc++, compiled for use with picolibc"
+	options=(!strip)
+
+	cd gcc-build
+	make DESTDIR="$pkgdir" install
+	cd "$pkgdir"
+	wf_relocate_path_to_destdir
+	rm -r toolchain/gcc-$GCC_TARGET/lib/*.py
+	rm -r toolchain/gcc-$GCC_TARGET/share
+
+	mkdir toolchain/gcc-$GCC_TARGET/$GCC_TARGET
+	mv toolchain/gcc-$GCC_TARGET/include toolchain/gcc-$GCC_TARGET/$GCC_TARGET/
+	mv toolchain/gcc-$GCC_TARGET/lib toolchain/gcc-$GCC_TARGET/$GCC_TARGET/
 }

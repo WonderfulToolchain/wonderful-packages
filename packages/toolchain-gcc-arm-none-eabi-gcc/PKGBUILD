@@ -1,4 +1,6 @@
-# Maintainer: Adrian Siekierka <kontakt@asie.pl>
+# SPDX-License-Identifier: CC0-1.0
+#
+# SPDX-FileContributor: Adrian "asie" Siekierka, 2023
 
 GCC_TARGET=arm-none-eabi
 GCC_EXTRA_ARGS=(--enable-languages=c,c++,lto --enable-lto --enable-interwork --enable-multilib)

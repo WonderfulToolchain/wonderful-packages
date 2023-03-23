@@ -1,3 +1,7 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# SPDX-FileContributor: Adrian "asie" Siekierka, 2023
+
 pkgver() {
 	if [ "x$GIT_REPO_DIR" = "x" ]; then
 		pushd "$pkgname" >/dev/null

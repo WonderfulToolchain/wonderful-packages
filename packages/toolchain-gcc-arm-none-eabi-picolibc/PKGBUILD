@@ -1,4 +1,7 @@
-# Maintainer: Adrian Siekierka <kontakt@asie.pl>
+# SPDX-License-Identifier: CC0-1.0
+#
+# SPDX-FileContributor: Adrian "asie" Siekierka, 2023
+
 pkgname=toolchain-gcc-arm-none-eabi-picolibc-generic
 _pkgver=1.8
 pkgver=1.8.r22944.0694a78fc
@@ -51,8 +54,8 @@ build() {
 		-Dnewlib-nano-malloc=false \
 		\
 		-Dprefix="$WF_PATH"/toolchain/gcc-arm-none-eabi \
-		-Dlibdir=lib \
-		-Dincludedir=include \
+		-Dlibdir=arm-none-eabi/lib \
+		-Dincludedir=arm-none-eabi/include \
 		../picolibc
 
 	ninja

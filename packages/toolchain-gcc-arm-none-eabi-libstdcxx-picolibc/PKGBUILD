@@ -1,0 +1,25 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# SPDX-FileContributor: Adrian "asie" Siekierka, 2023
+
+arch=(any)
+
+GCC_TARGET=arm-none-eabi
+# A bunch of hacks here to build libstdc++-v3 with custom CXXFLAGS and without the rest of GCC:
+# - setting CFLAGS/CXXFLAGS and host to the target platform
+# - setting --with-target-subdir, which disables tests for runtime system-specific functions (which would fail with the --host change)
+
+GCC_EXTRA_ARGS=(--host=$GCC_TARGET --with-target-subdir --enable-languages=c,c++,lto --enable-lto --enable-interwork --enable-multilib)
+GCC_IS_LIBSTDCXX=yes
+
+TARGET_CFLAGS="-mthumb-interwork -ffunction-sections"
+export CFLAGS="$TARGET_CFLAGS"
+export CFLAGS_FOR_TARGET="$TARGET_CFLAGS"
+export CXXFLAGS="$TARGET_CFLAGS"
+export CXXFLAGS_FOR_TARGET="$TARGET_CFLAGS"
+
+. "../templates/toolchain-gcc-gcc12.PKGBUILD"
+
+package_toolchain-gcc-arm-none-eabi-libstdcxx-picolibc() {
+	package_toolchain-gcc-template-libstdcxx-picolibc
+}

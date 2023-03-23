@@ -1,6 +1,8 @@
-# TODO: trim down decoder/parser/demuxer/bsf list
+# SPDX-License-Identifier: CC0-1.0
+#
+# SPDX-FileContributor: Adrian "asie" Siekierka, 2023
 
-# Maintainer: Adrian Siekierka <kontakt@asie.pl>
+# TODO: trim down decoder/parser/demuxer/bsf list
 pkgname=(runtime-ffmpeg runtime-ffmpeg-dev)
 pkgver=5.1.2
 pkgrel=1

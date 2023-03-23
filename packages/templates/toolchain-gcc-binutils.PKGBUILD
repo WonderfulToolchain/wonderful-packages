@@ -1,4 +1,7 @@
-# Maintainer: Adrian Siekierka <kontakt@asie.pl>
+# SPDX-License-Identifier: CC0-1.0
+#
+# SPDX-FileContributor: Adrian "asie" Siekierka, 2023
+
 pkgname=toolchain-gcc-$GCC_TARGET-binutils
 pkgver=2.40
 pkgrel=1

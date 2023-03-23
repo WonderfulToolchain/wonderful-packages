@@ -1,4 +1,7 @@
-# Maintainer: Adrian Siekierka <kontakt@asie.pl>
+# SPDX-License-Identifier: CC0-1.0
+#
+# SPDX-FileContributor: Adrian "asie" Siekierka, 2023
+
 pkgname=toolchain-gcc-ia16-elf-binutils
 _pkgver=2.39
 pkgver=2.39.r110776.a350f9e672
