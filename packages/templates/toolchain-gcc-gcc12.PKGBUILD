@@ -12,7 +12,7 @@ else
 	arch=("i686" "x86_64")
 fi
 pkgver=12.2.0
-pkgrel=1
+pkgrel=2
 _gmpver=6.1.2
 _mpfrver=4.0.2
 _mpcver=1.1.0
@@ -63,12 +63,15 @@ prepare() {
 build() {
 	if [ "x$GCC_IS_LIBSTDCXX" = "xyes" ]; then
 		build_libstdcxx_arg="--enable-libstdcxx"
+		configure_cmd=../"gcc-$pkgver"/libstdc++-v3/configure
 		export PATH=/opt/wonderful/toolchain/gcc-$GCC_TARGET/bin:$PATH
 	else
 		build_libstdcxx_arg="--disable-libstdcxx"
+		configure_cmd=../"gcc-$pkgver"/configure
 	fi
 	cd gcc-build
-	../"gcc-$pkgver"/libstdc++-v3/configure \
+
+	$configure_cmd \
 		--prefix="/opt/wonderful/toolchain/gcc-$GCC_TARGET" \
 		--target=$GCC_TARGET \
 		--with-bugurl="http://github.com/WonderfulToolchain/wonderful-packages/issues" \
@@ -102,7 +105,16 @@ package_toolchain-gcc-template-gcc() {
 	make DESTDIR="$pkgdir" install-gcc install-libcc1
 	cd "$pkgdir"
 	wf_relocate_path_to_destdir
+
 	rm toolchain/gcc-$GCC_TARGET/share/info/dir
+	rm toolchain/gcc-$GCC_TARGET/lib/gcc/$GCC_TARGET/$pkgver/include-fixed/README
+
+	# HACK: As we don't build with a C library present, limits.h
+	# assumes no such library is present.
+
+	cd "$srcdir"/gcc-"$pkgver"/gcc
+	cat limitx.h glimits.h limity.h > "$pkgdir"/toolchain/gcc-$GCC_TARGET/lib/gcc/$GCC_TARGET/$pkgver/include-fixed/limits.h
+
 }
 
 package_toolchain-gcc-template-gcc-libs() {
@@ -114,6 +126,8 @@ package_toolchain-gcc-template-gcc-libs() {
 	make DESTDIR="$pkgdir" install-target-libgcc
 	cd "$pkgdir"
 	wf_relocate_path_to_destdir
+
+	# HACK: Avoid conflict with -gcc package.
 	rm toolchain/gcc-$GCC_TARGET/lib/gcc/$GCC_TARGET/*/include/unwind.h
 }
 
