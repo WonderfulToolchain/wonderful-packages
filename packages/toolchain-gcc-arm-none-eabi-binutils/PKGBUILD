@@ -2,7 +2,8 @@
 #
 # SPDX-FileContributor: Adrian "asie" Siekierka, 2023
 
+pkgrel=2
 GCC_TARGET=arm-none-eabi
-GCC_EXTRA_ARGS=--enable-interwork --enable-multilib
+GCC_EXTRA_ARGS=(--enable-interwork --enable-multilib)
 
 . "../templates/toolchain-gcc-binutils.PKGBUILD"

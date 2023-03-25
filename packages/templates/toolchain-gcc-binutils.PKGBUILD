@@ -4,7 +4,6 @@
 
 pkgname=toolchain-gcc-$GCC_TARGET-binutils
 pkgver=2.40
-pkgrel=1
 epoch=
 pkgdesc="GNU binary utilities"
 arch=("i686" "x86_64")
