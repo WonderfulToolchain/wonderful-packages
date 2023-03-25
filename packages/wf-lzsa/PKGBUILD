@@ -3,8 +3,8 @@
 # SPDX-FileContributor: Adrian "asie" Siekierka, 2023
 
 pkgname=wf-lzsa
-_pkgver=1.3.12
-pkgver=1.3.12.r459.284cfaa
+_pkgver=1.4.1
+pkgver=1.4.1.r476.8b90350
 pkgrel=1
 epoch=
 pkgdesc="Byte-aligned, efficient lossless packer that is optimized for fast decompression on 8-bit micros"
