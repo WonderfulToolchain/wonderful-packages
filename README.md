@@ -28,10 +28,10 @@ Some scripts are sourced from external locations and may be licensed under more 
 
 ### sudo: effective uid is not 0, is /usr/bin/sudo on a file system with the 'nosuid' option set or an NFS file system without root privileges?
 
-On Arch Linux, this can be resolved by editing the following files:
+On Arch Linux, this can be resolved using the following steps:
 
- * `/usr/lib/binfmt.d/qemu-arm-static.conf`
- * `/usr/lib/binfmt.d/qemu-aarch64-static.conf`
- * etc.
-
-to replace the trailing flag `F` with `FOC`.
+1. Edit the following files to replace the trailing flag `F` with `FOC`, or `FP` with `FPOC`:
+  * `/usr/lib/binfmt.d/qemu-arm-static.conf`
+  * `/usr/lib/binfmt.d/qemu-aarch64-static.conf`
+  * etc.
+2. Run `systemctl restart systemd-binfmt` to apply changes.
