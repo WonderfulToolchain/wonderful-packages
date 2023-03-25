@@ -1,0 +1,121 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# SPDX-FileContributor: Adrian "asie" Siekierka, 2023
+
+pkgname=(toolchain-llvm-teak-llvm toolchain-llvm-teak-llvm-dev)
+_pkgver=11.0.0
+pkgver=11.0.0.r340438.dae9e1a1e6a
+pkgrel=1
+epoch=
+pkgdesc="LLVM fork modified to target Teak DSPs"
+arch=("i686" "x86_64")
+url="https://github.com/WonderfulToolchain/teak-llvm"
+license=("Apache-2.0")
+source=(
+	"teak-llvm::git+https://github.com/WonderfulToolchain/teak-llvm"
+)
+depends=(runtime-musl)
+makedepends=(runtime-musl-dev)
+sha256sums=(
+	'SKIP'
+)
+
+. "/wf/config/runtime-env-vars.sh"
+
+prepare() {
+	mkdir -p teak-llvm-build
+}
+
+GIT_REPO_DIR=teak-llvm
+. "../templates/git-pkgver.PKGBUILD"
+
+build() {
+	cd teak-llvm-build
+
+	# Explanation behind configuration choices:
+	# LLVM_USE_LINKER: lower linking RAM usage
+	# LLVM_*_LLVM_DYLIB, LLVM_ENABLE_*, LLVM_INCLUDE_*: reduce toolchain size
+	# LLVM_*_TARGETS_TO_BUILD: build Teak target only
+	# LLVM_ENABLE_DUMP: required for teak-llvm
+
+        LDFLAGS="$WF_RUNTIME_LDFLAGS" \
+		cmake -G Ninja \
+		-DCMAKE_INSTALL_PREFIX="$WF_PATH"/toolchain/llvm-teak \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DLLVM_USE_LINKER=lld \
+		-DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD="Teak" \
+		-DLLVM_TARGETS_TO_BUILD="" \
+		-DLLVM_BUILD_LLVM_DYLIB=ON \
+		-DLLVM_LINK_LLVM_DYLIB=ON \
+		-DLLVM_ENABLE_BINDINGS=OFF \
+		-DLLVM_INCLUDE_BENCHMARKS=OFF \
+		-DLLVM_INCLUDE_EXAMPLES=OFF \
+		-DLLVM_INCLUDE_TESTS=OFF \
+		-DLLVM_ENABLE_PROJECTS="llvm;clang;lld" \
+		-DLLVM_ENABLE_DUMP=ON \
+		../teak-llvm/llvm
+
+	ninja
+}
+
+package_toolchain-llvm-teak-llvm() {
+	groups=(toolchain-llvm-teak)
+
+	cd teak-llvm-build
+	DESTDIR="$pkgdir" ninja install
+	cd "$pkgdir"
+	wf_relocate_path_to_destdir
+
+	cd toolchain/llvm-teak/bin
+	for i in *; do
+		mv "$i" teak-"$i"
+	done
+	cd ..
+
+	# remove unnecessary files
+	rm -r share/clang share/opt-viewer share/scan-build share/scan-view
+	rm -r include lib/*.a lib/cmake bin/*-test
+
+	# moved to llvm-dev
+	rm bin/teak-llvm-config
+	rm bin/teak-llvm-tblgen
+
+	# removed
+	# TODO: expand this list
+	rm bin/teak-llvm-cvtres
+	rm bin/teak-llvm-dlltool
+	rm bin/teak-llvm-pdbutil
+	rm bin/teak-llvm-rc
+	rm bin/teak-wasm-ld
+}
+
+package_toolchain-llvm-teak-llvm-dev() {
+	pkgdesc="Development libraries for LLVM fork modified to target Teak DSPs"
+
+	cd teak-llvm-build
+	DESTDIR="$pkgdir" ninja install
+	cd "$pkgdir"
+	wf_relocate_path_to_destdir
+
+	cd toolchain/llvm-teak/bin
+	for i in *; do
+		mv "$i" teak-"$i"
+	done
+	cd ..
+
+	# remove unnecessary files
+	rm -r libexec share
+
+	# moved to llvm-dev
+	mkdir bin2
+	mv bin/teak-llvm-config bin2/
+	mv bin/teak-llvm-tblgen bin2/
+	rm -r bin
+	mv bin2 bin
+
+	mkdir lib2
+	mv lib/*.a lib2/
+	mv lib/cmake lib2/
+	rm -r lib
+	mv lib2 lib
+}
