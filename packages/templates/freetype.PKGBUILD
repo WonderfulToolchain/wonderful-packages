@@ -11,6 +11,7 @@ url="https://freetype.org/"
 license=("FTL")
 source=(
 	"https://download.savannah.gnu.org/releases/freetype/freetype-$pkgver.tar.xz"
+	"freetype-2.13.0-smaller.patch"
 )
 depends=(
 	toolchain-$WF_TOOLCHAIN-binutils
@@ -21,10 +22,16 @@ depends=(
 groups=(toolchain-$WF_TOOLCHAIN-extra)
 sha256sums=(
 	'5ee23abd047636c24b2d43c6625dcafc66661d1aca64dec9e0d05df29592624c'
+	'SKIP'
 )
 options=(!strip)
 
 . "/wf/config/runtime-env-vars.sh"
+
+prepare() {
+	cd freetype-$pkgver
+	patch -p1 <../freetype-2.13.0-smaller.patch
+}
 
 build() {
 	wf_use_toolchain $WF_TOOLCHAIN $WF_TARGET
