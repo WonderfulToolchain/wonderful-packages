@@ -5,7 +5,7 @@
 pkgname=toolchain-gcc-arm-none-eabi-picolibc-generic
 _pkgver=1.8
 pkgver=1.8.r22945.f28657625
-pkgrel=1
+pkgrel=2
 epoch=
 pkgdesc="picolibc-based C library for Wonderful toolchain"
 arch=(any)
@@ -13,12 +13,14 @@ url="https://github.com/WonderfulToolchain/wf-picolibc"
 license=("BSD-3-Clause")
 source=(
 	"wf-picolibc::git+https://github.com/WonderfulToolchain/wf-picolibc#branch=wonderful"
+	"crt0.c"
 	"cross-thumb.txt"
 )
 depends=(runtime-musl toolchain-gcc-arm-none-eabi-binutils toolchain-gcc-arm-none-eabi-gcc)
 makedepends=(runtime-musl-dev)
 groups=(toolchain-gcc-arm-none-eabi)
 sha256sums=(
+	'SKIP'
 	'SKIP'
 	'SKIP'
 )
@@ -59,11 +61,15 @@ build() {
 		../wf-picolibc
 
 	ninja
+
+	cd ..
+	arm-none-eabi-gcc -c -o crt0.o crt0.c
 }
 
 package() {
 	cd picolibc-build
 	DESTDIR="$pkgdir" ninja install
+	cp ../crt0.o "$pkgdir"/"$WF_PATH"/toolchain/gcc-arm-none-eabi/arm-none-eabi/lib
 	cd "$pkgdir"
 	wf_relocate_path_to_destdir
 }

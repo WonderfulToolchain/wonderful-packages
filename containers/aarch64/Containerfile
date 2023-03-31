@@ -3,13 +3,13 @@
 FROM docker.io/arm64v8/alpine:3.17
 # Install packages:
 # - compiler/make/etc. [build-base]
-# - tools for building/installing packages [fakeroot git pacman pacman-makepkg curl xz zstd sudo cmake patchelf pkgconf coreutils]
+# - tools for building/installing packages [fakeroot git pacman pacman-makepkg curl xz zstd sudo cmake patchelf pkgconf coreutils autoconf automake libtool]
 # - ffmpeg build dependencies [nasm]
 # - binutils build dependencies [texinfo]
 # - binutils-ia16 build dependencies [bison, flex]
 # - pacman build dependencies [meson]
 # - llvm build dependencies [lld ninja]
-RUN apk add --no-cache build-base fakeroot git pacman pacman-makepkg curl xz zstd sudo cmake patchelf pkgconf coreutils nasm texinfo bison flex meson linux-headers lld ninja
+RUN apk add --no-cache build-base fakeroot git pacman pacman-makepkg curl xz zstd sudo cmake patchelf pkgconf coreutils autoconf automake libtool nasm texinfo bison flex meson linux-headers lld ninja
 # Configure pacman/makepkg
 RUN mkdir -p /opt/wonderful/pacman/db
 COPY makepkg.conf pacman.conf /etc

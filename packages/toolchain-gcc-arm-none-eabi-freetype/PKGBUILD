@@ -1,0 +1,10 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# SPDX-FileContributor: Adrian "asie" Siekierka, 2023
+
+pkgrel=1
+WF_TOOLCHAIN=gcc-arm-none-eabi
+WF_TARGET=arm-none-eabi
+arch=(any)
+
+. "../templates/freetype.PKGBUILD"

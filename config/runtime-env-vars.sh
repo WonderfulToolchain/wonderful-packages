@@ -23,3 +23,8 @@ wf_runtime_patchelf() {
 	# For libraries, ignore the failure.
 	patchelf --set-interpreter "$WF_PATH/lib/ld-musl-$CARCH.so.1" "$1" || true
 }
+
+wf_use_toolchain() {
+	export WF_TOOLCHAIN_PREFIX="$WF_PATH/toolchain/$1/$2"
+	export PATH="$WF_PATH/toolchain/$1/bin":$PATH
+}
