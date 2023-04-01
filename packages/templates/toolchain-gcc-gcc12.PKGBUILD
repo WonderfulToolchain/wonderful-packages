@@ -12,7 +12,6 @@ else
 	arch=("i686" "x86_64" "armv6h" "aarch64")
 fi
 pkgver=12.2.0
-pkgrel=2
 _gmpver=6.1.2
 _mpfrver=4.0.2
 _mpcver=1.1.0
@@ -139,8 +138,8 @@ package_toolchain-gcc-template-libstdcxx-picolibc() {
 	make DESTDIR="$pkgdir" install
 	cd "$pkgdir"
 	wf_relocate_path_to_destdir
-	rm -r toolchain/gcc-$GCC_TARGET/lib/*.py
-	rm -r toolchain/gcc-$GCC_TARGET/share
+	rm -r toolchain/gcc-$GCC_TARGET/lib/*.py || true
+	rm -r toolchain/gcc-$GCC_TARGET/share || true
 
 	mkdir toolchain/gcc-$GCC_TARGET/$GCC_TARGET
 	mv toolchain/gcc-$GCC_TARGET/include toolchain/gcc-$GCC_TARGET/$GCC_TARGET/
