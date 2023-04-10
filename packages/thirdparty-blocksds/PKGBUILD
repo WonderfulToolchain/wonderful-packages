@@ -1,0 +1,66 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# SPDX-FileContributor: Adrian "asie" Siekierka, 2023
+
+pkgname=thirdparty-blocksds
+_pkgver=0.5
+pkgver=0.5.r113.13c6c0b
+pkgrel=1
+epoch=
+pkgdesc="DS/DSi console homebrew toolchain maintained by AntonioND"
+arch=("i686" "x86_64" "armv6h" "aarch64")
+url="https://github.com/blocksds/sdk"
+license=("complex")
+source=("$pkgname::git+https://github.com/blocksds/sdk#branch=master")
+depends=(
+	runtime-gcc-libs
+	runtime-musl
+	toolchain-gcc-arm-none-eabi-binutils
+	toolchain-gcc-arm-none-eabi-gcc-libs
+	toolchain-gcc-arm-none-eabi-gcc
+	toolchain-gcc-arm-none-eabi-picolibc-generic
+	toolchain-gcc-arm-none-eabi-libstdcxx-picolibc
+)
+makedepends=(
+	runtime-musl-dev
+)
+optdepends=(
+	'toolchain-gcc-arm-none-eabi-extra: additional libraries'
+)
+sha256sums=('SKIP')
+
+prepare() {
+	cd "$pkgname"
+	git submodule init
+	git submodule update
+
+	# patch grit to build statically, as we do not bundle
+	# a dynamic library version of freeimage
+	sed -i -e 's/$(LIBS)/-static $(LIBS)/' tools/grit/Makefile
+}
+
+. "/wf/config/runtime-env-vars.sh"
+
+. "../templates/git-pkgver.PKGBUILD"
+
+build() {
+	wf_use_toolchain gcc-arm-none-eabi arm-none-eabi
+
+	cd "$pkgname"
+	# make calls sub-Makefiles with -j`nproc`
+	BLOCKSDS=`pwd` make -j1
+}
+
+package() {
+	cd "$pkgname"
+	mkdir -p "$pkgdir"/thirdparty/blocksds/core
+
+	BLOCKSDS=`pwd` INSTALLDIR="$pkgdir"/thirdparty/blocksds/core make -j1 install
+
+	# patch compiled executables to use /opt/wonderful dynamic linker
+	find "$pkgdir"/thirdparty/blocksds/core/tools -executable -type f -print0 |
+		while IFS= read -r -d '' i; do
+			# this will fail on statically-linked grit; consume the error
+			wf_runtime_patchelf "$i" || true
+		done
+}
