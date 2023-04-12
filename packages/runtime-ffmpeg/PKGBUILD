@@ -4,11 +4,11 @@
 
 # TODO: trim down decoder/parser/demuxer/bsf list
 pkgname=(runtime-ffmpeg runtime-ffmpeg-dev)
-pkgver=5.1.2
+pkgver=6.0
 pkgrel=1
 epoch=
 pkgdesc="ffmpeg video library"
-arch=("i686" "x86_64")
+arch=("i686" "x86_64" "armv6h" "aarch64")
 url="http://www.ffmpeg.org"
 license=("MIT")
 source=("https://www.ffmpeg.org/releases/ffmpeg-$pkgver.tar.xz")
@@ -32,14 +32,14 @@ build() {
 		--disable-avfilter --disable-postproc \
 		--disable-everything \
 		--enable-decoder=ffv1,ffvhuff,huffyuv,vp8,vp9 \
-		--enable-decoder=mjpeg,bmp,png,flac,vorbis,theora \
+		--enable-decoder=mjpeg,bmp,gif,png,flac,vorbis,theora \
 		--enable-decoder=rawvideo,pcm_f16le,pcm_f32le,pcm_s16le \
 		--enable-decoder=pcm_u16le,pcm_mulaw,pcm_alaw,pcm_u8,pcm_s8 \
-		--enable-decoder=opus \
+		--enable-decoder=opus,mp3 \
 		--enable-parser=bmp,flac,mjpeg,opus,png,vorbis,vp8,vp9 \
 		--enable-demuxer=apng,avi,flac,matroska,ogg,wav \
 		--enable-demuxer=pcm_alaw,pcm_s16le,pcm_u16le,pcm_s8,pcm_u8 \
-		--enable-demuxer=image2,mov,rawvideo \
+		--enable-demuxer=image2,mov,rawvideo,mp3 \
 		--enable-protocol=file
 	make
 }
