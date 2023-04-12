@@ -2,8 +2,8 @@
 #
 # SPDX-FileContributor: Adrian "asie" Siekierka, 2023
 
-_pkgname=thirdparty-blocksds
-source=("$_pkgname::git+https://github.com/blocksds/sdk#tag=v0.6")
+_pkgname=thirdparty-blocksds-git
+source=("$_pkgname::git+https://github.com/blocksds/sdk#branch=master")
 
 if [ "x$_pkgname" = "xthirdparty-blocksds-git" ]; then
 	pkgname=(thirdparty-blocksds-git-toolchain thirdparty-blocksds-git-docs)
@@ -14,7 +14,8 @@ else
 fi
 
 groups=($_pkgname)
-pkgver=0.6
+_pkgver=0.6
+pkgver=0.6.r127.9482928
 pkgrel=1
 epoch=
 pkgdesc="DS/DSi console homebrew toolchain maintained by AntonioND"
@@ -64,7 +65,7 @@ build() {
 	BLOCKSDS=`pwd` make -j1
 }
 
-package_thirdparty-blocksds-toolchain() {
+package_thirdparty-blocksds-git-toolchain() {
 	cd "$_pkgname"
 	mkdir -p "$pkgdir"/thirdparty/blocksds/core
 
@@ -78,8 +79,8 @@ package_thirdparty-blocksds-toolchain() {
 		done
 }
 
-package_thirdparty-blocksds-docs() {
-	depends=(thirdparty-blocksds-toolchain)
+package_thirdparty-blocksds-git-docs() {
+	depends=(thirdparty-blocksds-git-toolchain)
 	optdepends=()
 
 	cd "$_pkgname"

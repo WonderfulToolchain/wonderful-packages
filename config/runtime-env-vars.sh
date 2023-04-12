@@ -28,3 +28,7 @@ wf_use_toolchain() {
 	export WF_TOOLCHAIN_PREFIX="$WF_PATH/toolchain/$1/$2"
 	export PATH="$WF_PATH/toolchain/$1/bin":$PATH
 }
+
+# for thirdparty-blocksds
+export BLOCKSDS="$WF_PATH"/thirdparty/blocksds/core
+export BLOCKSDSEXT="$WF_PATH"/thirdparty/blocksds/external
