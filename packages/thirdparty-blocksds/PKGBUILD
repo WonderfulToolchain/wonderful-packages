@@ -7,15 +7,13 @@ source=("$_pkgname::git+https://github.com/blocksds/sdk#tag=v0.6")
 
 if [ "x$_pkgname" = "xthirdparty-blocksds-git" ]; then
 	pkgname=(thirdparty-blocksds-git-toolchain thirdparty-blocksds-git-docs)
-	conflicts=(thirdparty-blocksds-toolchain thirdparty-blocksds-docs)
 else
 	pkgname=(thirdparty-blocksds-toolchain thirdparty-blocksds-docs)
-	conflicts=(thirdparty-blocksds-git-toolchain thirdparty-blocksds-git-docs)
 fi
 
 groups=($_pkgname)
 pkgver=0.6
-pkgrel=1
+pkgrel=2
 epoch=
 pkgdesc="DS/DSi console homebrew toolchain maintained by AntonioND"
 arch=("i686" "x86_64" "armv6h" "aarch64")
