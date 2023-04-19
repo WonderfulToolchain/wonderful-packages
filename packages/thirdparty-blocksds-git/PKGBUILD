@@ -13,7 +13,7 @@ fi
 
 groups=($_pkgname)
 _pkgver=0.6
-pkgver=0.6.r136.3525a15
+pkgver=0.6.r146.5a0bb69
 pkgrel=1
 epoch=
 pkgdesc="DS/DSi console homebrew toolchain maintained by AntonioND"
