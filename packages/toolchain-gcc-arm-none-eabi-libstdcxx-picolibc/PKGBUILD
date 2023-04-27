@@ -2,7 +2,7 @@
 #
 # SPDX-FileContributor: Adrian "asie" Siekierka, 2023
 
-pkgrel=3
+pkgrel=1
 arch=(any)
 
 GCC_TARGET=arm-none-eabi
@@ -19,7 +19,7 @@ export CFLAGS_FOR_TARGET="$TARGET_CFLAGS"
 export CXXFLAGS="$TARGET_CFLAGS"
 export CXXFLAGS_FOR_TARGET="$TARGET_CFLAGS"
 
-. "../templates/toolchain-gcc-gcc12.PKGBUILD"
+. "../templates/toolchain-gcc-gcc13.PKGBUILD"
 
 package_toolchain-gcc-arm-none-eabi-libstdcxx-picolibc() {
 	package_toolchain-gcc-template-libstdcxx-picolibc

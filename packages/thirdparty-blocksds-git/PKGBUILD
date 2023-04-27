@@ -12,8 +12,8 @@ else
 fi
 
 groups=($_pkgname)
-_pkgver=0.6
-pkgver=0.6.r146.5a0bb69
+_pkgver=0.7
+pkgver=0.7.r168.d5aa8be
 pkgrel=1
 epoch=
 pkgdesc="DS/DSi console homebrew toolchain maintained by AntonioND"
@@ -65,6 +65,7 @@ build() {
 
 package_thirdparty-blocksds-git-toolchain() {
 	provides=(thirdparty-blocksds-toolchain)
+	conflicts=(thirdparty-blocksds-toolchain)
 
 	cd "$_pkgname"
 	mkdir -p "$pkgdir"/thirdparty/blocksds/core

@@ -11,12 +11,12 @@ else
 	depends=(runtime-gcc-libs runtime-musl toolchain-gcc-$GCC_TARGET-binutils)
 	arch=("i686" "x86_64" "armv6h" "aarch64")
 fi
-pkgver=12.2.0
-_gmpver=6.1.2
-_mpfrver=4.0.2
-_mpcver=1.1.0
-_islver=0.21
-epoch=
+pkgver=13.1.0
+_gmpver=6.2.1
+_mpfrver=4.2.0
+_mpcver=1.3.1
+_islver=0.26
+epoch=1
 pkgdesc="The GNU Compiler Collection"
 makedepends=(runtime-musl-dev)
 groups=(toolchain-gcc-$GCC_TARGET)
@@ -27,14 +27,14 @@ source=("http://ftp.gnu.org/gnu/gcc/gcc-$pkgver/gcc-$pkgver.tar.xz"
         "http://www.mpfr.org/mpfr-$_mpfrver/mpfr-$_mpfrver.tar.xz"
         "http://ftp.gnu.org/gnu/mpc/mpc-$_mpcver.tar.gz"
 	"https://libisl.sourceforge.io/isl-$_islver.tar.xz"
-	"gcc12-poison-system-directories.patch")
+	"gcc13-poison-system-directories.patch")
 sha256sums=(
-	'e549cf9cf3594a00e27b6589d4322d70e0720cdd213f39beb4181e06926230ff'
-	'87b565e89a9a684fe4ebeeddb8399dce2599f9c9049854ca8c0dfbdea0e21912'
-	'1d3be708604eae0e42d578ba93b390c2a145f17743a744d8f3f8c2ad5855a38a'
-	'6985c538143c1208dcb1ac42cedad6ff52e267b47e5f970183a3e75125b43c2e'
-	'777058852a3db9500954361e294881214f6ecd4b594c00da5eee974cd6a54960'
-	'ff867cbed6b359235122e5ee91708b931f8154dadc6cc3f6412be53eff76ca7b'
+	'61d684f0aa5e76ac6585ad8898a2427aade8979ed5e7f85492286c4dfc13ee86'
+	'fd4829912cddd12f84181c3451cc752be224643e87fac497b69edddadc49b4f2'
+	'06a378df13501248c1b2db5aa977a2c8126ae849a9d9b7be2546fb4a9c26d993'
+	'ab642492f5cf882b74aa0cb730cd410a81edcdbec895183ce930e706c1c759b8'
+	'a0b5cb06d24f9fa9e77b55fabbe9a3c94a336190345c2555f9915bb38e976504'
+	'7b864e393b44a7addca4d47277d18054799f82c9dacab099591febfd4f51126a'
 )
 
 . "/wf/config/runtime-env-vars.sh"
@@ -43,12 +43,8 @@ prepare() {
 	mkdir -p "gcc-build"
 	cd "gcc-$pkgver"
 
-	# Not necessary for GCC 12.2.0+ on musl
-	# patch -p1 <../gcc12-poisoned-calloc-fix-libcc1.patch
-	# patch -p1 <../gcc12-poisoned-calloc-fix-libgccjit.patch
-
 	# Not strictly necessary, but a nice-to-have.
-	patch -p1 <../gcc12-poison-system-directories.patch
+	patch -p1 <../gcc13-poison-system-directories.patch
 
 	# HACK: hijack RTEMS's libstdc++ crossconfig for our own purposes (which has the dynamic feature checks we want)
 	sed -i "s/\*-rtems\*/*-unknown*/" libstdc++-v3/configure
@@ -113,8 +109,7 @@ package_toolchain-gcc-template-gcc() {
 	# assumes no such library is present.
 
 	cd "$srcdir"/gcc-"$pkgver"/gcc
-	cat limitx.h glimits.h limity.h > "$pkgdir"/toolchain/gcc-$GCC_TARGET/lib/gcc/$GCC_TARGET/$pkgver/include-fixed/limits.h
-
+	cat limitx.h glimits.h limity.h > "$pkgdir"/toolchain/gcc-$GCC_TARGET/lib/gcc/$GCC_TARGET/$pkgver/include/limits.h
 }
 
 package_toolchain-gcc-template-gcc-libs() {
