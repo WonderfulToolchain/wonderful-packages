@@ -1,0 +1,37 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# SPDX-FileContributor: Adrian "asie" Siekierka, 2023
+
+# TODO: trim down decoder/parser/demuxer/bsf list
+pkgname=runtime-linenoise-dev
+_pkgver=1.0
+pkgver=1.0.r145.93b2db9
+pkgrel=1
+epoch=
+pkgdesc="minimal readline replacement"
+arch=("i686" "x86_64" "armv6h" "aarch64")
+url="https://github.com/antirez/linenoise"
+license=("BSD-2-Clause")
+source=("$pkgname::git+https://github.com/antirez/linenoise#branch=master")
+depends=(runtime-musl)
+makedepends=(runtime-musl-dev)
+sha256sums=('SKIP')
+
+. "/wf/config/runtime-env-vars.sh"
+
+. "../templates/git-pkgver.PKGBUILD"
+
+build() {
+	cd "$pkgname"
+	gcc -O2 -g -c -o linenoise.o linenoise.c
+	ar rcu liblinenoise.a linenoise.o
+}
+
+package() {
+	cd "$pkgname"
+
+	mkdir -p "$pkgdir"/include
+	cp linenoise.h "$pkgdir"/include
+	mkdir -p "$pkgdir"/lib
+	cp liblinenoise.a "$pkgdir"/lib
+}

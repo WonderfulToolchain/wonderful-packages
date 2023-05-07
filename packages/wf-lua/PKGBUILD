@@ -4,7 +4,7 @@
 
 pkgname=(wf-lua wf-lua-dev)
 pkgver=5.4.6
-pkgrel=1
+pkgrel=2
 epoch=
 pkgdesc="Lua scripting language"
 arch=("i686" "x86_64" "armv6h" "aarch64")
@@ -12,12 +12,14 @@ url="https://www.lua.org"
 license=("MIT")
 source=(
 	"http://www.lua.org/work/lua-5.4.6-rc1.tar.gz"
+	"0011-linenoise.patch"
 	"lua-5.4.6-wonderful.patch"
 )
 depends=(runtime-gcc-libs runtime-musl)
-makedepends=(runtime-musl-dev)
+makedepends=(runtime-musl-dev runtime-linenoise-dev)
 sha256sums=(
 	"7d5ea1b9cb6aa0b59ca3dde1c6adcb57ef83a1ba8e5432c0ecd06bf439b3ad88"
+	"8a7584ca1d91e4cd4ab93db73fb72c7a03f71851d372a55ae412a59edbe5eb04"
 	"81946cb53543ddc3f51eaf0b67bf2db28a69e0e6d634084def9c4299a1a8b2a5"
 )
 
@@ -25,12 +27,13 @@ sha256sums=(
 
 prepare() {
 	cd "lua-$pkgver"
+	patch -p1 <../0011-linenoise.patch
 	patch -p1 <../lua-5.4.6-wonderful.patch
 }
 
 build() {
 	cd "lua-$pkgver"
-	make linux MYLDFLAGS="$WF_RUNTIME_LDFLAGS"
+	make linux MYCFLAGS="$WF_RUNTIME_INCLUDES -DLUA_USE_LINENOISE" MYLDFLAGS="$WF_RUNTIME_LDFLAGS" MYLIBS="-llinenoise"
 }
 
 package_wf-lua() {
