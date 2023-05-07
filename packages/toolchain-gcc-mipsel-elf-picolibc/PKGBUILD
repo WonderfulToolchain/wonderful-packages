@@ -3,8 +3,8 @@
 # SPDX-FileContributor: Adrian "asie" Siekierka, 2023
 
 pkgname=toolchain-gcc-mipsel-elf-picolibc-generic
-_pkgver=1.8
-pkgver=1.8.r22945.f28657625
+_pkgver=1.8.1
+pkgver=1.8.1.r22960.90f8b7fe5
 pkgrel=1
 epoch=
 pkgdesc="picolibc-based C library for Wonderful toolchain"

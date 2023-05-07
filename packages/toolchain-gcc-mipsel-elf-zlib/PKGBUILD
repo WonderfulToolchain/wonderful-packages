@@ -2,7 +2,7 @@
 #
 # SPDX-FileContributor: Adrian "asie" Siekierka, 2023
 
-pkgrel=1
+pkgrel=2
 WF_TOOLCHAIN=gcc-mipsel-elf
 WF_TARGET=mipsel-elf
 arch=(any)
