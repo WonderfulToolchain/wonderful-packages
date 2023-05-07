@@ -1,0 +1,26 @@
+diff -Nrup lua-5.4.6.orig/src/luaconf.h lua-5.4.6/src/luaconf.h
+--- lua-5.4.6.orig/src/luaconf.h	2023-05-07 13:22:40.701949234 +0200
++++ lua-5.4.6/src/luaconf.h	2023-05-07 13:31:37.545285526 +0200
+@@ -223,8 +223,8 @@
+ 
+ #else			/* }{ */
+ 
+-#define LUA_ROOT	"/usr/local/"
+-#define LUA_LDIR	LUA_ROOT "share/lua/" LUA_VDIR "/"
++#define LUA_ROOT	"/opt/wonderful/"
++#define LUA_LDIR	LUA_ROOT "local/lib/lua/" LUA_VDIR "/"
+ #define LUA_CDIR	LUA_ROOT "lib/lua/" LUA_VDIR "/"
+ 
+ #if !defined(LUA_PATH_DEFAULT)
+diff -Nrup lua-5.4.6.orig/src/Makefile lua-5.4.6/src/Makefile
+--- lua-5.4.6.orig/src/Makefile	2023-05-07 13:22:40.701949234 +0200
++++ lua-5.4.6/src/Makefile	2023-05-07 13:40:53.215288608 +0200
+@@ -7,7 +7,7 @@
+ PLAT= guess
+ 
+ CC= gcc -std=gnu99
+-CFLAGS= -O2 -Wall -Wextra -DLUA_COMPAT_5_3 $(SYSCFLAGS) $(MYCFLAGS)
++CFLAGS= -O2 -Wall -Wextra $(SYSCFLAGS) $(MYCFLAGS)
+ LDFLAGS= $(SYSLDFLAGS) $(MYLDFLAGS)
+ LIBS= -lm $(SYSLIBS) $(MYLIBS)
+ 

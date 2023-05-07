@@ -1,0 +1,55 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# SPDX-FileContributor: Adrian "asie" Siekierka, 2023
+
+pkgname=(wf-lua wf-lua-dev)
+pkgver=5.4.6
+pkgrel=1
+epoch=
+pkgdesc="Lua scripting language"
+arch=("i686" "x86_64" "armv6h" "aarch64")
+url="https://www.lua.org"
+license=("MIT")
+source=(
+	"http://www.lua.org/work/lua-5.4.6-rc1.tar.gz"
+	"lua-5.4.6-wonderful.patch"
+)
+depends=(runtime-gcc-libs runtime-musl)
+makedepends=(runtime-musl-dev)
+sha256sums=(
+	"7d5ea1b9cb6aa0b59ca3dde1c6adcb57ef83a1ba8e5432c0ecd06bf439b3ad88"
+	"81946cb53543ddc3f51eaf0b67bf2db28a69e0e6d634084def9c4299a1a8b2a5"
+)
+
+. "/wf/config/runtime-env-vars.sh"
+
+prepare() {
+	cd "lua-$pkgver"
+	patch -p1 <../lua-5.4.6-wonderful.patch
+}
+
+build() {
+	cd "lua-$pkgver"
+	make linux MYLDFLAGS="$WF_RUNTIME_LDFLAGS"
+}
+
+package_wf-lua() {
+	cd "lua-$pkgver"
+
+	mkdir -p "$pkgdir"/bin
+	cp -a src/lua "$pkgdir"/bin/wf-lua
+	cp -a src/luac "$pkgdir"/bin/wf-luac
+
+	mkdir -p "$pkgdir"/doc
+	cp -a doc "$pkgdir"/doc/wf-lua
+}
+
+package_wf-lua-dev() {
+	cd "lua-$pkgver"
+
+	mkdir -p "$pkgdir"/include
+	for i in lua.h luaconf.h lualib.h lauxlib.h lua.hpp; do cp -a src/"$i" "$pkgdir"/include; done
+
+	mkdir -p "$pkgdir"/lib
+	cp -a src/liblua.a "$pkgdir"/lib
+}
