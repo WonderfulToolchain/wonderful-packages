@@ -1,0 +1,30 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# SPDX-FileContributor: Adrian "asie" Siekierka, 2023
+
+pkgname=wf-lua-penlight
+_pkgver=1.13.1
+pkgver=1.13.1.r908.3bf0326
+pkgrel=1
+pkgdesc="Lua Penlight library"
+arch=(any)
+url="https://github.com/lunarmodules/Penlight"
+license=("MIT")
+source=("$pkgname::git+https://github.com/lunarmodules/Penlight#branch=master")
+depends=(wf-lua)
+sha256sums=("SKIP")
+
+. "/wf/config/runtime-env-vars.sh"
+
+. "../templates/git-pkgver.PKGBUILD"
+
+package() {
+	cd "$pkgname"
+
+	mkdir -p "$pkgdir"/lib/lua/5.4
+	cp -a lua/pl "$pkgdir"/lib/lua/5.4/
+
+	mkdir -p "$pkgdir"/doc
+	cp -a docs "$pkgdir"/doc/wf-lua-penlight
+	cp -a LICENSE.md "$pkgdir"/doc/wf-lua-penlight/
+}
