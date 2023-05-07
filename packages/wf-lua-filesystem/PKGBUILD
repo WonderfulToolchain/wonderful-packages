@@ -1,0 +1,48 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# SPDX-FileContributor: Adrian "asie" Siekierka, 2023
+
+pkgname=(wf-lua-filesystem)
+_pkgver=1.8.0
+pkgver=1.8.0.r352.912e067
+pkgrel=1
+epoch=
+pkgdesc="Lua file system library"
+arch=("i686" "x86_64" "armv6h" "aarch64")
+url="https://www.lua.org"
+license=("MIT")
+source=(
+	"$pkgname::git+https://github.com/lunarmodules/luafilesystem#branch=master"
+	"config"
+)
+depends=(wf-lua)
+makedepends=(wf-lua-dev)
+sha256sums=(
+	"SKIP"
+	"bd489e80a1ad243fd2c1383dd5ab26f218af2767f013fefdfbfe6f9a16c891bd"
+)
+
+. "/wf/config/runtime-env-vars.sh"
+
+. "../templates/git-pkgver.PKGBUILD"
+
+prepare() {
+	cd "$pkgname"
+	cp ../config .
+}
+
+build() {
+	cd "$pkgname"
+	make lib
+}
+
+package() {
+	cd "$pkgname"
+
+	mkdir -p "$pkgdir"/doc
+	cp -aR docs "$pkgdir"/doc/wf-lua-filesystem
+
+	mkdir -p "$pkgdir"/lib/lua/5.4
+	cp -a src/lfs.so "$pkgdir"/lib/lua/5.4
+}
+
