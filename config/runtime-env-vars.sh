@@ -8,6 +8,7 @@ WF_RUNTIME_LDFLAGS="-Wl,-rpath,$WF_PATH/lib -Wl,--dynamic-linker=$WF_PATH/lib/ld
 
 WF_RUNTIME_INCLUDES="-I$WF_PATH/include"
 WF_RUNTIME_LDFLAGS="$WF_RUNTIME_LDFLAGS -L$WF_PATH/lib"
+WF_RUNTIME_PKG_CONFIG_PATH="$WF_PATH/lib/pkgconfig"
 
 wf_relocate_path_to_destdir() {
 	if [ -d opt/wonderful ]; then
