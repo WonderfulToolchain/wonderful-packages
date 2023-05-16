@@ -1,0 +1,39 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# SPDX-FileContributor: Adrian "asie" Siekierka, 2023
+
+pkgname=(wf-lua-toml)
+_pkgver=0.3.0
+pkgver=0.3.0.r45.9ac034b
+pkgrel=1
+epoch=
+pkgdesc="Lua TOML library"
+arch=("i686" "x86_64" "armv6h" "aarch64")
+url="https://github.com/LebJe/toml.lua"
+license=("MIT")
+source=("$pkgname::git+https://github.com/LebJe/toml.lua#branch=main")
+depends=(wf-lua)
+makedepends=(wf-lua-dev)
+sha256sums=("SKIP")
+
+. "/wf/config/runtime-env-vars.sh"
+
+. "../templates/git-pkgver.PKGBUILD"
+
+build() {
+	cd "$pkgname"
+
+	LDFLAGS="$WF_RUNTIME_LDFLAGS" \
+		cmake -S . -B build -G Ninja \
+		-DLUA_INCLUDE_DIR="$WF_PATH"/include \
+		-DLUA_LIBRARIES=
+	cmake --build build --config Release
+}
+
+package() {
+	cd "$pkgname"
+
+	mkdir -p "$pkgdir"/lib/lua/5.4
+	cp -a build/toml.so "$pkgdir"/lib/lua/5.4
+}
+
