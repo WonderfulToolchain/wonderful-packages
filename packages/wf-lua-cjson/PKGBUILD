@@ -1,0 +1,39 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# SPDX-FileContributor: Adrian "asie" Siekierka, 2023
+
+pkgname=(wf-lua-cjson)
+_pkgver=2.10.12
+pkgver=2.10.12.r302.881accc
+pkgrel=1
+epoch=
+pkgdesc="Lua JSON library"
+arch=("i686" "x86_64" "armv6h" "aarch64")
+url="https://github.com/openresty/lua-cjson"
+license=("MIT")
+source=("$pkgname::git+https://github.com/openresty/lua-cjson#branch=master")
+depends=(wf-lua)
+makedepends=(wf-lua-dev)
+sha256sums=("SKIP")
+
+. "/wf/config/runtime-env-vars.sh"
+
+. "../templates/git-pkgver.PKGBUILD"
+
+build() {
+	cd "$pkgname"
+
+	LUA_INCLUDE_DIR="$WF_PATH"/include \
+	LUA_CMODULE_DIR="$WF_PATH"/lib/lua/5.4 \
+	LUA_MODULE_DIR="$WF_PATH"/lib/lua/5.4 \
+	LDFLAGS="$WF_RUNTIME_LDFLAGS" \
+		make
+}
+
+package() {
+	cd "$pkgname"
+
+	mkdir -p "$pkgdir"/lib/lua/5.4
+	cp -a cjson.so "$pkgdir"/lib/lua/5.4
+}
+
