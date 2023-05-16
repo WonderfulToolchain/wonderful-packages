@@ -1,0 +1,58 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# SPDX-FileContributor: Adrian "asie" Siekierka, 2023
+
+pkgname=(wf-lua-iconv)
+_pkgver=7
+pkgver=7.r87.b761918
+pkgrel=1
+epoch=
+pkgdesc="Lua iconv wrapper"
+arch=("i686" "x86_64" "armv6h" "aarch64")
+url="https://github.com/ittner/lua-iconv"
+license=("MIT")
+source=("$pkgname::git+https://github.com/ittner/lua-iconv#branch=master")
+depends=(wf-lua)
+makedepends=(wf-lua-dev)
+sha256sums=("SKIP")
+
+. "/wf/config/runtime-env-vars.sh"
+
+. "../templates/git-pkgver.PKGBUILD"
+
+prepare() {
+	cd "$pkgname"
+
+	# musl iconv has many differences relative to glibc iconv:
+	# https://wiki.musl-libc.org/functional-differences-from-glibc.html
+
+	# musl does not support //TRANSLIT.
+	sed -i -e "s/\/\/TRANSLIT//g" test_iconv.lua
+	# musl does not support EBCDIC-CP-ES.
+	sed -i -E -e "s/check_one\(termcs, \"EBCDIC/-- EBCDIC/g" test_iconv.lua
+	# musl does not output EILSEQ.
+	sed -i -E -e "s/assert\(e == iconv.ERROR_INVALID/-- ERROR_INVALID/g" test_iconv.lua
+}
+
+build() {
+	cd "$pkgname"
+	gcc -c -o iconv.lo $WF_RUNTIME_INCLUDES -fPIC -O3 -Wall luaiconv.c
+	gcc -o iconv.so -shared $WF_LUA_LDFLAGS iconv.lo
+}
+
+check() {
+	cd "$pkgname"
+
+	$WF_PATH/bin/wf-lua test_iconv.lua
+}
+
+package() {
+	cd "$pkgname"
+
+	mkdir -p "$pkgdir"/doc/wf-lua-iconv
+	cp -a README "$pkgdir"/doc/wf-lua-iconv/
+
+	mkdir -p "$pkgdir"/lib/lua/5.4
+	cp -a iconv.so "$pkgdir"/lib/lua/5.4
+}
+
