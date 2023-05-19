@@ -4,14 +4,14 @@
 
 pkgname=(wf-lua wf-lua-dev)
 pkgver=5.4.6
-pkgrel=2
+pkgrel=3
 epoch=
 pkgdesc="Lua scripting language"
 arch=("i686" "x86_64" "armv6h" "aarch64")
 url="https://www.lua.org"
 license=("MIT")
 source=(
-	"http://www.lua.org/work/lua-5.4.6-rc1.tar.gz"
+	"https://www.lua.org/ftp/lua-5.4.6.tar.gz"
 	"0011-linenoise.patch"
 	"lua-5.4.6-wonderful.patch"
 )
@@ -26,6 +26,9 @@ sha256sums=(
 . "/wf/config/runtime-env-vars.sh"
 
 prepare() {
+	# ???
+	tar xvf lua-$pkgver.tar
+
 	cd "lua-$pkgver"
 	patch -p1 <../0011-linenoise.patch
 	patch -p1 <../lua-5.4.6-wonderful.patch
