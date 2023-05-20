@@ -1,0 +1,39 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# SPDX-FileContributor: Adrian "asie" Siekierka, 2023
+
+pkgname=wf-lua-posix
+pkgver=36.1
+pkgrel=1
+pkgdesc="Lua POSIX library"
+arch=(any)
+url="https://github.com/luaposix/luaposix"
+license=("MIT")
+source=("$pkgname-$pkgver::git+https://github.com/luaposix/luaposix#branch=release-v$pkgver")
+depends=(wf-lua)
+makedepends=(runtime-musl-dev wf-lua-dev)
+sha256sums=("SKIP")
+
+. "/wf/config/runtime-env-vars.sh"
+
+build() {
+	cd "$pkgname-$pkgver"
+	"$WF_PATH"/bin/wf-lua build-aux/luke \
+		PREFIX="$WF_PATH" \
+		package="$pkgname" version="$pkgver" \
+		LUA="$WF_PATH"/bin/wf-lua LUA_INCDIR="$WF_PATH"/include \
+		CFLAGS="$WF_RUNTIME_INCLUDES" \
+		LDFLAGS="$WF_RUNTIME_LDFLAGS" \
+		INST_LIBDIR="$pkgdir/lib/lua/5.4" \
+		INST_LUADIR="$pkgdir/lib/lua/5.4"
+}
+package() {
+	cd "$pkgname-$pkgver"
+	"$WF_PATH"/bin/wf-lua build-aux/luke install \
+		INST_LIBDIR="$pkgdir/lib/lua/5.4" \
+		INST_LUADIR="$pkgdir/lib/lua/5.4"
+
+	mkdir -p "$pkgdir"/doc
+	cp -a doc "$pkgdir"/doc/wf-lua-posix
+	cp -a LICENSE "$pkgdir"/doc/wf-lua-posix/
+}
