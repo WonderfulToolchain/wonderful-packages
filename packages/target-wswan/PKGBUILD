@@ -4,14 +4,14 @@
 
 pkgname=target-wswan
 pkgver=0.1.0
-pkgrel=1
+pkgrel=2
 epoch=
 pkgdesc="WSwan target metapackage"
 arch=(any)
 url="https://github.com/WonderfulToolchain"
 license=("zlib")
 source=()
-depends=(toolchain-gcc-ia16-elf-binutils toolchain-gcc-ia16-elf-gcc wf-tools target-wswan-syslibs)
+depends=(toolchain-gcc-ia16-elf-binutils toolchain-gcc-ia16-elf-gcc toolchain-gcc-ia16-elf-gcc-libs wf-tools target-wswan-syslibs)
 makedepends=()
 sha256sums=()
 
