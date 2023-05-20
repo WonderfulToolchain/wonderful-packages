@@ -1,0 +1,41 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# SPDX-FileContributor: Adrian "asie" Siekierka, 2023
+
+pkgname=wf-tools
+_pkgver=0.1.0
+pkgver=0.1.0.r7.2eec203
+pkgrel=1
+epoch=
+pkgdesc="Wonderful toolchain tools"
+arch=("i686" "x86_64" "armv6h" "aarch64")
+url="https://github.com/WonderfulToolchain/wf-tools"
+license=("MIT")
+source=("$pkgname::git+https://github.com/WonderfulToolchain/wf-tools#branch=main")
+groups=(wf-environment)
+depends=(runtime-musl wf-lua wf-lua-filesystem wf-lua-iconv wf-lua-penlight wf-lua-posix wf-lua-toml wf-pacman)
+makedepends=(runtime-musl-dev wf-lua-dev)
+sha256sums=('SKIP')
+
+. "/wf/config/runtime-env-vars.sh"
+
+. "../templates/git-pkgver.PKGBUILD"
+
+build() {
+	cd "$pkgname"
+}
+
+package() {
+	cd "$pkgname"
+
+	# Package lua/
+	cd lua
+	mkdir -p "$pkgdir"/bin
+	for i in *.lua; do
+		chmod 755 "$i"
+		cp -a "$i" "$pkgdir"/bin/"${i%.*}"
+	done
+	mkdir -p "$pkgdir"/lib/lua/5.4
+	cp -aR wf "$pkgdir"/lib/lua/5.4/wf
+	cd ..
+}
