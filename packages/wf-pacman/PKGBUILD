@@ -4,19 +4,19 @@
 # [Wonderful] pkgname
 pkgname=wf-pacman
 pkgver=6.0.2
-_cares_ver=1.18.1
-_nghttp2_ver=1.50.0
-_curlver=7.86.0
-_sslver=3.0.7
+_cares_ver=1.19.0
+_nghttp2_ver=1.53.0
+_curlver=8.1.0
+_sslver=3.0.8
 _zlibver=1.2.13
-_xzver=5.2.7
+_xzver=5.4.3
 _bzipver=1.0.8
-_zstdver=1.5.2
-_libarchive_ver=3.6.1
+_zstdver=1.5.5
+_libarchive_ver=3.6.2
 _gpgerrorver=1.46
 _libassuanver=2.5.5
 _gpgmever=1.18.0
-pkgrel=2
+pkgrel=3
 # [Wonderful] pkgdesc
 pkgdesc="Wonderful toolchain build of the pacman package manager"
 arch=('i486' 'i686' 'pentium4' 'x86_64' 'arm' 'armv6h' 'armv7h' 'aarch64')
@@ -68,30 +68,31 @@ validpgpkeys+=('AC8E115BF73E2D8D47FA9908E98E9B2D19C6C8BD') #  Niibe Yutaka (GnuP
 # libarchive
 source+=("https://github.com/libarchive/libarchive/releases/download/v${_libarchive_ver}/libarchive-${_libarchive_ver}.tar.xz"{,.asc})
 validpgpkeys+=('A5A45B12AD92D964B89EEE2DEC560C81CEC2276E') # Martin Matuska <mm@FreeBSD.org>
-# [Wonderful] pacman.conf, rootless.patch
+# [Wonderful] pacman.conf, rootless.patch, libarchive patch
 source+=("pacman.conf")
 source+=("pacman-rootless.patch")
+source+=("libarchive-ignore-pc-requires.patch")
 # [Wonderful] group
 groups=("wonderful-base")
 
 sha512sums=('9d76fb58c3a50e89a4b92b1f9e3bfdecca3f69e05022ea88fbd34f9df540c4fc688ad4f8b27e77eedb791aa682c27037abe65c789c6d9ee393bae5b620c3df13'
             'SKIP'
-            'c2f7f14972cb268a85966f2bd26ac515fa61d9cf6b6bcaa5cffc04f02a18abf116b15537eb4dfbdfa79e7b1472de7034dfdbce7a082cc5b23627d87e2939e529'
-            '1276ec0799916019f8c0af6b55a139701bd15e0ca4a00811d07963893978bc96c107b980f0fd49f81aa70bc8b3b8cd671195ba357c390772d4c2c5643c50c5a5'
+            'ae3c7b12fc019fa139e94c16f69070734d9c600c1ebefad46758cd7f9a93d39f1d72fa2a9bce10e757141749436858316752157d9957e6aaa455764e2f667a4e'
+            'a7f5988bef393afec08a225be92f6eee54a3e67170fb26cbe00dcc5c5a457b27037bbcfeccc39fb855ed72f100196958d6cbbe251bf1ccfbdd353be18f098359'
             'SKIP'
-            'b2d30b4d145a3621862a0f5e6378b5099ba92f4be6e92f4e070ec1299fc5eacba851bf993efd613b366fb81642f3f5cccb6e02adcd472dccc9c5e65c1a51812c'
+            '401ad5aeb7244e7cf61de89aa190a682107852d76beefc49817f5885960db27d6ab56b435fc90ccc9459f1586a4d70928819d69fe59c642380137dba36ba9205'
             'SKIP'
-            '6c2bcd1cd4b499e074e006150dda906980df505679d8e9d988ae93aa61ee6f8c23c0fa369e2edc1e1a743d7bec133044af11d5ed57633b631ae479feb59e3424'
+            '8ce10be000d7d4092c8efc5b96b1d2f7da04c1c3a624d3a7923899c6b1de06f369016be957e36e8ab6d4c9102eaeec5d1973295d547f7893a7f11f132ae42b0d'
             'SKIP'
             'b1873dbb7a49460b007255689102062756972de5cc2d38b12cc9f389b6be412da6797579b1acd3717a8cd2ee118fd9801b94e55f063d4328f050f0876a5eb53c'
             'b5887ea77417fae49b6cb1e9fa782d3021f268d5219701d87a092235964f73fa72a31428b630445517f56f2bb69dcbbb24119ef9dbf8b4e40a753369a9f9a16f'
             '99f0e843f52290e6950cc328820c0f322a4d934a504f66c7caa76bd0cc17ece4bf0546424fc95135de85a2656fed5115abb835fd8d8a390d60ffaf946c8887ad'
             'SKIP'
-            '06329fdbd1d897aa99dc96900c6246457288c586d02bb4869a92dd2f97973f95acb3a2fa9598a20613ea029f816836a8e3b65e36fec2b807b5e7553141429ab9'
+            'aff0fe166af6df4491a6f5df2372cab100b081452461a0e8c6fd65b72af3f250f16c64d9fb8fd309141e9b9ae4e41649f48687cc29e63dd82f27f2eab19b4023'
             'SKIP'
             '083f5e675d73f3233c7930ebe20425a533feedeaaa9d8cc86831312a6581cefbe6ed0d08d2fa89be81082f2a5abdabca8b3c080bf97218a1bd59dc118a30b9f3'
             'SKIP'
-            'bf8183dcb42ac306c120836fdd03a13f3f41de72f697a928a7795008acc86e2533ce42f6b554bde7f1ca834f1a0282f8371585b9129ea88441f3f8dd49f1e923'
+            'c2d88b2c2050262f85be32877142c94e36a8ee451890f579cd2426c7de565fb22d21c369bad11f306093f0b356e935cef5a8ff5a2b0c007ade0f7e7eb944d2a5'
             'SKIP'
             'b06223bb2b0f67d3db5d0d9ab116361a0eda175d4667352b5c0941408d37f2b0ba8e507297e480ccebb88cbba9d0a133820b896914b07d264fb3edaac7b8c99d'
             'SKIP'
@@ -99,7 +100,8 @@ sha512sums=('9d76fb58c3a50e89a4b92b1f9e3bfdecca3f69e05022ea88fbd34f9df540c4fc688
             'SKIP'
             'c0cb0b337d017793a15dd477a7f5eaef24587fcda3d67676bf746bb342398d04792c51abe3c26ae496e799c769ce667d4196d91d86e8a690d02c6718c8f6b4ac'
             'SKIP'
-            '2e5a72edc468080c0e8f29e07d9c33826ffb246fa040ec42399bedeecf698b7555f69ffd15057ad79c0f50cd4926d43174599d99632b1b99ec6cd159c43a70b8'
+            'a12bb6839e13a0be1099f42c650fc90fbfe62d32ce38bcbb4794206d29b2c782ae1115124d0e5f6b9716514213af32b05e4a42eb196447674a5f9a2a32bee043'
+            'SKIP'
             'SKIP'
             'SKIP'
             'SKIP')
@@ -141,6 +143,17 @@ export LDFLAGS="$LDFLAGS -static"
 prepare() {
     cd "${srcdir}"/pacman-${pkgver}
     patch -p1 < ../pacman-rootless.patch
+    sed -i -e "s/Pacman v\%s - libalpm v\%s/Pacman v%s - libalpm v%s (wf-pacman)/" src/pacman/pacman.c
+
+    cd ../libarchive-${_libarchive_ver}
+    patch -p1 < ../libarchive-ignore-pc-requires.patch
+
+    # ???
+    cd ..
+    tar xvf zlib-$_zlibver.tar
+    tar xvf bzip2-$_bzipver.tar
+    tar xvf libassuan-$_libassuanver.tar
+    tar xvf libgpg-error-$_gpgerrorver.tar
 }
 
 build() {
@@ -255,7 +268,7 @@ build() {
     ./configure --prefix="${srcdir}"/temp/usr \
                 --disable-shared \
                 --with-ca-bundle=/etc/ssl/certs/ca-certificates.crt \
-                --disable-{dict,gopher,imap,imaps,ldap,ldaps,manual,pop3,pop3s,rtsp,scp,sftp,smb,smbs,smtp,smtps,telnet,tftp} \
+                --disable-{dict,gopher,imap,imaps,ldap,ldaps,manual,mqtt,pop3,pop3s,rtsp,scp,sftp,smb,smbs,smtp,smtps,telnet,tftp,websockets} \
                 --without-{brotli,libidn2,librtmp,libssh2} \
                 --disable-libcurl-option \
                 --with-openssl \
