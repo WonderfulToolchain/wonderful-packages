@@ -1,0 +1,18 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# SPDX-FileContributor: Adrian "asie" Siekierka, 2023
+
+pkgname=target-wswan
+pkgver=0.1.0
+pkgrel=1
+epoch=
+pkgdesc="WSwan target metapackage"
+arch=(any)
+url="https://github.com/WonderfulToolchain"
+license=("zlib")
+source=()
+depends=(toolchain-gcc-ia16-elf-binutils toolchain-gcc-ia16-elf-gcc wf-tools target-wswan-syslibs)
+makedepends=()
+sha256sums=()
+
+. "/wf/config/runtime-env-vars.sh"

@@ -1,0 +1,33 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# SPDX-FileContributor: Adrian "asie" Siekierka, 2023
+
+pkgname=target-wswan-syslibs
+_pkgver=0.1.0
+pkgver=0.1.0.r2.1ead1bc
+pkgrel=1
+epoch=
+pkgdesc="WSwan target system libraries"
+arch=(any)
+url="https://github.com/WonderfulToolchain/target-wswan-syslibs"
+license=("zlib")
+source=("$pkgname::git+https://github.com/WonderfulToolchain/target-wswan-syslibs#branch=main")
+depends=()
+makedepends=(toolchain-gcc-ia16-elf-binutils toolchain-gcc-ia16-elf-gcc)
+sha256sums=('SKIP')
+options=(!strip)
+
+. "/wf/config/runtime-env-vars.sh"
+
+. "../templates/git-pkgver.PKGBUILD"
+
+build() {
+	cd "$pkgname"
+	./build.sh
+}
+
+package() {
+	cd "$pkgname"
+	mkdir -p "$pkgdir"
+	cp -aR build/target "$pkgdir"/
+}
