@@ -23,11 +23,26 @@ sha256sums=("SKIP")
 build() {
 	cd "$pkgname"
 
-	LDFLAGS="$WF_RUNTIME_LDFLAGS" \
-		cmake -S . -B build -G Ninja \
-		-DLUA_INCLUDE_DIR="$WF_PATH"/include \
-		-DLUA_LIBRARIES=
-	cmake --build build --config Release
+	case ${CARCH} in
+		armv6h|i686)
+			# Building toml++ *really* requires a lot of memory...
+			LDFLAGS="$WF_RUNTIME_LDFLAGS" \
+				cmake -S . -B build -G Ninja \
+				-DCMAKE_CXX_FLAGS=-O1 \
+				-DCMAKE_CXX_FLAGS_RELEASE=-O1 \
+				-DLUA_INCLUDE_DIR="$WF_PATH"/include \
+				-DLUA_LIBRARIES=
+			;;
+		*)
+			LDFLAGS="$WF_RUNTIME_LDFLAGS" \
+				cmake -S . -B build -G Ninja \
+				-DLUA_INCLUDE_DIR="$WF_PATH"/include \
+				-DLUA_LIBRARIES=
+			;;
+	esac
+
+	# Building toml++ requires a lot of memory...
+	cmake --build build --config Release -j 1
 }
 
 package() {
