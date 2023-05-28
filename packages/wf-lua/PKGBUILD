@@ -42,20 +42,20 @@ build() {
 package_wf-lua() {
 	cd "lua-$pkgver"
 
-	mkdir -p "$pkgdir"/bin
-	cp -a src/lua "$pkgdir"/bin/wf-lua
-	cp -a src/luac "$pkgdir"/bin/wf-luac
+	mkdir -p "$pkgdir$WF_DESTDIR"/bin
+	cp -a src/lua "$pkgdir$WF_DESTDIR"/bin/wf-lua
+	cp -a src/luac "$pkgdir$WF_DESTDIR"/bin/wf-luac
 
-	mkdir -p "$pkgdir"/doc
-	cp -a doc "$pkgdir"/doc/wf-lua
+	mkdir -p "$pkgdir$WF_DESTDIR"/doc
+	cp -a doc "$pkgdir$WF_DESTDIR"/doc/wf-lua
 }
 
 package_wf-lua-dev() {
 	cd "lua-$pkgver"
 
-	mkdir -p "$pkgdir"/include
-	for i in lua.h luaconf.h lualib.h lauxlib.h lua.hpp; do cp -a src/"$i" "$pkgdir"/include; done
+	mkdir -p "$pkgdir$WF_DESTDIR"/include
+	for i in lua.h luaconf.h lualib.h lauxlib.h lua.hpp; do cp -a src/"$i" "$pkgdir$WF_DESTDIR"/include; done
 
-	mkdir -p "$pkgdir"/lib
-	cp -a src/liblua.a "$pkgdir"/lib
+	mkdir -p "$pkgdir$WF_DESTDIR"/lib
+	cp -a src/liblua.a "$pkgdir$WF_DESTDIR"/lib
 }

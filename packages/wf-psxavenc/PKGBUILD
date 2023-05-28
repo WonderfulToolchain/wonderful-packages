@@ -36,6 +36,6 @@ build() {
 package() {
 	cd "$pkgname"/build
 
-	mkdir -p "$pkgdir"/bin
-	cp -a psxavenc "$pkgdir"/bin/wf-psxavenc
+	mkdir -p "$pkgdir$WF_DESTDIR"/bin
+	cp -a psxavenc "$pkgdir$WF_DESTDIR"/bin/wf-psxavenc
 }

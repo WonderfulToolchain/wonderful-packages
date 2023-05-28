@@ -30,12 +30,12 @@ package() {
 
 	# Package lua/
 	cd lua
-	mkdir -p "$pkgdir"/bin
+	mkdir -p "$pkgdir$WF_DESTDIR"/bin
 	for i in *.lua; do
 		chmod 755 "$i"
-		cp -a "$i" "$pkgdir"/bin/"${i%.*}"
+		cp -a "$i" "$pkgdir$WF_DESTDIR"/bin/"${i%.*}"
 	done
-	mkdir -p "$pkgdir"/lib/lua/5.4
-	cp -aR wf "$pkgdir"/lib/lua/5.4/wf
+	mkdir -p "$pkgdir$WF_DESTDIR"/lib/lua/5.4
+	cp -aR wf "$pkgdir$WF_DESTDIR"/lib/lua/5.4/wf
 	cd ..
 }

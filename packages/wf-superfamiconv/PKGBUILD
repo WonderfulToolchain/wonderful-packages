@@ -29,6 +29,6 @@ build() {
 }
 
 package() {
-	mkdir -p "$pkgdir"/bin
-	cp -a build/superfamiconv "$pkgdir"/bin/wf-superfamiconv
+	mkdir -p "$pkgdir$WF_DESTDIR"/bin
+	cp -a build/superfamiconv "$pkgdir$WF_DESTDIR"/bin/wf-superfamiconv
 }

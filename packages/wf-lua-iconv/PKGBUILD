@@ -37,7 +37,7 @@ prepare() {
 build() {
 	cd "$pkgname"
 	gcc -c -o iconv.lo $WF_RUNTIME_INCLUDES -fPIC -O3 -Wall luaiconv.c
-	gcc -o iconv.so -shared $WF_LUA_LDFLAGS iconv.lo
+	gcc -o iconv"$WF_LIBRARY_SUFFIX" -shared $WF_LUA_LDFLAGS iconv.lo
 }
 
 check() {
@@ -49,10 +49,10 @@ check() {
 package() {
 	cd "$pkgname"
 
-	mkdir -p "$pkgdir"/doc/wf-lua-iconv
-	cp -a README "$pkgdir"/doc/wf-lua-iconv/
+	mkdir -p "$pkgdir$WF_DESTDIR"/doc/wf-lua-iconv
+	cp -a README "$pkgdir$WF_DESTDIR"/doc/wf-lua-iconv/
 
-	mkdir -p "$pkgdir"/lib/lua/5.4
-	cp -a iconv.so "$pkgdir"/lib/lua/5.4
+	mkdir -p "$pkgdir$WF_DESTDIR"/lib/lua/5.4
+	cp -a iconv"$WF_LIBRARY_SUFFIX" "$pkgdir$WF_DESTDIR"/lib/lua/5.4
 }
 

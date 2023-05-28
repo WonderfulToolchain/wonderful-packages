@@ -27,6 +27,6 @@ build() {
 
 package() {
 	cd "$pkgname"
-	mkdir -p "$pkgdir"/bin
-	cp -a wf-lzsa "$pkgdir"/bin
+	mkdir -p "$pkgdir$WF_DESTDIR"/bin
+	cp -a wf-lzsa "$pkgdir$WF_DESTDIR"/bin
 }

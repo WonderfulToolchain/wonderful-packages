@@ -21,10 +21,10 @@ sha256sums=("SKIP")
 package() {
 	cd "$pkgname"
 
-	mkdir -p "$pkgdir"/lib/lua/5.4
-	cp -a lua/pl "$pkgdir"/lib/lua/5.4/
+	mkdir -p "$pkgdir$WF_DESTDIR"/lib/lua/5.4
+	cp -a lua/pl "$pkgdir$WF_DESTDIR"/lib/lua/5.4/
 
-	mkdir -p "$pkgdir"/doc
-	cp -a docs "$pkgdir"/doc/wf-lua-penlight
-	cp -a LICENSE.md "$pkgdir"/doc/wf-lua-penlight/
+	mkdir -p "$pkgdir$WF_DESTDIR"/doc
+	cp -a docs "$pkgdir$WF_DESTDIR"/doc/wf-lua-penlight
+	cp -a LICENSE.md "$pkgdir$WF_DESTDIR"/doc/wf-lua-penlight/
 }

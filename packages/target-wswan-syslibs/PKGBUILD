@@ -29,5 +29,5 @@ build() {
 package() {
 	cd "$pkgname"
 	mkdir -p "$pkgdir"
-	cp -aR build/target "$pkgdir"/
+	cp -aR build/target "$pkgdir$WF_DESTDIR"
 }

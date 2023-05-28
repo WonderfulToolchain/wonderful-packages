@@ -1,0 +1,29 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# SPDX-FileContributor: Adrian "asie" Siekierka, 2023
+
+pkgname=wf-lua-vstruct
+_pkgver=2.1.1
+pkgver=2.1.1.r230.b6889e3
+pkgrel=1
+pkgdesc="Lua struct read/write library"
+arch=(any)
+url="https://github.com/ToxicFrog/vstruct"
+license=("MIT")
+source=("$pkgname::git+https://github.com/ToxicFrog/vstruct#branch=master")
+depends=(wf-lua)
+sha256sums=("SKIP")
+
+. "/wf/config/runtime-env-vars.sh"
+
+. "../templates/git-pkgver.PKGBUILD"
+
+package() {
+	cd "$pkgname"
+
+	mkdir -p "$pkgdir$WF_DESTDIR"/lib/lua/5.4/vstruct
+	cp -aR ast io api.lua ast.lua cursor.lua frexp.lua init.lua io.lua lexer.lua "$pkgdir$WF_DESTDIR"/lib/lua/5.4/vstruct
+
+	mkdir -p "$pkgdir$WF_DESTDIR"/doc/wf-lua-vstruct
+	cp -a COPYING README.md "$pkgdir$WF_DESTDIR"/doc/wf-lua-vstruct
+}

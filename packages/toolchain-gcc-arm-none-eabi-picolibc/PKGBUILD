@@ -69,7 +69,7 @@ build() {
 package() {
 	cd picolibc-build
 	DESTDIR="$pkgdir" ninja install
-	cp ../crt0.o "$pkgdir"/"$WF_PATH"/toolchain/gcc-arm-none-eabi/arm-none-eabi/lib
 	cd "$pkgdir"
 	wf_relocate_path_to_destdir
+	cp ../crt0.o "$pkgdir$WF_DESTDIR"/toolchain/gcc-arm-none-eabi/arm-none-eabi/lib
 }

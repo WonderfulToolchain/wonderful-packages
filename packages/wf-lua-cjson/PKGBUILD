@@ -33,7 +33,7 @@ build() {
 package() {
 	cd "$pkgname"
 
-	mkdir -p "$pkgdir"/lib/lua/5.4
-	cp -a cjson.so "$pkgdir"/lib/lua/5.4
+	mkdir -p "$pkgdir$WF_DESTDIR"/lib/lua/5.4
+	cp -a cjson"$WF_LIBRARY_SUFFIX" "$pkgdir$WF_DESTDIR"/lib/lua/5.4
 }
 

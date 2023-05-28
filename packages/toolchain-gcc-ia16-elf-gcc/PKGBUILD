@@ -100,8 +100,8 @@ package_toolchain-gcc-ia16-elf-gcc-libs() {
         	make all-target-libgcc \
 			CFLAGS_FOR_TARGET="$OPT_LEVEL -march=v30mz -mtune=v30mz -mregparmcall -mcmodel=$MEMORY_MODEL -msegelf" \
 			MULTIFLAGS="-march=v30mz -mtune=v30mz -mregparmcall -mcmodel=$MEMORY_MODEL -msegelf"
-        	mkdir -p "$pkgdir"/toolchain/gcc-ia16-elf/lib/v30mz/$MEMORY_MODEL/
-        	install -m 644 ia16-elf/libgcc/libgcc.a "$pkgdir"/toolchain/gcc-ia16-elf/lib/v30mz/$MEMORY_MODEL/libgcc.a
+        	mkdir -p "$pkgdir$WF_DESTDIR"/toolchain/gcc-ia16-elf/lib/v30mz/$MEMORY_MODEL/
+        	install -m 644 ia16-elf/libgcc/libgcc.a "$pkgdir$WF_DESTDIR"/toolchain/gcc-ia16-elf/lib/v30mz/$MEMORY_MODEL/libgcc.a
 	done
 
 	# DS != SS memory model versions of libgcc
@@ -115,7 +115,7 @@ package_toolchain-gcc-ia16-elf-gcc-libs() {
         	make all-target-libgcc \
 			CFLAGS_FOR_TARGET="$OPT_LEVEL -march=v30mz -mtune=v30mz -mregparmcall -mcmodel=$MEMORY_MODEL -mno-callee-assume-ss-data-segment -msegelf" \
 			MULTIFLAGS="-march=v30mz -mtune=v30mz -mregparmcall -mcmodel=$MEMORY_MODEL -mno-callee-assume-ss-data-segment -msegelf"
-        	mkdir -p "$pkgdir"/toolchain/gcc-ia16-elf/lib/v30mz-separate-stack/$MEMORY_MODEL/
-        	install -m 644 ia16-elf/libgcc/libgcc.a "$pkgdir"/toolchain/gcc-ia16-elf/lib/v30mz-separate-stack/$MEMORY_MODEL/libgcc.a
+        	mkdir -p "$pkgdir$WF_DESTDIR"/toolchain/gcc-ia16-elf/lib/v30mz-separate-stack/$MEMORY_MODEL/
+        	install -m 644 ia16-elf/libgcc/libgcc.a "$pkgdir$WF_DESTDIR"/toolchain/gcc-ia16-elf/lib/v30mz-separate-stack/$MEMORY_MODEL/libgcc.a
 	done
 }

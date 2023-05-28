@@ -35,6 +35,9 @@ package_runtime-musl() {
 	cp lib/*.so "$pkgdir"/lib/
 	ln -s ../lib/libc.so "$pkgdir"/bin/wf-runtime-ldd
 	ln -s libc.so "$pkgdir"/lib/ld-musl-$CARCH.so.1
+
+	cd "$pkgdir"
+	wf_relocate_path_to_destdir
 }
 
 package_runtime-musl-dev() {
@@ -45,4 +48,7 @@ package_runtime-musl-dev() {
 	make DESTDIR="$pkgdir" install
 	rm "$pkgdir"/lib/*.so
 	rm "$pkgdir"/lib/*.so.*
+
+	cd "$pkgdir"
+	wf_relocate_path_to_destdir
 }

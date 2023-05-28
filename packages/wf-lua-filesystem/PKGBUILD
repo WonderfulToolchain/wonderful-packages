@@ -39,10 +39,10 @@ build() {
 package() {
 	cd "$pkgname"
 
-	mkdir -p "$pkgdir"/doc
-	cp -aR docs "$pkgdir"/doc/wf-lua-filesystem
+	mkdir -p "$pkgdir$WF_DESTDIR"/doc
+	cp -aR docs "$pkgdir$WF_DESTDIR"/doc/wf-lua-filesystem
 
-	mkdir -p "$pkgdir"/lib/lua/5.4
-	cp -a src/lfs.so "$pkgdir"/lib/lua/5.4
+	mkdir -p "$pkgdir$WF_DESTDIR"/lib/lua/5.4
+	cp -a src/lfs"$WF_LIBRARY_SUFFIX" "$pkgdir$WF_DESTDIR"/lib/lua/5.4
 }
 

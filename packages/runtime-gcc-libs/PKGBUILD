@@ -26,8 +26,9 @@ package() {
 
 	cd "$pkgdir"
 	mkdir lib
-	cp -d /usr/lib/libstdc++.so* lib/
-	wf_runtime_patchelf lib/libstdc++.so
-	cp -d /usr/lib/libgcc_s.so* lib/
-	wf_runtime_patchelf lib/libgcc_s.so.1
+	cp -d /usr/lib/libstdc++"$WF_LIBRARY_SUFFIX"* lib/
+	wf_runtime_patchelf lib/libstdc++"$WF_LIBRARY_SUFFIX"
+	cp -d /usr/lib/libgcc_s"$WF_LIBRARY_SUFFIX"* lib/
+	wf_runtime_patchelf lib/libgcc_s"$WF_LIBRARY_SUFFIX".1
+	wf_relocate_path_to_destdir
 }

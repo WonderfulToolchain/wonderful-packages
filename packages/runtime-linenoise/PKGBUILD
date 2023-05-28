@@ -29,9 +29,13 @@ build() {
 
 package() {
 	cd "$pkgname"
+	wf_relocate_path_to_destdir
 
 	mkdir -p "$pkgdir"/include
 	cp linenoise.h "$pkgdir"/include
 	mkdir -p "$pkgdir"/lib
 	cp liblinenoise.a "$pkgdir"/lib
+
+	cd "$pkgdir"
+	wf_relocate_path_to_destdir
 }

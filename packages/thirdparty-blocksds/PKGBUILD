@@ -64,12 +64,12 @@ build() {
 
 package_thirdparty-blocksds-toolchain() {
 	cd "$_pkgname"
-	mkdir -p "$pkgdir"/thirdparty/blocksds/core
+	mkdir -p "$pkgdir$WF_DESTDIR"/thirdparty/blocksds/core
 
-	BLOCKSDS=`pwd` INSTALLDIR="$pkgdir"/thirdparty/blocksds/core make -j1 install
+	BLOCKSDS=`pwd` INSTALLDIR="$pkgdir$WF_DESTDIR"/thirdparty/blocksds/core make -j1 install
 
 	# patch compiled executables to use /opt/wonderful dynamic linker
-	find "$pkgdir"/thirdparty/blocksds/core/tools -executable -type f -print0 |
+	find "$pkgdir$WF_DESTDIR"/thirdparty/blocksds/core/tools -executable -type f -print0 |
 		while IFS= read -r -d '' i; do
 			# this will fail on statically-linked grit; consume the error
 			wf_runtime_patchelf "$i" || true
@@ -82,11 +82,11 @@ package_thirdparty-blocksds-docs() {
 
 	cd "$_pkgname"
 
-	mkdir -p "$pkgdir"/thirdparty/blocksds/core
-	cp -aR changelog.rst "$pkgdir"/thirdparty/blocksds/core || true
-	cp -aR docs "$pkgdir"/thirdparty/blocksds/core || true
-	cp -aR examples "$pkgdir"/thirdparty/blocksds/core || true
-	cp -aR readme.rst "$pkgdir"/thirdparty/blocksds/core || true
-	cp -aR templates "$pkgdir"/thirdparty/blocksds/core || true
-	cp -aR tests "$pkgdir"/thirdparty/blocksds/core || true
+	mkdir -p "$pkgdir$WF_DESTDIR"/thirdparty/blocksds/core
+	cp -aR changelog.rst "$pkgdir$WF_DESTDIR"/thirdparty/blocksds/core || true
+	cp -aR docs "$pkgdir$WF_DESTDIR"/thirdparty/blocksds/core || true
+	cp -aR examples "$pkgdir$WF_DESTDIR"/thirdparty/blocksds/core || true
+	cp -aR readme.rst "$pkgdir$WF_DESTDIR"/thirdparty/blocksds/core || true
+	cp -aR templates "$pkgdir$WF_DESTDIR"/thirdparty/blocksds/core || true
+	cp -aR tests "$pkgdir$WF_DESTDIR"/thirdparty/blocksds/core || true
 }
