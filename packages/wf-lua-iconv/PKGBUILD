@@ -23,19 +23,22 @@ sha256sums=("SKIP")
 prepare() {
 	cd "$pkgname"
 
-	# musl iconv has many differences relative to glibc iconv:
-	# https://wiki.musl-libc.org/functional-differences-from-glibc.html
+	if [ "$WF_USE_MUSL" == "true" ]; then
+		# musl iconv has many differences relative to glibc iconv:
+		# https://wiki.musl-libc.org/functional-differences-from-glibc.html
 
-	# musl does not support //TRANSLIT.
-	sed -i -e "s/\/\/TRANSLIT//g" test_iconv.lua
-	# musl does not support EBCDIC-CP-ES.
-	sed -i -E -e "s/check_one\(termcs, \"EBCDIC/-- EBCDIC/g" test_iconv.lua
-	# musl does not output EILSEQ.
-	sed -i -E -e "s/assert\(e == iconv.ERROR_INVALID/-- ERROR_INVALID/g" test_iconv.lua
+		# musl does not support //TRANSLIT.
+		sed -i -e "s/\/\/TRANSLIT//g" test_iconv.lua
+		# musl does not support EBCDIC-CP-ES.
+		sed -i -E -e "s/check_one\(termcs, \"EBCDIC/-- EBCDIC/g" test_iconv.lua
+		# musl does not output EILSEQ.
+		sed -i -E -e "s/assert\(e == iconv.ERROR_INVALID/-- ERROR_INVALID/g" test_iconv.lua
+	fi
 }
 
 build() {
 	cd "$pkgname"
+
 	gcc -c -o iconv.lo $WF_RUNTIME_INCLUDES -fPIC -O3 -Wall luaiconv.c
 	gcc -o iconv"$WF_LIBRARY_SUFFIX" -shared $WF_LUA_LDFLAGS iconv.lo
 }
