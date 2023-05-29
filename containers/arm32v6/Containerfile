@@ -10,7 +10,8 @@ FROM docker.io/arm32v6/alpine:3.18
 # - pacman build dependencies [meson]
 # - llvm build dependencies [lld ninja]
 # - grit build dependencies [freeimage-dev]
-RUN apk add --no-cache build-base fakeroot git pacman pacman-makepkg curl xz zstd sudo cmake patchelf pkgconf coreutils autoconf automake libtool nasm texinfo bison flex meson linux-headers lld ninja freeimage-dev
+# - Lua build tools [luarocks5.4]
+RUN apk add --no-cache build-base fakeroot git pacman pacman-makepkg curl xz zstd sudo cmake patchelf pkgconf coreutils autoconf automake libtool nasm texinfo bison flex meson linux-headers lld ninja freeimage-dev luarocks5.4
 # Configure pacman/makepkg
 RUN mkdir -p /opt/wonderful/pacman/db
 COPY makepkg.conf pacman.conf /etc

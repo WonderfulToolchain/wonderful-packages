@@ -5,6 +5,7 @@
 pkgname=(wf-lua-cjson)
 _pkgver=2.10.12
 pkgver=2.10.12.r302.881accc
+pkgrock=lua-cjson-2.1.0.12-1
 pkgrel=1
 epoch=
 pkgdesc="Lua JSON library"
@@ -19,21 +20,22 @@ sha256sums=("SKIP")
 . "/wf/config/runtime-env-vars.sh"
 
 . "../templates/git-pkgver.PKGBUILD"
+. "../templates/luarocks-package.PKGBUILD"
+
+prepare() {
+	cd "$pkgname"
+	sed -i -e "s/2\.1\.0\.11/2.1.0.12/g" "$pkgrock".rockspec
+}
 
 build() {
 	cd "$pkgname"
-
-	LUA_INCLUDE_DIR="$WF_PATH"/include \
-	LUA_CMODULE_DIR="$WF_PATH"/lib/lua/5.4 \
-	LUA_MODULE_DIR="$WF_PATH"/lib/lua/5.4 \
-	LDFLAGS="$WF_RUNTIME_LDFLAGS" \
-		make
+	build_luarocks
 }
 
 package() {
 	cd "$pkgname"
 
 	mkdir -p "$pkgdir$WF_DESTDIR"/lib/lua/5.4
-	cp -a cjson"$WF_LIBRARY_SUFFIX" "$pkgdir$WF_DESTDIR"/lib/lua/5.4
+	cp -aR build/lib/lua/5.4/* "$pkgdir$WF_DESTDIR"/lib/lua/5.4/
 }
 
