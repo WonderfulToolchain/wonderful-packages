@@ -6,7 +6,7 @@ pkgname=wf-pacman
 pkgver=6.0.2
 _cares_ver=1.19.0
 _nghttp2_ver=1.53.0
-_curlver=8.1.0
+_curlver=8.1.2
 _sslver=3.0.8
 _zlibver=1.2.13
 _xzver=5.4.3
@@ -16,7 +16,7 @@ _libarchive_ver=3.6.2
 _gpgerrorver=1.46
 _libassuanver=2.5.5
 _gpgmever=1.18.0
-pkgrel=3
+pkgrel=4
 # [Wonderful] pkgdesc
 pkgdesc="Wonderful toolchain build of the pacman package manager"
 arch=('i486' 'i686' 'pentium4' 'x86_64' 'arm' 'armv6h' 'armv7h' 'aarch64')
@@ -80,7 +80,7 @@ sha512sums=('9d76fb58c3a50e89a4b92b1f9e3bfdecca3f69e05022ea88fbd34f9df540c4fc688
             'ae3c7b12fc019fa139e94c16f69070734d9c600c1ebefad46758cd7f9a93d39f1d72fa2a9bce10e757141749436858316752157d9957e6aaa455764e2f667a4e'
             'a7f5988bef393afec08a225be92f6eee54a3e67170fb26cbe00dcc5c5a457b27037bbcfeccc39fb855ed72f100196958d6cbbe251bf1ccfbdd353be18f098359'
             'SKIP'
-            '401ad5aeb7244e7cf61de89aa190a682107852d76beefc49817f5885960db27d6ab56b435fc90ccc9459f1586a4d70928819d69fe59c642380137dba36ba9205'
+            '41f4edb9c75870b713a2ecdaae2f8888651f2db3e689b991e70f1ee4e0da86d861eba1a9d24374e7b99deb0fdb218b9fbbd6cd624363d940a27d82b90c0e5c1b'
             'SKIP'
             '8ce10be000d7d4092c8efc5b96b1d2f7da04c1c3a624d3a7923899c6b1de06f369016be957e36e8ab6d4c9102eaeec5d1973295d547f7893a7f11f132ae42b0d'
             'SKIP'
