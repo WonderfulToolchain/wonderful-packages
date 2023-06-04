@@ -3,9 +3,9 @@
 # SPDX-FileContributor: Adrian "asie" Siekierka, 2023
 
 pkgname=toolchain-gcc-arm-none-eabi-picolibc-generic
-_pkgver=1.8.1
-pkgver=1.8.1.r22960.90f8b7fe5
-pkgrel=2
+_pkgver=1.8.2
+pkgver=1.8.2.r23363.85c5e83fc
+pkgrel=1
 epoch=
 pkgdesc="picolibc-based C library for Wonderful toolchain"
 arch=(any)
@@ -69,7 +69,8 @@ build() {
 package() {
 	cd picolibc-build
 	DESTDIR="$pkgdir" ninja install
+	cp ../crt0.o "$pkgdir"/"$WF_PATH"/toolchain/gcc-arm-none-eabi/arm-none-eabi/lib
+
 	cd "$pkgdir"
 	wf_relocate_path_to_destdir
-	cp ../crt0.o "$pkgdir$WF_DESTDIR"/toolchain/gcc-arm-none-eabi/arm-none-eabi/lib
 }

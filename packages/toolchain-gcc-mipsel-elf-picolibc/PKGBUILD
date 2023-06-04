@@ -3,8 +3,8 @@
 # SPDX-FileContributor: Adrian "asie" Siekierka, 2023
 
 pkgname=toolchain-gcc-mipsel-elf-picolibc-generic
-_pkgver=1.8.1
-pkgver=1.8.1.r22960.90f8b7fe5
+_pkgver=1.8.2
+pkgver=1.8.2.r23363.85c5e83fc
 pkgrel=1
 epoch=
 pkgdesc="picolibc-based C library for Wonderful toolchain"
@@ -65,6 +65,7 @@ build() {
 package() {
 	cd picolibc-build
 	DESTDIR="$pkgdir" ninja install
+
 	cd "$pkgdir"
 	wf_relocate_path_to_destdir
 }
