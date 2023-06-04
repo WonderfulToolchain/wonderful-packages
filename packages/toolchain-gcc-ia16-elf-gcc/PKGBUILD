@@ -4,15 +4,15 @@
 
 pkgname=(toolchain-gcc-ia16-elf-gcc toolchain-gcc-ia16-elf-gcc-libs)
 _pkgver=6.3.0
-pkgver=6.3.0.r147129.c8f0f13e700
-pkgrel=1
+pkgver=6.3.0.r147134.ba1a5806f69
+pkgrel=2
 _gmpver=6.1.2
 _mpfrver=3.1.5
 _mpcver=1.0.3
 _islver=0.16.1
 epoch=
 pkgdesc="The GNU Compiler Collection"
-arch=("i686" "x86_64")
+arch=("i686" "x86_64" "armv6h" "aarch64")
 depends=(runtime-gcc-libs runtime-musl toolchain-gcc-ia16-elf-binutils)
 makedepends=(runtime-musl-dev)
 groups=(toolchain-gcc-ia16-elf)
@@ -44,6 +44,10 @@ prepare() {
 	ln -s ../"mpfr-$_mpfrver" mpfr
 	ln -s ../"mpc-$_mpcver" mpc
 	ln -s ../"isl-$_islver" isl
+
+	# ???
+	cd ..
+	tar xvf mpc-$_mpcver.tar
 }
 
 . "../templates/git-pkgver.PKGBUILD"
@@ -89,8 +93,32 @@ package_toolchain-gcc-ia16-elf-gcc-libs() {
 
 	cd gcc-build
 
-	# DS == SS memory model versions of libgcc
-	for MEMORY_MODEL in tiny small medium; do
+	# DS == SS, non-segelf memory model versions of libgcc
+	for MEMORY_MODEL in tiny small; do
+		OPT_LEVEL=-Os
+
+	        make clean-target-libgcc
+        	make all-target-libgcc \
+			CFLAGS_FOR_TARGET="$OPT_LEVEL -march=v30mz -mtune=v30mz -mregparmcall -mcmodel=$MEMORY_MODEL" \
+			MULTIFLAGS="-march=v30mz -mtune=v30mz -mregparmcall -mcmodel=$MEMORY_MODEL"
+        	mkdir -p "$pkgdir$WF_DESTDIR"/toolchain/gcc-ia16-elf/lib/v30mz/$MEMORY_MODEL/
+        	install -m 644 ia16-elf/libgcc/libgcc.a "$pkgdir$WF_DESTDIR"/toolchain/gcc-ia16-elf/lib/v30mz/$MEMORY_MODEL/libgcc.a
+	done
+
+	# DS != SS, non-segelf memory model versions of libgcc
+	for MEMORY_MODEL in tiny small; do
+		OPT_LEVEL=-Os
+
+	        make clean-target-libgcc
+        	make all-target-libgcc \
+			CFLAGS_FOR_TARGET="$OPT_LEVEL -march=v30mz -mtune=v30mz -mregparmcall -mcmodel=$MEMORY_MODEL -mno-callee-assume-ss-data-segment" \
+			MULTIFLAGS="-march=v30mz -mtune=v30mz -mregparmcall -mcmodel=$MEMORY_MODEL -mno-callee-assume-ss-data-segment"
+        	mkdir -p "$pkgdir$WF_DESTDIR"/toolchain/gcc-ia16-elf/lib/v30mz-separate-stack/$MEMORY_MODEL/
+        	install -m 644 ia16-elf/libgcc/libgcc.a "$pkgdir$WF_DESTDIR"/toolchain/gcc-ia16-elf/lib/v30mz-separate-stack/$MEMORY_MODEL/libgcc.a
+	done
+
+	# DS == SS, segelf memory model versions of libgcc
+	for MEMORY_MODEL in small medium; do
 		OPT_LEVEL=-Os
 		if [ "$MEMORY_MODEL" = "medium" ]; then
 			OPT_LEVEL=-O2
@@ -100,12 +128,12 @@ package_toolchain-gcc-ia16-elf-gcc-libs() {
         	make all-target-libgcc \
 			CFLAGS_FOR_TARGET="$OPT_LEVEL -march=v30mz -mtune=v30mz -mregparmcall -mcmodel=$MEMORY_MODEL -msegelf" \
 			MULTIFLAGS="-march=v30mz -mtune=v30mz -mregparmcall -mcmodel=$MEMORY_MODEL -msegelf"
-        	mkdir -p "$pkgdir$WF_DESTDIR"/toolchain/gcc-ia16-elf/lib/v30mz/$MEMORY_MODEL/
-        	install -m 644 ia16-elf/libgcc/libgcc.a "$pkgdir$WF_DESTDIR"/toolchain/gcc-ia16-elf/lib/v30mz/$MEMORY_MODEL/libgcc.a
+        	mkdir -p "$pkgdir$WF_DESTDIR"/toolchain/gcc-ia16-elf/lib/v30mz-segelf/$MEMORY_MODEL/
+        	install -m 644 ia16-elf/libgcc/libgcc.a "$pkgdir$WF_DESTDIR"/toolchain/gcc-ia16-elf/lib/v30mz-segelf/$MEMORY_MODEL/libgcc.a
 	done
 
-	# DS != SS memory model versions of libgcc
-	for MEMORY_MODEL in tiny small medium; do
+	# DS != SS, segelf memory model versions of libgcc
+	for MEMORY_MODEL in small medium; do
 		OPT_LEVEL=-Os
 		if [ "$MEMORY_MODEL" = "medium" ]; then
 			OPT_LEVEL=-O2
@@ -115,7 +143,7 @@ package_toolchain-gcc-ia16-elf-gcc-libs() {
         	make all-target-libgcc \
 			CFLAGS_FOR_TARGET="$OPT_LEVEL -march=v30mz -mtune=v30mz -mregparmcall -mcmodel=$MEMORY_MODEL -mno-callee-assume-ss-data-segment -msegelf" \
 			MULTIFLAGS="-march=v30mz -mtune=v30mz -mregparmcall -mcmodel=$MEMORY_MODEL -mno-callee-assume-ss-data-segment -msegelf"
-        	mkdir -p "$pkgdir$WF_DESTDIR"/toolchain/gcc-ia16-elf/lib/v30mz-separate-stack/$MEMORY_MODEL/
-        	install -m 644 ia16-elf/libgcc/libgcc.a "$pkgdir$WF_DESTDIR"/toolchain/gcc-ia16-elf/lib/v30mz-separate-stack/$MEMORY_MODEL/libgcc.a
+        	mkdir -p "$pkgdir$WF_DESTDIR"/toolchain/gcc-ia16-elf/lib/v30mz-segelf-separate-stack/$MEMORY_MODEL/
+        	install -m 644 ia16-elf/libgcc/libgcc.a "$pkgdir$WF_DESTDIR"/toolchain/gcc-ia16-elf/lib/v30mz-segelf-separate-stack/$MEMORY_MODEL/libgcc.a
 	done
 }

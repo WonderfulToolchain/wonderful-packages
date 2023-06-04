@@ -4,11 +4,11 @@
 
 pkgname=toolchain-gcc-ia16-elf-binutils
 _pkgver=2.39
-pkgver=2.39.r110776.a350f9e672
+pkgver=2.39.r110782.951956c421
 pkgrel=1
 epoch=
 pkgdesc="GNU binary utilities (ia16 fork)"
-arch=("i686" "x86_64")
+arch=("i686" "x86_64" "armv6h" "aarch64")
 url="https://github.com/WonderfulToolchain/binutils-ia16"
 license=("GPL-3.0-or-later")
 source=("$pkgname::git+https://github.com/WonderfulToolchain/binutils-ia16#branch=binutils-2_39-ia16")
