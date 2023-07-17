@@ -4,7 +4,7 @@
 
 pkgname=wf-psxavenc
 _pkgver=0.2.0
-pkgver=0.2.0.r6.4419132
+pkgver=0.2.0.r10.d524746
 pkgrel=1
 epoch=
 pkgdesc="PS1 audio/video encoding tool"
