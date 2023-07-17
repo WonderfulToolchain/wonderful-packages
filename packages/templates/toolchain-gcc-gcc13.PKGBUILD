@@ -40,6 +40,8 @@ sha256sums=(
 . "/wf/config/runtime-env-vars.sh"
 
 prepare() {
+	tar xvf mpc-$_mpcver.tar
+
 	mkdir -p "gcc-build"
 	cd "gcc-$pkgver"
 
@@ -87,8 +89,6 @@ build() {
 		--disable-libstdcxx-verbose \
 		--disable-libunwind-exceptions \
 		--disable-threads \
-		--enable-tls \
-		--with-float=soft \
 		--with-isl \
 		$build_libstdcxx_arg \
 		"${GCC_EXTRA_ARGS[@]}"
