@@ -13,7 +13,7 @@ strip = 'sh-elf-strip'
 system = 'none'
 cpu_family = 'sh'
 cpu = 'sh1'
-endian = 'little'
+endian = 'big'
 
 [properties]
 skip_sanity_check = true
