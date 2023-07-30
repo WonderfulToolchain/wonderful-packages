@@ -4,7 +4,7 @@
 
 pkgname=wf-tools
 _pkgver=0.1.0
-pkgver=0.1.0.r12.f9bc4d0
+pkgver=0.1.0.r20.6d19742
 pkgrel=1
 epoch=
 pkgdesc="Wonderful toolchain tools"
@@ -37,5 +37,13 @@ package() {
 	done
 	mkdir -p "$pkgdir$WF_DESTDIR"/lib/lua/5.4
 	cp -aR wf "$pkgdir$WF_DESTDIR"/lib/lua/5.4/wf
+	cd ..
+
+	# Package shell/
+	cd shell
+	for i in *; do
+		chmod 755 "$i"
+		cp -a "$i" "$pkgdir$WF_DESTDIR"/bin/
+	done
 	cd ..
 }

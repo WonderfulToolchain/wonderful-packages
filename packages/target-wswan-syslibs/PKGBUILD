@@ -4,7 +4,7 @@
 
 pkgname=target-wswan-syslibs
 _pkgver=0.1.0
-pkgver=0.1.0.r38.b7c3d2d
+pkgver=0.1.0.r46.e6dad0c
 pkgrel=1
 epoch=
 pkgdesc="WSwan target system libraries"
@@ -28,6 +28,6 @@ build() {
 
 package() {
 	cd "$pkgname"
-	mkdir -p "$pkgdir"
+	mkdir -p "$pkgdir$WF_DESTDIR"
 	cp -aR build/target "$pkgdir$WF_DESTDIR"
 }

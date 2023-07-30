@@ -1,0 +1,23 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# SPDX-FileContributor: Adrian "asie" Siekierka, 2023
+
+target=wswan
+pkgname=target-wswan-examples
+_pkgver=0.1.0
+pkgver=0.1.0.r14.3c0a3ef
+pkgrel=1
+epoch=
+pkgdesc="WSwan target examples"
+arch=(any)
+url="https://github.com/WonderfulToolchain/target-wswan-examples"
+license=("CC0")
+source=("$pkgname::git+https://github.com/WonderfulToolchain/target-wswan-examples#branch=main")
+depends=()
+sha256sums=('SKIP')
+options=(!strip)
+
+. "/wf/config/runtime-env-vars.sh"
+
+. "../templates/git-pkgver.PKGBUILD"
+. "../templates/wf-examples.PKGBUILD"
