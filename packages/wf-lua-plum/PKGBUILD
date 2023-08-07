@@ -1,0 +1,36 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# SPDX-FileContributor: Adrian "asie" Siekierka, 2023
+
+pkgname=(wf-lua-plum)
+_pkgver=0.0.1
+pkgver=0.0.1.r7.fcd07ac
+pkgrock=lua-plum-dev-1
+pkgrel=1
+epoch=
+pkgdesc="Lua bindings for libplum image library"
+arch=("i686" "x86_64" "armv6h" "aarch64")
+url="https://github.com/asiekierka/lua-plum"
+license=("MIT")
+source=("$pkgname::git+https://github.com/asiekierka/lua-plum#branch=main")
+depends=(wf-lua)
+makedepends=(wf-lua-dev)
+sha256sums=("SKIP")
+
+. "/wf/config/runtime-env-vars.sh"
+
+. "../templates/git-pkgver.PKGBUILD"
+. "../templates/luarocks-package.PKGBUILD"
+
+build() {
+	cd "$pkgname"
+	build_luarocks
+}
+
+package() {
+	cd "$pkgname"
+
+	mkdir -p "$pkgdir$WF_DESTDIR"/lib/lua/5.4
+	cp -aR build/lib/lua/5.4/* "$pkgdir$WF_DESTDIR"/lib/lua/5.4/
+}
+

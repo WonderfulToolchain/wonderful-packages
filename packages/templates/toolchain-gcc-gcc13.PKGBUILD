@@ -11,7 +11,7 @@ else
 	depends=(runtime-gcc-libs runtime-musl toolchain-gcc-$GCC_TARGET-binutils)
 	arch=("i686" "x86_64" "armv6h" "aarch64")
 fi
-pkgver=13.1.0
+pkgver=13.2.0
 _gmpver=6.2.1
 _mpfrver=4.2.0
 _mpcver=1.3.1
@@ -29,7 +29,7 @@ source=("http://ftp.gnu.org/gnu/gcc/gcc-$pkgver/gcc-$pkgver.tar.xz"
 	"https://libisl.sourceforge.io/isl-$_islver.tar.xz"
 	"gcc13-poison-system-directories.patch")
 sha256sums=(
-	'61d684f0aa5e76ac6585ad8898a2427aade8979ed5e7f85492286c4dfc13ee86'
+	'e275e76442a6067341a27f04c5c6b83d8613144004c0413528863dc6b5c743da'
 	'fd4829912cddd12f84181c3451cc752be224643e87fac497b69edddadc49b4f2'
 	'06a378df13501248c1b2db5aa977a2c8126ae849a9d9b7be2546fb4a9c26d993'
 	'ab642492f5cf882b74aa0cb730cd410a81edcdbec895183ce930e706c1c759b8'

@@ -12,8 +12,8 @@ else
 fi
 
 groups=($_pkgname)
-_pkgver=0.8
-pkgver=0.8.r190.41b479b
+_pkgver=0.8.1
+pkgver=0.8.1.r192.c7e3f22
 pkgrel=1
 epoch=
 pkgdesc="DS/DSi console homebrew toolchain maintained by AntonioND"
@@ -59,8 +59,7 @@ build() {
 	wf_use_toolchain gcc-arm-none-eabi arm-none-eabi
 
 	cd "$_pkgname"
-	# make calls sub-Makefiles with -j`nproc`
-	BLOCKSDS=`pwd` make -j1
+	BLOCKSDS=`pwd` make
 }
 
 package_thirdparty-blocksds-git-toolchain() {
