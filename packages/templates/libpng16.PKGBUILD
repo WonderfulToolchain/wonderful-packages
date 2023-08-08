@@ -3,7 +3,7 @@
 # SPDX-FileContributor: Adrian "asie" Siekierka, 2023
 
 pkgname=toolchain-$WF_TOOLCHAIN-libpng16
-pkgver=1.6.39
+pkgver=1.6.40
 epoch=
 pkgdesc="libpng for $WF_TOOLCHAIN"
 arch=(any)
@@ -22,7 +22,7 @@ depends=(
 )
 groups=(toolchain-$WF_TOOLCHAIN-extra)
 sha256sums=(
-	'1f4696ce70b4ee5f85f1e1623dc1229b210029fa4b7aee573df3e2ba7b036937'
+	'535b479b2467ff231a3ec6d92a525906fb8ef27978be4f66dbe05d3f3a01b3a1'
 	'SKIP'
 )
 options=(!strip)
@@ -30,6 +30,9 @@ options=(!strip)
 . "/wf/config/runtime-env-vars.sh"
 
 prepare() {
+	# ???
+	tar xf libpng-$pkgver.tar
+
 	cd libpng-$pkgver
 	patch -p1 <../libpng-1.6.34-disable-tests.patch
 	autoreconf -i

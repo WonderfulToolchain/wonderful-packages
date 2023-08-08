@@ -4,7 +4,7 @@
 
 pkgname=wf-tools
 _pkgver=0.1.0
-pkgver=0.1.0.r20.6d19742
+pkgver=0.1.0.r25.7133c58
 pkgrel=1
 epoch=
 pkgdesc="Wonderful toolchain tools"
