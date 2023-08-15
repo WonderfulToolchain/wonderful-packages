@@ -1,0 +1,64 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# SPDX-FileContributor: Adrian "asie" Siekierka, 2023
+
+pkgname=(wf-sox wf-sox-dev)
+_pkgver=14.4.2
+pkgver=14.4.2.r3246.5ec1b44f
+pkgrel=1
+epoch=
+pkgdesc="The Swiss Army knife of sound processing tools"
+arch=("i686" "x86_64" "armv6h" "aarch64")
+url="https://github.com/WonderfulToolchain/sox"
+license=("GPL2" "LGPL2.1")
+source=("$pkgname::git+https://github.com/WonderfulToolchain/sox#branch=master")
+depends=(runtime-gcc-libs runtime-musl)
+makedepends=(runtime-musl-dev)
+sha256sums=('SKIP')
+
+. "/wf/config/runtime-env-vars.sh"
+
+. "../templates/git-pkgver.PKGBUILD"
+
+prepare() {
+	cd wf-sox
+	autoreconf -vfi
+}
+
+build() {
+	cd wf-sox
+	CFLAGS="-O2 -flto $WF_RUNTIME_INCLUDES" \
+	CXXFLAGS="-O2 -flto $WF_RUNTIME_INCLUDES" \
+	LDFLAGS="-static $WF_RUNTIME_LDFLAGS" \
+	./configure --prefix="$WF_PATH" \
+		--sysconfdir=/etc \
+		--with-dyn-default \
+		--without-libltdl --without-ladspa --without-magic --without-png \
+		--without-id3tag --without-libgsm --without-opencore-amrnb \
+		--without-opencore-amrwb --without-vo-amrwbenc --without-mad --without-lame \
+		--without-twolame --without-libsndfile \
+		--disable-formats --disable-symlinks \
+		--with-distro="Wonderful Toolchain"
+	make all
+}
+
+package_wf-sox() {
+	cd wf-sox
+	make DESTDIR="$pkgdir" install
+	cd "$pkgdir"
+	wf_relocate_path_to_destdir
+
+	mv bin/sox$WF_EXECUTABLE_SUFFIX bin/wf-sox$WF_EXECUTABLE_SUFFIX
+
+	rm -r include share
+	rm -r lib/libsox.a lib/libsox.la lib/pkgconfig
+}
+
+package_wf-sox-dev() {
+	cd wf-sox
+	make DESTDIR="$pkgdir" install
+	cd "$pkgdir"
+	wf_relocate_path_to_destdir
+
+	rm -r bin share
+}

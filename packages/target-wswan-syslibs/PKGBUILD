@@ -4,7 +4,7 @@
 
 pkgname=target-wswan-syslibs
 _pkgver=0.1.0
-pkgver=0.1.0.r51.55e48df
+pkgver=0.1.0.r54.d8d0da2
 pkgrel=1
 epoch=
 pkgdesc="WSwan target system libraries"
@@ -13,7 +13,7 @@ url="https://github.com/WonderfulToolchain/target-wswan-syslibs"
 license=("zlib")
 source=("$pkgname::git+https://github.com/WonderfulToolchain/target-wswan-syslibs#branch=main")
 depends=()
-makedepends=(toolchain-gcc-ia16-elf-binutils toolchain-gcc-ia16-elf-gcc)
+makedepends=(toolchain-gcc-ia16-elf-binutils toolchain-gcc-ia16-elf-gcc wf-tools)
 sha256sums=('SKIP')
 options=(!strip)
 

@@ -8,6 +8,7 @@ WF_DESTDIR="/"
 # WF_DESTDIR="/opt/wonderful/"
 WF_USE_MUSL=true
 WF_LIBRARY_SUFFIX=.so
+WF_EXECUTABLE_SUFFIX=
 
 WF_RUNTIME_LDFLAGS="-Wl,-rpath,$WF_PATH/lib -Wl,--dynamic-linker=$WF_PATH/lib/ld-musl-$CARCH.so.1"
 
