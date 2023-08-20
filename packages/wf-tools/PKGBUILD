@@ -4,7 +4,8 @@
 
 pkgname=wf-tools
 _pkgver=0.1.0
-pkgver=0.1.0.r41.ae3ab92
+pkgver=0.1.0.r54.ad6ec22
+pkgrock=wf-tools-dev-1
 pkgrel=1
 epoch=
 pkgdesc="Wonderful toolchain tools"
@@ -20,9 +21,11 @@ sha256sums=('SKIP')
 . "/wf/config/runtime-env-vars.sh"
 
 . "../templates/git-pkgver.PKGBUILD"
+. "../templates/luarocks-package.PKGBUILD"
 
 build() {
 	cd "$pkgname"
+	build_luarocks
 }
 
 package() {
@@ -38,6 +41,10 @@ package() {
 	mkdir -p "$pkgdir$WF_DESTDIR"/lib/lua/5.4
 	cp -aR wf "$pkgdir$WF_DESTDIR"/lib/lua/5.4/wf
 	cd ..
+
+	# Package Lua natives
+	mkdir -p "$pkgdir$WF_DESTDIR"/lib/lua/5.4
+	cp -aR build/lib/lua/5.4/* "$pkgdir$WF_DESTDIR"/lib/lua/5.4/
 
 	# Package shell/
 	cd shell
