@@ -3,7 +3,7 @@
 # SPDX-FileContributor: Adrian "asie" Siekierka, 2023
 
 pkgname=toolchain-$WF_TOOLCHAIN-zlib
-pkgver=1.2.13
+pkgver=1.3
 epoch=
 pkgdesc="zlib for $WF_TOOLCHAIN"
 arch=(any)
@@ -20,7 +20,7 @@ depends=(
 )
 groups=(toolchain-$WF_TOOLCHAIN-extra)
 sha256sums=(
-	'b3a24de97a8fdbc835b9833169501030b8977031bcb54b3b3ac13740f846ab30'
+	'ff0ba4c292013dbc27530b3a81e1f9a813cd39de01ca5e0f8bf355702efa593e'
 )
 options=(!strip)
 
