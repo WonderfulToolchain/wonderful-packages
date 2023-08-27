@@ -3,14 +3,14 @@
 # SPDX-FileContributor: Adrian "asie" Siekierka, 2023
 
 pkgname=wf-lua-posix
-pkgver=36.1
+pkgver=36.2.1
 pkgrel=1
 pkgrock=luaposix-"$pkgver"-1
 pkgdesc="Lua POSIX library"
-arch=(any)
+arch=("i686" "x86_64" "armv6h" "aarch64")
 url="https://github.com/luaposix/luaposix"
 license=("MIT")
-source=("$pkgname-$pkgver::git+https://github.com/luaposix/luaposix#branch=release-v$pkgver")
+source=("$pkgname-$pkgver::git+https://github.com/luaposix/luaposix#tag=v$pkgver")
 depends=(wf-lua)
 makedepends=(runtime-musl-dev wf-lua-dev)
 sha256sums=("SKIP")
