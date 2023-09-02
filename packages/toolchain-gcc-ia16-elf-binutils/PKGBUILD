@@ -4,7 +4,7 @@
 
 pkgname=toolchain-gcc-ia16-elf-binutils
 _pkgver=2.39
-pkgver=2.39.r110782.951956c421
+pkgver=2.39.r110783.b0bae6a7e4
 pkgrel=1
 epoch=
 pkgdesc="GNU binary utilities (ia16 fork)"

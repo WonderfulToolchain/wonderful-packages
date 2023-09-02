@@ -51,7 +51,7 @@ prepare() {
 build() {
 	cd gcc-build
 
-	# workaround for https://gcc.gnu.org/bugzilla//show_bug.cgi?id=108300
+	# workaround for https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108300
 	if [ "$WF_HOST_OS" == "windows" ]; then
 		CPPFLAGS='-DWIN32_LEAN_AND_MEAN'
 	fi
