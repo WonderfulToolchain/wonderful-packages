@@ -102,6 +102,7 @@ class PackageSourceCache:
                 package["name"] = package["pkgbase"]
                 del package["pkgbase"]
             if "pkgname" in package:
+                package["names"] = package["pkgname"]
                 del package["pkgname"]
             if "pkgver" in package:
                 package["version"] = package["pkgver"]
@@ -115,7 +116,7 @@ class PackageSourceCache:
                 package["desc"] = package["pkgdesc"]
                 del package["pkgdesc"]
 
-            postprocess_package_keys(package)
+            postprocess_package_keys(package, extra_keys=["names"])
             self.packages[path] = package
         return self.packages[path]
 

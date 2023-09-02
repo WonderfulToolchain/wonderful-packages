@@ -5,6 +5,7 @@
 from .mirror import clean_unused_packages
 from ..package import PackageBinaryCache, PackageSourceCache, resolve_package_path
 from pathlib import Path
+import re
 import shutil
 from termcolor import colored
 from tqdm import tqdm
@@ -29,16 +30,17 @@ def parse_package_reference(name, all_targets):
 
 def cmd_build(ctx, args):
     all_targets = list(ctx.environments.keys())
-    # package_caches = {}
+    package_caches = {}
     package_pairs = []
     source_cache = PackageSourceCache(ctx.preferred_environment)
     repo_updates = {}
 
     tqdm.write(colored(f"[*] Preparing...", attrs=["bold"]))
     for target in ctx.all_known_environments:
-        # package_caches[target] = PackageBinaryCache(target)
-        # package_caches[target].init_db()
         repo_updates[target] = []
+    for target in all_targets:
+        package_caches[target] = PackageBinaryCache(target)
+        package_caches[target].init_db()
 
     for name, targets in tqdm([parse_package_reference(package, all_targets) for package in args.packages]):
         if name not in source_cache.get_package_names():
@@ -54,23 +56,27 @@ def cmd_build(ctx, args):
     for package, target in tqdm(package_pairs):
         tqdm.write(colored(f"[*] Building {package} for {target}...", attrs=["bold"]))
         env = ctx.preferred_environment if target == "any" else ctx.environments[target]
-        result = env.run(["cd", str(env.root / str(resolve_package_path(package, env.path))), "&&", "makepkg", "-C", "--clean", "--syncdeps", "--force", "--noconfirm", "--skippgpcheck", package], check=True)   
+        result = env.run(["cd", str(env.root / str(resolve_package_path(package, env.path))), "&&", "makepkg", "-C", "--clean", "--syncdeps", "--force", "--noconfirm", "--skippgpcheck", package], check=True)
+        package_names = source_cache.get_package_by_name(package, target)["names"]
 
-        repo_updates[env.path].append(package)
+        for package_name in package_names:
+            repo_updates[env.path].append(package_name)
         if target == "any":
             # This is a little broken - it will copy all "any-files" that begin with the same prefix.
             tqdm.write("Propagating any-package...")
             src_dir = Path(f"build/packages/{env.path}")
-            for target in ctx.all_known_environments:
-                if target == env.path:
-                    continue
-                repo_updates[target].append(package)
-                dest_dir = Path(f"build/packages/{target}")
-                dest_dir.mkdir(parents=True, exist_ok=True)
-                for src_file in src_dir.glob("*"):
-                    if src_file.name.startswith(package + "-") and "-any.pkg.tar." in src_file.name:
-                        tqdm.write("-> " + str(dest_dir / src_file.name))
-                        shutil.copy(src_file, dest_dir / src_file.name)
+            for package_name in package_names:
+                for target in ctx.all_known_environments:
+                    if target == env.path:
+                        continue
+                    repo_updates[target].append(package_name)
+                    dest_dir = Path(f"build/packages/{target}")
+                    dest_dir.mkdir(parents=True, exist_ok=True)
+                    matcher = re.compile(f"^{package_name}-[0-9]")
+                    for src_file in src_dir.glob("*"):
+                        if src_file.is_file() and matcher.match(src_file.name) and "-any.pkg.tar." in src_file.name:
+                            tqdm.write("-> " + str(dest_dir / src_file.name))
+                            shutil.copy(src_file, dest_dir / src_file.name)
     
     for target, packages in tqdm(repo_updates.items()):
         target_dir = Path(f"build/packages/{target}")
@@ -79,11 +85,27 @@ def cmd_build(ctx, args):
             continue
         tqdm.write(colored(f"[*] Updating repository for {target}...", attrs=["bold"]))
         env = ctx.preferred_environment
+
+        old_filenames = list([p["filename"] for p in package_caches[target].get_packages().values()])
+
         run_args = ["cd", str(env.root / str(target_dir)), "&&", "repo-add"]
         if not args.keep:
             run_args.append("-R")
         run_args.append("wonderful.db.tar.gz")
-        for target_file in target_dir.glob("*"):
-            if any([target_file.name.startswith(package + "-") for package in packages]):
-                run_args.append(target_file.name)
+        added_files = {}
+        for package in packages:
+            # At any given point, there's going to be either one matching package file (re-building same package)
+            # or multiple (upgrading package).
+            # This assumption is a little broken - currently, it will match all files that begin with the same prefix.
+            matching_filenames = []
+            matcher = re.compile(f"^{package}-[0-9]")
+            for target_file in target_dir.glob("*"):
+                if target_file.is_file() and matcher.match(target_file.name):
+                    matching_filenames.append(target_file.name)
+            if len(matching_filenames) > 1:
+                matching_filenames = list(filter(lambda x: x not in old_filenames, matching_filenames))
+            for fn in matching_filenames:
+                if fn not in added_files:
+                    run_args.append(fn)
+                    added_files[fn] = True
         result = env.run(run_args, check=True, skip_package_sync=True)
