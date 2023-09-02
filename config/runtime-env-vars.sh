@@ -19,13 +19,23 @@ case `uname` in MINGW*)
 	WF_HOST_OS=windows
 esac
 
-if [ "$WF_USE_MUSL" == "false" ]; then
-	removables=(runtime-gcc-libs runtime-musl runtime-musl-dev)
-	for rem in ${removables[@]}; do
-		depends=( "${depends[@]/$rem}" )
-		makedepends=( "${makedepends[@]/$rem}" )
-		optdepends=( "${optdepends[@]/$rem}" )
+remove_dependencies() {
+	for rem in "$@"; do
+		for i in "${!depends[@]}"; do
+			if [[ "${depends[$i]}" == "$rem" ]]; then
+				unset depends[$i]
+			fi
+		done
+		for i in "${!makedepends[@]}"; do
+			if [[ "${makedepends[$i]}" == "$rem" ]]; then
+				unset makedepends[$i]
+			fi
+		done
 	done
+}
+
+if [ "$WF_USE_MUSL" == "false" ]; then
+	remove_dependencies runtime-gcc-libs runtime-musl-dev runtime-musl
 fi
 
 WF_RUNTIME_LDFLAGS="-Wl,-rpath,$WF_PATH/lib -Wl,--dynamic-linker=$WF_PATH/lib/ld-musl-$CARCH.so.1"
