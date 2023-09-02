@@ -40,7 +40,7 @@ Example call:
 
 The Linux bootstraps are effectively self-contained repackagings of a pre-installed `wf-pacman` package, allowing easy end user installation.
 
-    $ ./build-bootstrap.sh x86_64
+    $ ./pkgtool build-bootstrap [targets...]
 
 ## Known issues
 

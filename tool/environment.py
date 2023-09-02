@@ -52,9 +52,12 @@ class ContainerLinuxEnvironment(Environment):
             self.container_built = True
         cwd = os.getcwd()
         cmd = " ".join(args)
-        cmd = "su -c '" + cmd + "' wfbuilder"
+        cmd = "su -c '" + cmd + "'"
+        if not ("as_root" in kwargs and kwargs["as_root"]):
+            cmd = cmd + " wfbuilder"
         if not ("skip_package_sync" in kwargs and kwargs["skip_package_sync"]):
             cmd = "pacman -Syu && " + cmd
-        if "skip_package_sync" in kwargs:
-            del kwargs["skip_package_sync"]
+        for key in ["skip_package_sync", "as_root"]:
+            if key in kwargs:
+                del kwargs[key]
         return subprocess.run(["podman", "run", "-i", "-v", f"{cwd}:/wf", f"wonderful-{self.container_name}", "sh", "-c", cmd], **kwargs)

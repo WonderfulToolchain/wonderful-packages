@@ -3,6 +3,7 @@
 # SPDX-FileContributor: Adrian "asie" Siekierka, 2023
 
 from .cmd.build import cmd_build
+from .cmd.build_bootstrap import cmd_build_bootstrap
 from .cmd.mirror import cmd_mirror
 from .environment import NativeLinuxEnvironment, NativeWindowsEnvironment, ContainerLinuxEnvironment
 import addict
@@ -53,6 +54,10 @@ argp_build = subparsers.add_parser('build', help='Build packages.')
 argp_build.add_argument('packages', metavar='package', type=str, nargs='*', help='Requested packages. Format: package_name[@target1[,target2...]]')
 argp_build.add_argument('-k', '--keep', dest='keep', action='store_true', help='Keep the old version of the package.')
 argp_build.set_defaults(func=cmd_build)
+
+argp_build_bootstrap = subparsers.add_parser('build-bootstrap', help='Build bootstraps.')
+argp_build_bootstrap.add_argument('targets', metavar='target', type=str, nargs='*', help='Requested targets.')
+argp_build_bootstrap.set_defaults(func=cmd_build_bootstrap)
 
 args = argp.parse_args()
 args.func(ctx, args)
