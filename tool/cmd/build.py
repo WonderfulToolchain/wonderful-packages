@@ -78,7 +78,7 @@ def cmd_build(ctx, args):
                             tqdm.write("-> " + str(dest_dir / src_file.name))
                             shutil.copy(src_file, dest_dir / src_file.name)
     
-    for target, packages in tqdm(repo_updates.items()):
+    for target, packages in tqdm(filter(lambda x: len(x[1]) > 0, repo_updates.items())):
         target_dir = Path(f"build/packages/{target}")
         if not (target_dir / "wonderful.db.tar.gz").exists():
             tqdm.write(colored(f"[*] Repository not found for {target}, skipping...", attrs=["bold"]))
