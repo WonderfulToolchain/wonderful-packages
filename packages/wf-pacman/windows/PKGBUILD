@@ -1,0 +1,81 @@
+# https://github.com/msys2/MSYS2-packages/tree/master/pacman
+
+# [Wonderful] pkgname
+pkgname=wf-pacman
+pkgver=6.0.2
+pkgrel=6
+# [Wonderful] pkgdesc
+pkgdesc="Wonderful toolchain build of the pacman package manager"
+arch=('x86_64')
+url="https://www.archlinux.org/pacman/"
+license=('GPL')
+options=('!emptydirs')
+
+source=("https://sources.archlinux.org/other/pacman/pacman-${pkgver}.tar.xz"{,.sig})
+validpgpkeys=('6645B0A8C7005E78DB1D7864F99FFE0FEAE999BD'  # Allan McRae <allan@archlinux.org>
+              'B8151B117037781095514CA7BBDFFC92306B1121') # Andrew Gregory (pacman) <andrew@archlinux.org>
+# [Wonderful] group
+groups=("wonderful-base")
+
+sha512sums=('9d76fb58c3a50e89a4b92b1f9e3bfdecca3f69e05022ea88fbd34f9df540c4fc688ad4f8b27e77eedb791aa682c27037abe65c789c6d9ee393bae5b620c3df13'
+            'SKIP')
+
+# [Wonderful]
+. "/wf/config/runtime-env-vars.sh"
+
+# [Wonderful]
+prepare() {
+    cd "${srcdir}"/pacman-${pkgver}
+    patch -p1 < /wf/packages/wf-pacman/pacman-rootless.patch
+    patch -p1 < /wf/packages/wf-pacman/pacman-windows-friendly-epoch-separator.patch
+    sed -i -e "s/Pacman v\%s - libalpm v\%s/Pacman v%s - libalpm v%s (wf-pacman)/" src/pacman/pacman.c
+
+    patch -p1 < /wf/packages/wf-pacman/msys2-0006-fill_progress.patch
+    patch -p1 < /wf/packages/wf-pacman/msys2-0019-pacman-libalpm-ignore-file-conflicts-for-foo.exe-foo.patch
+    patch -p1 < /wf/packages/wf-pacman/msys2-0021-Use-pipe-instead-of-socket.patch
+    patch -p1 < /wf/packages/wf-pacman/msys2-0022-pacman-make-file-list-comparisons-between-packages-c.patch
+    patch -p1 < /wf/packages/wf-pacman/msys2-0027-pacman.c-handle-cr-on-stdin-as-well.patch
+}
+
+build() {
+    mkdir -p "${srcdir}"/pacman-${pkgver}/builddir
+    cd "${srcdir}"/pacman-${pkgver}/builddir
+    meson setup \
+        --prefix="$WF_PATH" \
+	--sysconfdir="$WF_PATH/etc" \
+	--localstatedir="$WF_PATH/pacman" \
+        --includedir=lib/pacman/include \
+        --libdir=lib/pacman/lib \
+        --buildtype=plain \
+        -Db_lto=true \
+        -Db_staticpic=false \
+        -Dbuildstatic=true \
+        -Ddefault_library=static \
+        -Ddoc=disabled \
+        -Ddoxygen=disabled \
+        -Di18n=false \
+        -Droot-dir="$WF_PATH" \
+        -Dscriptlet-shell=/usr/bin/bash \
+        ..
+    ninja
+}
+
+package() {
+    cd "${srcdir}"/pacman-${pkgver}/builddir
+    DESTDIR="${pkgdir}" ninja install
+
+    # [Wonderful] custom packaging process
+    cd "$pkgdir"
+    install -dm755 bin
+    mv ."$WF_PATH"/bin/pacman.exe bin/wf-pacman.exe
+#   mv ."$WF_PATH"/bin/pacman-conf bin/wf-pacman-conf
+#   mv ."$WF_PATH"/bin/pacman-db-upgrade bin/wf-pacman-db-upgrade
+#   mv ."$WF_PATH"/bin/pacman-key bin/wf-pacman-key
+    install -dm755 etc
+    install -m644 "/wf/packages/wf-pacman/pacman.conf" etc
+    sed -i -e "s/%ARCH%/"$CARCH"/g" -e "s/%OS%/"$WF_HOST_OS"/g" etc/pacman.conf
+    rm -r opt
+
+    wf_relocate_path_to_destdir
+}
+

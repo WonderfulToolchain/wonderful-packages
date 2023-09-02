@@ -21,12 +21,13 @@ As the packaging system is intended for internal use only, the list of tested se
 * For Windows development, MSYS2 (MINGW64 environment) should be used. Unlike Linux, development is not containerized; as such, all packages' build dependencies must be installed by the user, and they're often not well-documented. Caveat emptor.
   * The repository must be installed to `/wf`. While `pkgtool` is directory-agnostic, the `PKGBUILD` scripts are not.
   * Make sure to install MINGW64 Python instead of MSYS2 Python: `pacman -S mingw-w64-x86_64-python mingw-w64-x86_64-python-poetry`.
-  * A good start for building PKGBUILD scripts is `pacman -S autoconf auitoconf-archive automake base-devel bison flex git libtool lld mingw-w64-x86_64-cmake mingw-w64-x86_64-lua-luarocks mingw-w64-x86_64-meson mingw-w64-x86_64-toolchain nasm ninja`.
+  * A good start for building PKGBUILD scripts is `pacman -S autoconf auitoconf-archive automake base-devel bison flex git libtool lld mingw-w64-x86_64-autotools mingw-w64-x86_64-cmake mingw-w64-x86_64-lua-luarocks mingw-w64-x86_64-meson mingw-w64-x86_64-toolchain nasm ninja`.
   * For HTTP downloads, `mingw-w64-x86_64-ca-certificates` is also required.
   * Copy `misc/windows/makepkg.conf` to `/etc/makepkg.conf`.
   * Edit `/etc/pacman.conf` to include the local Wonderful repository (see `containers/x86_64/pacman.conf` for example).
   * `./pkgtool mirror`'s `-c` argument is currently broken on Windows.
   * To fix `luarocks` not being able to create directories, you will need to `luarocks install luafilesystem` first, while creating all the erroring directories manually. See [MINGW-packages/#12002](https://github.com/msys2/MINGW-packages/pull/12002).
+  * `wf-pacman` is built with MSYS rather than MINGW64.
 
 ### Downloading repositories
 

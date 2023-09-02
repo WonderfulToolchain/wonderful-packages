@@ -1,3 +1,14 @@
 #!/bin/bash
+
+# Redirect pacman to wf-pacman on non-containerized platforms.
+case "$(uname -s)" in
+	MINGW*)
+		export PATH=`pwd`/tool/windows:$PATH
+		;;
+	*)
+		;;
+esac
+
+# Run pkgtool.
 poetry run python -m tool.main "$@"
 

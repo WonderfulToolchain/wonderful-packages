@@ -34,7 +34,7 @@ class NativeWindowsEnvironment(Environment):
         super().__init__("windows", arch, os.getcwd())
 
     def run(self, args, **kwargs):
-        kwargs["shell"] = True
+        # kwargs["shell"] = True
         clean_custom_keys(kwargs)
         return subprocess.run(["sh", "-c", " ".join(args)], **kwargs)
         

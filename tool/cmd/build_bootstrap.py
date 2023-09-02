@@ -14,14 +14,23 @@ def cmd_build_bootstrap(ctx, args):
             continue
         tqdm.write(colored(f"[*] Building bootstrap for {target}...", attrs=["bold"]))
 
-        run_args = ["rm", "-r", f"/wf/build/bootstrap/*-{env.container_name}.tar.gz", ";",
+        target_parts = target.split("/")
+        bootstrap_suffix = target_parts[1]
+        if target_parts[0] != "linux":
+            bootstrap_suffix = target_parts[0] + "-" + bootstrap_suffix
+
+        run_args = ["rm", "-r", f"/wf/build/bootstrap/*-{bootstrap_suffix}.tar.gz", ";",
                 "mkdir", "-p", "/wf/build/bootstrap", "&&",
                 "sudo", "pacman", "-Syu", "&&",
                 "sudo", "pacman", "-S", "--noconfirm", "wf-pacman", "&&",
                 "cd", "/opt/wonderful", "&&",
                 "rm", "-r", "pacman/cache", "&&",
                 "rm", "pacman/pacman.log", "&&",
-                "tar", "czvf", f"/wf/build/bootstrap/wf-bootstrap-{env.container_name}.tar.gz", "."]
+                "tar", "czvf", f"/wf/build/bootstrap/wf-bootstrap-{bootstrap_suffix}.tar.gz", "."]
+
+        if target_parts[0] != "linux":
+            run_args.remove("sudo")
+            run_args.remove("sudo")
         
         result = env.run(run_args, check=True, skip_package_sync=True, as_root=True)
 

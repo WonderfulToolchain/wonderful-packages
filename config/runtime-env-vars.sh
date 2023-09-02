@@ -14,7 +14,6 @@ case `uname` in MINGW*)
 	WF_USE_MUSL=false
 	WF_LIBRARY_SUFFIX=.dll
 	WF_EXECUTABLE_SUFFIX=.exe
-	WF_DESTDIR="/opt/wonderful/"
 	WF_LUA_LDFLAGS=-llua
 	WF_HOST_OS=windows
 esac

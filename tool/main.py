@@ -29,7 +29,7 @@ def add_environment(env, is_fastest):
     if is_fastest:
         ctx.preferred_environment = env
 
-if platform.system() == "Windows":
+if platform.system() == "Windows" or platform.system().startswith("MSYS_NT"):
     if platform.machine() == "AMD64" or platform.machine() == "x86_64":
         add_environment(NativeWindowsEnvironment("x86_64"), True)
 elif platform.system() == "Linux":
