@@ -26,9 +26,6 @@ sha256sums=(
 . "/wf/config/runtime-env-vars.sh"
 
 prepare() {
-	# ???
-	tar xvf lua-$pkgver.tar
-
 	cd "lua-$pkgver"
 	patch -p1 <../0011-linenoise.patch
 	patch -p1 <../lua-5.4.6-wonderful.patch

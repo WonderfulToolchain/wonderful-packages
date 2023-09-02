@@ -40,8 +40,6 @@ sha256sums=(
 . "/wf/config/runtime-env-vars.sh"
 
 prepare() {
-	tar xvf mpc-$_mpcver.tar
-
 	mkdir -p "gcc-build"
 	cd "gcc-$pkgver"
 

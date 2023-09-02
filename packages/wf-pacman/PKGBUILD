@@ -147,13 +147,6 @@ prepare() {
 
     cd ../libarchive-${_libarchive_ver}
     patch -p1 < ../libarchive-ignore-pc-requires.patch
-
-    # ???
-    cd ..
-    tar xvf zlib-$_zlibver.tar
-    tar xvf bzip2-$_bzipver.tar
-    tar xvf libassuan-$_libassuanver.tar
-    tar xvf libgpg-error-$_gpgerrorver.tar
 }
 
 build() {

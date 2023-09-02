@@ -4,15 +4,33 @@ shopt -s extglob
 # wf-pacman sees $WF_PATH as $WF_DESTDIR
 WF_PATH="/opt/wonderful"
 WF_DESTDIR="/"
-# uncomment if not using wf-pacman
-# WF_DESTDIR="/opt/wonderful/"
 WF_USE_MUSL=true
 WF_LIBRARY_SUFFIX=.so
 WF_EXECUTABLE_SUFFIX=
+WF_LUA_LDFLAGS=
+WF_HOST_OS=linux
+
+case `uname` in MINGW*)
+	WF_USE_MUSL=false
+	WF_LIBRARY_SUFFIX=.dll
+	WF_EXECUTABLE_SUFFIX=.exe
+	WF_DESTDIR="/opt/wonderful/"
+	WF_LUA_LDFLAGS=-llua
+	WF_HOST_OS=windows
+esac
+
+if [ "$WF_USE_MUSL" == "false" ]; then
+	removables=(runtime-gcc-libs runtime-musl runtime-musl-dev)
+	for rem in ${removables[@]}; do
+		depends=( "${depends[@]/$rem}" )
+		makedepends=( "${makedepends[@]/$rem}" )
+		optdepends=( "${optdepends[@]/$rem}" )
+	done
+fi
 
 WF_RUNTIME_LDFLAGS="-Wl,-rpath,$WF_PATH/lib -Wl,--dynamic-linker=$WF_PATH/lib/ld-musl-$CARCH.so.1"
 
-WF_RUNTIME_INCLUDES="-I$WF_PATH/include"
+WF_RUNTIME_INCLUDES="-isystem $WF_PATH/include"
 WF_RUNTIME_LDFLAGS="$WF_RUNTIME_LDFLAGS -L$WF_PATH/lib"
 WF_RUNTIME_PKG_CONFIG_PATH="$WF_PATH/lib/pkgconfig"
 

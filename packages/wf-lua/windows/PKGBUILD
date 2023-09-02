@@ -1,0 +1,36 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# SPDX-FileContributor: Adrian "asie" Siekierka, 2023
+
+pkgname=(wf-lua wf-lua-dev)
+pkgver=5.4.0
+pkgrel=1
+epoch=
+pkgdesc="Lua scripting language"
+arch=("i686" "x86_64" "armv6h" "aarch64")
+url="https://www.lua.org"
+license=("MIT")
+source=(
+	"wf-lua"
+	"wf-luac"
+)
+depends=(mingw-w64-x86_64-lua)
+makedepends=()
+sha256sums=(
+	"SKIP"
+	"SKIP"
+)
+
+. "/wf/config/runtime-env-vars.sh"
+
+package_wf-lua() {
+	mkdir -p "$pkgdir$WF_DESTDIR"/bin
+	chmod +x "$srcdir"/wf-lua
+	chmod +x "$srcdir"/wf-luac
+	cp -a "$srcdir"/wf-lua "$pkgdir$WF_DESTDIR"/bin/wf-lua
+	cp -a "$srcdir"/wf-luac "$pkgdir$WF_DESTDIR"/bin/wf-luac
+}
+
+package_wf-lua-dev() {
+	true
+}

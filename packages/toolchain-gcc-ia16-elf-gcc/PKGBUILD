@@ -44,16 +44,18 @@ prepare() {
 	ln -s ../"mpfr-$_mpfrver" mpfr
 	ln -s ../"mpc-$_mpcver" mpc
 	ln -s ../"isl-$_islver" isl
-
-	# ???
-	cd ..
-	tar xvf mpc-$_mpcver.tar
 }
 
 . "../templates/git-pkgver.PKGBUILD"
 
 build() {
 	cd gcc-build
+
+	# workaround for https://gcc.gnu.org/bugzilla//show_bug.cgi?id=108300
+	if [ "$WF_HOST_OS" == "windows" ]; then
+		CPPFLAGS='-DWIN32_LEAN_AND_MEAN'
+	fi
+
 	../"$pkgname"/configure \
 		--prefix="/opt/wonderful/toolchain/gcc-ia16-elf" \
 		--target=ia16-elf \

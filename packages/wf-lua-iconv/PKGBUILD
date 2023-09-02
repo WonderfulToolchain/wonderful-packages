@@ -33,19 +33,31 @@ prepare() {
 		sed -i -E -e "s/check_one\(termcs, \"EBCDIC/-- EBCDIC/g" test_iconv.lua
 		# musl does not output EILSEQ.
 		sed -i -E -e "s/assert\(e == iconv.ERROR_INVALID/-- ERROR_INVALID/g" test_iconv.lua
+	elif [ "$WF_HOST_OS" == "windows" ]; then
+		# mingw iconv only recognises them with a dash
+		sed -i -E -e "s/\"utf8\"/\"utf-8\"/g" test_iconv.lua
+		sed -i -E -e "s/\"utf16\"/\"utf-16\"/g" test_iconv.lua
 	fi
 }
 
 build() {
 	cd "$pkgname"
 
-	gcc -c -o iconv.lo $WF_RUNTIME_INCLUDES -fPIC -O3 -Wall luaiconv.c
-	gcc -o iconv"$WF_LIBRARY_SUFFIX" -shared $WF_LUA_LDFLAGS iconv.lo
+	if [ "$WF_HOST_OS" == "windows" ]; then
+		gcc -c -o iconv.lo $WF_RUNTIME_INCLUDES -O3 -Wall luaiconv.c
+		gcc -o iconv"$WF_LIBRARY_SUFFIX" -shared iconv.lo "$WF_LUA_LDFLAGS" -liconv
+	else
+		gcc -c -o iconv.lo $WF_RUNTIME_INCLUDES -fPIC -O3 -Wall luaiconv.c
+		gcc -o iconv"$WF_LIBRARY_SUFFIX" -shared $WF_LUA_LDFLAGS iconv.lo
+	fi
 }
 
 check() {
 	cd "$pkgname"
 
+	if [ "$WF_HOST_OS" == "windows" ]; then
+		export LUA_CPATH="C:/msys64/wf/packages/wf-lua-iconv/src/wf-lua-iconv/?.dll"
+	fi
 	$WF_PATH/bin/wf-lua test_iconv.lua
 }
 

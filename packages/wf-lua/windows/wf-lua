@@ -1,0 +1,6 @@
+#!/bin/bash
+
+export LUA_PATH="/opt/wonderful/lib/lua/5.4/?.lua;$LUA_PATH"
+export LUA_CPATH="/opt/wonderful/lib/lua/5.4/?.dll;$LUA_CPATH"
+
+lua "$@"

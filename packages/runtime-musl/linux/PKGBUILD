@@ -15,9 +15,6 @@ sha256sums=('7a35eae33d5372a7c0da1188de798726f68825513b7ae3ebe97aaaa52114f039')
 
 prepare() {
 	mkdir -p "musl-$pkgver-build"
-
-	# ???
-	tar xvf musl-$pkgver.tar
 }
 
 build() {
