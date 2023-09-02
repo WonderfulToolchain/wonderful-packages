@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "pkgtool"
+name = "wf-pkgtool"
 version = "0.1.0"
 description = "Wonderful package building tool"
 authors = ["Adrian Siekierka <kontakt@asie.pl>"]
