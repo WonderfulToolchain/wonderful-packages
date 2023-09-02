@@ -1,28 +1,42 @@
 # wonderful-packages
 
-Repository used to build binary packages for Wonderful's Pacman repo. Somewhat internal.
+Repository containing the build scripts and infrastructure for Wonderful's Pacman-based packaging.
 
-## Hints
+## Supported targets
 
-    $ ./build-package.sh packages/wf-pacman [x86_64]
-    $ ./rebuild-repository.sh
-    $ ./build-bootstrap.sh x86_64
+Listed from most to least supported.
 
-## Supported architectures
-
-| Description | Container/Shell argument | makepkg/pacman | Supported |
+| Target | Description | Container |
 | - | - | - | - |
-| x86_64 | x86_64 | x86_64 | Yes |
-| ARMv6+, hard float | arm32v6 | armv6h | Yes |
-| AArch64 | aarch64 | aarch64 | Yes |
-| x86 (i686) | i686 | i686 | No |
+| linux/x86_64 | Linux, x86_64 | x86_64 | x86_64 |
+| linux/aarch64 | Linux, AArch64 | aarch64 |
+| linux/armv6h | Linux, ARMv6+, hard float | arm32v6 |
+| windows/x86_64 | Windows, x86_64 | N/A | 
 
-## License
+## Guide
 
-Where possible, the build scripts are licensed under Creative Commons 0, as I don't see why instructions on building libre toolchains should be restricted by copyright in any way.
-However, if you'd like to use these instructions to build your own toolchain, I'd appreciate it if steps were made to ensure that such toolchains are not misrepresented as my own work.
+As the packaging system is intended for internal use only, the list of tested setups is highly specific:
 
-Some scripts are sourced from external locations and may be licensed under more restrictive terms.
+* For Linux development, Arch Linux on an x86_64 or AArch64 machine is recommended. `pipenv`, `podman`, `qemu-user-static` and `qemu-user-static-binfmt` should be installed, probably among some others.
+* For Windows development, MSYS2 should be used. Unlike Linux, development is not containerized; as such, all packages' build dependencies must be installed by the user, and they're often not well-documented. Caveat emptor.
+
+### Downloading repositories
+
+To start working with `pkgtool`, one must make mirrors of all the relevant repositories. This can be done by writing:
+
+    $ ./pkgtool mirror -c [targets...]
+
+If no `targets` are specified, all targets supported by your environment will be downloaded. The `-c` argument removes all outdated/unused packages.
+
+### Building packages
+
+TODO
+
+### Building Linux bootstraps
+
+The Linux bootstraps are effectively self-contained repackagings of a pre-installed `wf-pacman` package, allowing easy end user installation.
+
+    $ ./build-bootstrap.sh x86_64
 
 ## Known issues
 
@@ -35,3 +49,11 @@ On Arch Linux, this can be resolved using the following steps:
   * `/usr/lib/binfmt.d/qemu-aarch64-static.conf`
   * etc.
 2. Run `systemctl restart systemd-binfmt` to apply changes.
+
+## License
+
+Unless otherwise specified, the build scripts (`config/`, `packages/`) are licensed under Creative Commons 0. I don't see why instructions on building otherwise libre toolchains should be restricted by copyright in any way.
+
+The Python package management tool (`tool/`) is licensed under the MIT license.
+
+If you'd like to use these scripts and/or tools to build your own repository or toolchain, I'd appreciate it if steps were made to ensure that such toolchains are not misrepresented as my own work.

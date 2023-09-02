@@ -19,6 +19,7 @@ build_package() {
 	podman build -t wonderful-"$PKGARCH" .
 	podman build -t wonderful .
 	podman run -i -v "$ROOT_DIR":/wf wonderful-"$PKGARCH" sh -c 'pacman -Syu && su -c "cd /wf/packages/'$PKGNAME' && makepkg -C --clean --syncdeps --force --noconfirm --skippgpcheck '$PKGNAME'" wfbuilder'
+	#podman run -i -v "$ROOT_DIR":/wf wonderful-"$PKGARCH" sh -c 'pacman -Syu && su -c "cd /wf/packages/'$PKGNAME' && makepkg --clean --syncdeps --force --noconfirm --skippgpcheck '$PKGNAME'" wfbuilder'
 	popd
 }
 

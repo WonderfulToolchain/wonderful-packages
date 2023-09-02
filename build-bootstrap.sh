@@ -2,7 +2,7 @@
 #
 # SPDX-FileContributor: Adrian "asie" Siekierka, 2023
 
-#!/bin/sh
+#!/bin/bash
 PKGARCH=$1
 ROOT_DIR=$(pwd)
 
