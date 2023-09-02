@@ -7,8 +7,8 @@ Repository containing the build scripts and infrastructure for Wonderful's Pacma
 Listed from most to least supported.
 
 | Target | Description | Container |
-| - | - | - | - |
-| linux/x86_64 | Linux, x86_64 | x86_64 | x86_64 |
+| - | - | - |
+| linux/x86_64 | Linux, x86_64 | x86_64 |
 | linux/aarch64 | Linux, AArch64 | aarch64 |
 | linux/armv6h | Linux, ARMv6+, hard float | arm32v6 |
 | windows/x86_64 | Windows, x86_64 | N/A | 
