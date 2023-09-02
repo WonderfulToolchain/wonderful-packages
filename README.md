@@ -26,6 +26,7 @@ As the packaging system is intended for internal use only, the list of tested se
   * Copy `misc/windows/makepkg.conf` to `/etc/makepkg.conf`.
   * Edit `/etc/pacman.conf` to include the local Wonderful repository (see `containers/x86_64/pacman.conf` for example).
   * `./pkgtool mirror`'s `-c` argument is currently broken on Windows.
+  * To fix `luarocks` not being able to create directories, you will need to `luarocks install luafilesystem` first, while creating all the erroring directories manually. See [MINGW-packages/#12002](https://github.com/msys2/MINGW-packages/pull/12002).
 
 ### Downloading repositories
 

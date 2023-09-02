@@ -36,9 +36,8 @@ def cmd_build(ctx, args):
     repo_updates = {}
 
     tqdm.write(colored(f"[*] Preparing...", attrs=["bold"]))
-    for target in ctx.all_known_environments:
-        repo_updates[target] = []
     for target in all_targets:
+        repo_updates[target] = []
         package_caches[target] = PackageBinaryCache(target)
         package_caches[target].init_db()
 
@@ -66,7 +65,7 @@ def cmd_build(ctx, args):
             tqdm.write("Propagating any-package...")
             src_dir = Path(f"build/packages/{env.path}")
             for package_name in package_names:
-                for target in ctx.all_known_environments:
+                for target in all_targets:
                     if target == env.path:
                         continue
                     repo_updates[target].append(package_name)

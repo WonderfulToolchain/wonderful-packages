@@ -1,6 +1,7 @@
 #!/bin/bash
 
-export LUA_PATH="/opt/wonderful/lib/lua/5.4/?.lua"
-export LUA_CPATH="/opt/wonderful/lib/lua/5.4/?.dll"
+WINPATH=`cygpath -w /opt/wonderful/lib/lua/5.4`
+export LUA_PATH="$WINPATH\\?.lua;$LUA_PATH"
+export LUA_CPATH="$WINPATH\\?.dll;$LUA_CPATH"
 
 luac "$@"

@@ -48,6 +48,7 @@ argp_mirror = subparsers.add_parser('mirror', help='Synchronize a local copy of 
 argp_mirror.add_argument('targets', metavar='target', type=str, nargs='*', help='Requested targets.')
 argp_mirror.add_argument('-c', '--clean', dest='clean', action='store_true', help='Remove unused package files.')
 argp_mirror.add_argument('-f', '--force', dest='force', action='store_true', help='Download already existing package files. Use sparingly.')
+argp_mirror.add_argument('-a', '--all', dest='all', action='store_true', help='Download all targets, including ones not buildable on this machine. [targets] takes priority.')
 argp_mirror.set_defaults(func=cmd_mirror)
 
 argp_build = subparsers.add_parser('build', help='Build packages.')

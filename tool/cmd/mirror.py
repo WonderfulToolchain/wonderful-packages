@@ -20,7 +20,12 @@ def clean_unused_packages(ctx, package_caches, file_list):
                     target_file.unlink()
 
 def cmd_mirror(ctx, args):
-    targets = args.targets or ctx.all_known_environments
+    targets = args.targets
+    if targets is None:
+        if args.all:
+            targets = ctx.all_known_environments
+        else:
+            targets = list(ctx.environments.keys())
     package_caches = {}
 
     print(colored("[*] Downloading repository databases...", attrs=["bold"]))

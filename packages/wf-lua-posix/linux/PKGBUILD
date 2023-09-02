@@ -1,0 +1,36 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# SPDX-FileContributor: Adrian "asie" Siekierka, 2023
+
+pkgname=wf-lua-posix
+pkgver=36.2.1
+pkgrel=1
+pkgrock=luaposix-"$pkgver"-1
+pkgdesc="Lua POSIX library"
+arch=("i686" "x86_64" "armv6h" "aarch64")
+url="https://github.com/luaposix/luaposix"
+license=("MIT")
+source=("$pkgname-$pkgver::git+https://github.com/luaposix/luaposix#tag=v$pkgver")
+depends=(wf-lua)
+makedepends=(runtime-musl-dev wf-lua-dev)
+sha256sums=("SKIP")
+
+. "/wf/config/runtime-env-vars.sh"
+
+. "../templates/luarocks-package.PKGBUILD"
+
+build() {
+	cd "$pkgname-$pkgver"
+	build_luarocks
+}
+
+package() {
+	cd "$pkgname-$pkgver"
+
+	mkdir -p "$pkgdir$WF_DESTDIR"/doc
+	cp -a doc "$pkgdir$WF_DESTDIR"/doc/wf-lua-posix
+	cp -a LICENSE "$pkgdir$WF_DESTDIR"/doc/wf-lua-posix/
+
+	mkdir -p "$pkgdir$WF_DESTDIR"/lib/lua/5.4
+	cp -aR build/lib/lua/5.4/* "$pkgdir$WF_DESTDIR"/lib/lua/5.4/
+}
