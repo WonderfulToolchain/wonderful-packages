@@ -54,7 +54,7 @@ def cmd_build(ctx, args):
     for package, target in tqdm(package_pairs):
         tqdm.write(colored(f"[*] Building {package} for {target}...", attrs=["bold"]))
         env = ctx.preferred_environment if target == "any" else ctx.environments[target]
-        result = env.run(["cd", "/wf/" + str(resolve_package_path(package, env.path)), "&&", "makepkg", "-C", "--clean", "--syncdeps", "--force", "--noconfirm", "--skippgpcheck", package], check=True)   
+        result = env.run(["cd", str(env.root / str(resolve_package_path(package, env.path))), "&&", "makepkg", "-C", "--clean", "--syncdeps", "--force", "--noconfirm", "--skippgpcheck", package], check=True)   
 
         repo_updates[env.path].append(package)
         if target == "any":
@@ -79,7 +79,7 @@ def cmd_build(ctx, args):
             continue
         tqdm.write(colored(f"[*] Updating repository for {target}...", attrs=["bold"]))
         env = ctx.preferred_environment
-        run_args = ["cd", "/wf/" + str(target_dir), "&&", "repo-add"]
+        run_args = ["cd", str(env.root / str(target_dir)), "&&", "repo-add"]
         if not args.keep:
             run_args.append("-R")
         run_args.append("wonderful.db.tar.gz")

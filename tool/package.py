@@ -88,7 +88,7 @@ class PackageSourceCache:
 
     def get_package_by_path(self, name, path):
         if path not in self.packages:
-            result = self.env.run(["cd", "/wf/" + str(path), "&&", "makepkg", "--printsrcinfo"], check=True, stdout=subprocess.PIPE, skip_package_sync=True)
+            result = self.env.run(["cd", str(self.env.root / str(path)), "&&", "makepkg", "--printsrcinfo"], check=True, stdout=subprocess.PIPE, skip_package_sync=True)
             package = {}
             for line in result.stdout.decode('utf-8').splitlines():
                 parts = list([l.strip() for l in line.strip().split("=", maxsplit=1)])

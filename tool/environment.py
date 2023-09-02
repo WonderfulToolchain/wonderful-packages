@@ -4,41 +4,51 @@
 
 from .package import PackageBinaryCache
 import os
+from pathlib import Path
 import shlex
 import subprocess
 from tqdm import tqdm
 
+def clean_custom_keys(kwargs):
+    for key in ["skip_package_sync", "as_root"]:
+        if key in kwargs:
+            del kwargs[key]
+
 class Environment:
-    def __init__(self, os, arch):
+    def __init__(self, os, arch, root):
         self.os = os
         self.arch = arch
+        self.root = Path(root)
         self.path = f"{os}/{arch}"
         self.package_cache = PackageBinaryCache(self.path)
 
 class UnsupportedEnvironment(Environment):
     def __init__(self, os, arch):
-        super().__init__(os, arch)
+        super().__init__(os, arch, "")
 
     def run(self, args, **kwargs):
         raise Exception(f"unsupported os/arch: {os}/{arch}")
 
 class NativeWindowsEnvironment(Environment):
     def __init__(self, arch):
-        super().__init__("windows", arch)
+        super().__init__("windows", arch, os.getcwd())
 
     def run(self, args, **kwargs):
-        return subprocess.run(args, **kwargs)
+        kwargs["shell"] = True
+        clean_custom_keys(kwargs)
+        return subprocess.run(["sh", "-c", " ".join(args)], **kwargs)
         
 class NativeLinuxEnvironment(Environment):
     def __init__(self, arch):
-        super().__init__("linux", arch)
+        super().__init__("linux", arch, os.getcwd())
 
     def run(self, args, **kwargs):
+        clean_custom_keys(kwargs)
         return subprocess.run(args, user="wfbuilder", **kwargs)
         
 class ContainerLinuxEnvironment(Environment):
     def __init__(self, arch, container_name):
-        super().__init__("linux", arch)
+        super().__init__("linux", arch, "/wf")
         self.container_name = container_name
         self.container_built = False
 
@@ -57,7 +67,5 @@ class ContainerLinuxEnvironment(Environment):
             cmd = cmd + " wfbuilder"
         if not ("skip_package_sync" in kwargs and kwargs["skip_package_sync"]):
             cmd = "pacman -Syu && " + cmd
-        for key in ["skip_package_sync", "as_root"]:
-            if key in kwargs:
-                del kwargs[key]
+        clean_custom_keys(kwargs)
         return subprocess.run(["podman", "run", "-i", "-v", f"{cwd}:/wf", f"wonderful-{self.container_name}", "sh", "-c", cmd], **kwargs)
