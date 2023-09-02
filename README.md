@@ -21,7 +21,10 @@ As the packaging system is intended for internal use only, the list of tested se
 * For Windows development, MSYS2 (MINGW64 environment) should be used. Unlike Linux, development is not containerized; as such, all packages' build dependencies must be installed by the user, and they're often not well-documented. Caveat emptor.
   * Make sure to install MINGW64 Python instead of MSYS2 Python: `pacman -S mingw-w64-x86_64-python mingw-w64-x86_64-python-poetry`.
   * For HTTP downloads, `mingw-w64-x86_64-ca-certificates` is also required.
-  * Once everything is installed, run `ln -s ``pwd .`` /wf`. This is necessary for some of the PKGBUILD scripts.
+  * Once everything is installed:
+    * Run `ln -s ``pwd .`` /wf`. This is necessary for the PKGBUILD scripts.
+    * Copy all lines with `/wf` in them from `containers/x86_64/makepkg.conf` to `/etc/makepkg.conf`. Adjust `build/packages/linux` to `build/packages/windows`.
+  * `./pkgtool mirror`'s `-c` argument is currently broken on Windows.
 
 ### Downloading repositories
 

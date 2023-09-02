@@ -14,7 +14,7 @@ def clean_unused_packages(ctx, package_caches, file_list):
     for target, package_cache in package_caches.items():
         target_path = Path(f"build/packages/{target}")
         for target_file in target_path.rglob('*'):
-            if not any([target_file.name.endswith(x) for x in [".db", ".db.tar.gz", ".files", ".files.tar.gz"]]):
+            if target_file.is_file() and not any([target_file.name.endswith(x) for x in [".db", ".db.tar.gz", ".files", ".files.tar.gz"]]):
                 if target_file.resolve() not in file_list:
                     print(f"Removing {target_file.name}...")
                     target_file.unlink()
