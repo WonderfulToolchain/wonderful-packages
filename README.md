@@ -17,9 +17,9 @@ Listed from most to least supported.
 
 As the packaging system is intended for internal use only, the list of tested setups is highly specific:
 
-* For Linux development, Arch Linux on an x86_64 or AArch64 machine is recommended. `pipenv`, `podman`, `qemu-user-static` and `qemu-user-static-binfmt` should be installed, probably among some others.
+* For Linux development, Arch Linux on an x86_64 or AArch64 machine is recommended. `python-poetry`, `podman`, `qemu-user-static` and `qemu-user-static-binfmt` should be installed, probably among some others.
 * For Windows development, MSYS2 (MINGW64 environment) should be used. Unlike Linux, development is not containerized; as such, all packages' build dependencies must be installed by the user, and they're often not well-documented. Caveat emptor.
-  * Make sure to install MINGW64 Python instead of MSYS2 Python: `pacman -S mingw-w64-x86_64-python mingw-w64-x86_64-python-pipenv`.
+  * Make sure to install MINGW64 Python instead of MSYS2 Python: `pacman -S mingw-w64-x86_64-python mingw-w64-x86_64-python-poetry`.
 
 ### Downloading repositories
 
