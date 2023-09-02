@@ -6,6 +6,7 @@ from .package import PackageBinaryCache
 import os
 import shlex
 import subprocess
+from tqdm import tqdm
 
 class Environment:
     def __init__(self, os, arch):
@@ -44,10 +45,16 @@ class ContainerLinuxEnvironment(Environment):
     def run(self, args, **kwargs):
         if not self.container_built:
             # run synchronously
-            subprocess.run(f"podman build -t wonderful-{self.container_name} .", shell=True, check=True, cwd=f"containers/{self.container_name}")
+            tqdm.write(f"Updating {self.container_name} container...")
+            subprocess.run(f"podman build -t wonderful-{self.container_name} .", shell=True, check=True,
+                stdout=subprocess.DEVNULL,
+                cwd=f"containers/{self.container_name}")
             self.container_built = True
         cwd = os.getcwd()
         cmd = " ".join(args)
-        cmd = "pacman -Syu && su -c '" + cmd + "' wfbuilder"
-        print(cmd)
+        cmd = "su -c '" + cmd + "' wfbuilder"
+        if not ("skip_package_sync" in kwargs and kwargs["skip_package_sync"]):
+            cmd = "pacman -Syu && " + cmd
+        if "skip_package_sync" in kwargs:
+            del kwargs["skip_package_sync"]
         return subprocess.run(["podman", "run", "-i", "-v", f"{cwd}:/wf", f"wonderful-{self.container_name}", "sh", "-c", cmd], **kwargs)
