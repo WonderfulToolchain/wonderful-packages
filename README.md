@@ -19,14 +19,17 @@ As the packaging system is intended for internal use only, the list of tested se
 
 * For Linux development, Arch Linux on an x86_64 or AArch64 machine is recommended. `python-poetry`, `podman`, `qemu-user-static` and `qemu-user-static-binfmt` should be installed, probably among some others.
 * For Windows development, MSYS2 (MINGW64 environment) should be used. Unlike Linux, development is not containerized; as such, all packages' build dependencies must be installed by the user, and they're often not well-documented. Caveat emptor.
+  * The repository must be installed to `/wf`. While `pkgtool` is directory-agnostic, the `PKGBUILD` scripts are not.
   * Make sure to install MINGW64 Python instead of MSYS2 Python: `pacman -S mingw-w64-x86_64-python mingw-w64-x86_64-python-poetry`.
   * For HTTP downloads, `mingw-w64-x86_64-ca-certificates` is also required.
-  * Once everything is installed:
-    * Run `ln -s ``pwd .`` /wf`. This is necessary for the PKGBUILD scripts.
-    * Copy all lines with `/wf` in them from `containers/x86_64/makepkg.conf` to `/etc/makepkg.conf`. Adjust `build/packages/linux` to `build/packages/windows`.
+  * Copy `misc/windows/makepkg.conf` to `/etc/makepkg.conf`.
   * `./pkgtool mirror`'s `-c` argument is currently broken on Windows.
 
 ### Downloading repositories
+
+Before using `pkgtool` for the first time, one should initialize the Poetry-based virtual environment:
+
+    $ poetry install
 
 To start working with `pkgtool`, one must make mirrors of all the relevant repositories. This can be done by writing:
 
