@@ -37,9 +37,9 @@ def cmd_build(ctx, args):
 
     tqdm.write(colored(f"[*] Preparing...", attrs=["bold"]))
     for target in all_targets:
-        repo_updates[target] = []
         package_caches[target] = PackageBinaryCache(target)
-        package_caches[target].init_db()
+        if package_caches[target].init_db():
+            repo_updates[target] = []
 
     for name, targets in tqdm([parse_package_reference(package, all_targets) for package in args.packages]):
         if name not in source_cache.get_package_names():
@@ -65,8 +65,10 @@ def cmd_build(ctx, args):
             tqdm.write("Propagating any-package...")
             src_dir = Path(f"build/packages/{env.path}")
             for package_name in package_names:
-                for target in all_targets:
+                for target in ctx.all_known_environments:
                     if target == env.path:
+                        continue
+                    if target not in repo_updates:
                         continue
                     repo_updates[target].append(package_name)
                     dest_dir = Path(f"build/packages/{target}")
@@ -76,7 +78,7 @@ def cmd_build(ctx, args):
                         if src_file.is_file() and matcher.match(src_file.name) and "-any.pkg.tar." in src_file.name:
                             tqdm.write("-> " + str(dest_dir / src_file.name))
                             shutil.copy(src_file, dest_dir / src_file.name)
-    
+
     for target, packages in tqdm(filter(lambda x: len(x[1]) > 0, repo_updates.items())):
         target_dir = Path(f"build/packages/{target}")
         if not (target_dir / "wonderful.db.tar.gz").exists():

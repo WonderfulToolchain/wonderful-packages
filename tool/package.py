@@ -34,7 +34,9 @@ class PackageBinaryCache:
 
     def init_db(self, force=False):
         if self.packages is not None and not force:
-            return
+            return True
+        if not Path(self.__db_loc).exists():
+            return False
         self.packages = {}
         with tarfile.open(self.__db_loc, "r") as db_tar:
             for file in db_tar.getmembers():
@@ -54,12 +56,14 @@ class PackageBinaryCache:
                                 package[current_key] = package[current_key] + "\n" + line
                     postprocess_package_keys(package)
                     self.packages[package["name"]] = package
+        return True
 
     def clear(self):
         self.packages = None
 
     def get_package_names(self):
-        self.init_db()
+        if not self.init_db():
+            return []
         return self.packages.keys()
 
     def get_package_by_name(self, name):
@@ -67,7 +71,8 @@ class PackageBinaryCache:
         return self.packages[name]
 
     def get_packages(self):
-        self.init_db()
+        if not self.init_db():
+            return {}
         return self.packages
 
 # Source (PKGBUILD) package metadata cache.
