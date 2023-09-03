@@ -77,7 +77,17 @@ wf_runtime_patchelf() {
 	fi
 }
 
+wf_disable_host_build() {
+	# disable MinGW environment patches
+	if [ "$WF_HOST_OS" == "windows" ]; then
+		export CONFIG_SITE=/wf/config/empty-config.site
+		unset CC CXX
+	fi
+}
+
 wf_use_toolchain() {
+	wf_disable_host_build
+
 	export WF_TOOLCHAIN_PREFIX="$WF_PATH/toolchain/$1/$2"
 	export PATH="$WF_PATH/toolchain/$1/bin":$PATH
 }

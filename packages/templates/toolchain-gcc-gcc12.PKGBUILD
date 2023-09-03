@@ -64,6 +64,8 @@ build() {
 		build_libstdcxx_arg="--enable-libstdcxx"
 		configure_cmd=../"gcc-$pkgver"/libstdc++-v3/configure
 		export PATH=/opt/wonderful/toolchain/gcc-$GCC_TARGET/bin:$PATH
+
+		wf_disable_host_build
 	else
 		build_libstdcxx_arg="--disable-libstdcxx"
 		configure_cmd=../"gcc-$pkgver"/configure
