@@ -60,6 +60,7 @@ Installation instructions:
 Notes:
 
 * `wf-pacman` is built with MSYS rather than UCRT64. This currently appears to require a separate, manual installation of Poetry via pip.
+* For an unknown reason, `wf-sox` expects `/msys64/usr/share/aclocal` to have the contents of `/usr/share/aclocal`.
 
 ## Known issues
 
