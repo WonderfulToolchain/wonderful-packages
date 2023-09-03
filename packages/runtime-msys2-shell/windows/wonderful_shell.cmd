@@ -14,6 +14,7 @@ set "CONTITLE=Wonderful Toolchain Shell"
 set "CONICON=wonderful_shell.ico"
 
 set BLOCKSDS=/opt/wonderful/thirdparty/blocksds/core
+set BLOCKSDSEXT=/opt/wonderful/thirdparty/blocksds/external
 set WONDERFUL_TOOLCHAIN=/opt/wonderful
 
 :checkparams

@@ -4,7 +4,7 @@
 
 pkgname=(runtime-msys2-shell)
 pkgver=0.1.0
-pkgrel=1
+pkgrel=2
 epoch=
 pkgdesc="MSYS2 shell"
 arch=("i686" "x86_64" "aarch64")
