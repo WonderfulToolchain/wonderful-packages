@@ -4,7 +4,7 @@
 
 pkgname=wf-tools
 _pkgver=0.1.0
-pkgver=0.1.0.r58.d6308f4
+pkgver=0.1.0.r59.6ad2ef5
 pkgrock=wf-tools-dev-1
 pkgrel=1
 epoch=
@@ -26,6 +26,10 @@ sha256sums=('SKIP')
 build() {
 	cd "$pkgname"
 	build_luarocks
+
+	mkdir bin || true
+	gcc -O2 -flto $WF_RUNTIME_INCLUDES $WF_RUNTIME_LDFLAGS \
+		-o bin/wf-compile-commands-merge src/cmd/wf-compile-commands-merge.c
 }
 
 package() {
@@ -46,8 +50,8 @@ package() {
 	mkdir -p "$pkgdir$WF_DESTDIR"/lib/lua/5.4
 	cp -aR build/lib/lua/5.4/* "$pkgdir$WF_DESTDIR"/lib/lua/5.4/
 
-	# Package shell/
-	cd shell
+	# Package bin/
+	cd bin
 	for i in *; do
 		chmod 755 "$i"
 		cp -a "$i" "$pkgdir$WF_DESTDIR"/bin/
