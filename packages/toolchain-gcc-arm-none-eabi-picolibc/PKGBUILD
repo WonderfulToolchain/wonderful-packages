@@ -4,7 +4,7 @@
 
 pkgname=toolchain-gcc-arm-none-eabi-picolibc-generic
 _pkgver=1.8.3
-pkgver=1.8.3.r23570.16fe207d3
+pkgver=1.8.3.r23612.55de37ded
 pkgrel=1
 epoch=
 pkgdesc="picolibc-based C library for Wonderful toolchain"
@@ -16,8 +16,7 @@ source=(
 	"crt0.c"
 	"cross-thumb.txt"
 )
-depends=(runtime-musl toolchain-gcc-arm-none-eabi-binutils toolchain-gcc-arm-none-eabi-gcc)
-makedepends=(runtime-musl-dev)
+depends=(toolchain-gcc-arm-none-eabi-binutils toolchain-gcc-arm-none-eabi-gcc)
 groups=(toolchain-gcc-arm-none-eabi)
 sha256sums=(
 	'SKIP'

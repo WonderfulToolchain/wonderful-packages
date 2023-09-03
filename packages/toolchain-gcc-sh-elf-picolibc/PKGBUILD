@@ -15,8 +15,7 @@ source=(
 	"wf-picolibc::git+https://github.com/WonderfulToolchain/wf-picolibc#branch=wonderful"
 	"cross.txt"
 )
-depends=(runtime-musl toolchain-gcc-sh-elf-binutils toolchain-gcc-sh-elf-gcc)
-makedepends=(runtime-musl-dev)
+depends=(toolchain-gcc-sh-elf-binutils toolchain-gcc-sh-elf-gcc)
 groups=(toolchain-gcc-sh-elf)
 sha256sums=(
 	'SKIP'
