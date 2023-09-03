@@ -1,0 +1,31 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# SPDX-FileContributor: Adrian "asie" Siekierka, 2023
+
+pkgname=(runtime-msys2-shell)
+pkgver=0.1.0
+pkgrel=1
+epoch=
+pkgdesc="MSYS2 shell"
+arch=("i686" "x86_64" "aarch64")
+url=""
+license=("BSD-3-Clause")
+source=(
+	"wonderful_shell.cmd"
+	"wonderful_shell.ico"
+	"wonderful_shell.LICENSE"
+)
+sha256sums=(
+	"SKIP"
+	"SKIP"
+	"SKIP"
+)
+
+. "/wf/config/runtime-env-vars.sh"
+	
+package() {
+	cp wonderful_shell.cmd "$pkgdir"/
+	cp wonderful_shell.ico "$pkgdir"/
+	cp wonderful_shell.LICENSE "$pkgdir"/
+	wf_relocate_path_to_destdir
+}

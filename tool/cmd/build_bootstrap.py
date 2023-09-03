@@ -19,10 +19,14 @@ def cmd_build_bootstrap(ctx, args):
         if target_parts[0] != "linux":
             bootstrap_suffix = target_parts[0] + "-" + bootstrap_suffix
 
+        packages = ["wf-pacman"]
+        if target_parts[0] == "windows":
+            packages.append("runtime-msys2-shell")
+
         run_args = ["rm", "-r", f"/wf/build/bootstrap/*-{bootstrap_suffix}.tar.gz", ";",
                 "mkdir", "-p", "/wf/build/bootstrap", "&&",
                 "sudo", "pacman", "-Syu", "&&",
-                "sudo", "pacman", "-S", "--noconfirm", "wf-pacman", "&&",
+                "sudo", "pacman", "-S", "--noconfirm", ] + packages + ["&&",
                 "cd", "/opt/wonderful", "&&",
                 "rm", "-r", "pacman/cache", "&&",
                 "rm", "pacman/pacman.log", "&&",
