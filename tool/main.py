@@ -39,6 +39,7 @@ elif platform.system() == "Linux":
 
 if ctx.preferred_environment is None:
     raise Exception("unsupported platform: " + platform.system() + "/" + platform.machine())
+ctx.platform = ctx.preferred_environment.path.split("/")[0]
 
 argp = argparse.ArgumentParser(prog='pkgtool')
 subparsers = argp.add_subparsers(title='subcommands', required=True,

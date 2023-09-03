@@ -16,7 +16,7 @@ _libarchive_ver=3.7.1
 _gpgerrorver=1.46
 _libassuanver=2.5.5
 _gpgmever=1.18.0
-pkgrel=6
+pkgrel=7
 # [Wonderful] pkgdesc
 pkgdesc="Wonderful toolchain build of the pacman package manager"
 arch=('i486' 'i686' 'pentium4' 'x86_64' 'arm' 'armv6h' 'armv7h' 'aarch64')
@@ -328,6 +328,7 @@ package() {
     cd "$pkgdir"
     install -dm755 bin
     mv ."$WF_PATH"/bin/pacman bin/wf-pacman
+    mv ."$WF_PATH"/bin/vercmp bin/wf-pacman-vercmp
 #   mv ."$WF_PATH"/bin/pacman-conf bin/wf-pacman-conf
 #   mv ."$WF_PATH"/bin/pacman-db-upgrade bin/wf-pacman-db-upgrade
 #   mv ."$WF_PATH"/bin/pacman-key bin/wf-pacman-key

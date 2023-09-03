@@ -14,6 +14,9 @@ source=(
 	"https://www.lua.org/ftp/lua-5.4.6.tar.gz"
 	"0011-linenoise.patch"
 	"lua-5.4.6-wonderful.patch"
+	"msys2-0001-When-running-lua-on-mintty-or-other.patch"
+	"msys2-0002-Add-Wl-out-implib-liblua.dll.a-to-AR.patch"
+	"msys2-link-implib.patch"
 )
 depends=(runtime-gcc-libs runtime-musl)
 makedepends=(runtime-musl-dev runtime-linenoise-dev)
@@ -21,19 +24,33 @@ sha256sums=(
 	"7d5ea1b9cb6aa0b59ca3dde1c6adcb57ef83a1ba8e5432c0ecd06bf439b3ad88"
 	"8a7584ca1d91e4cd4ab93db73fb72c7a03f71851d372a55ae412a59edbe5eb04"
 	"81946cb53543ddc3f51eaf0b67bf2db28a69e0e6d634084def9c4299a1a8b2a5"
+	"37246417ce7b1d062cb52012c087793c961527e5b6da5318cf573244a477f528"
+	"5f0c29865f9645a61ca62b1860f26ffac8b3458bd5e7b7a9c92daae0927a1914"
+	"0e9f1fab745c8d6cd1fe37a32c8bd6cca665692aac5c130237e648abef86f632"
 )
 
 . "/wf/config/runtime-env-vars.sh"
 
 prepare() {
 	cd "lua-$pkgver"
-	patch -p1 <../0011-linenoise.patch
 	patch -p1 <../lua-5.4.6-wonderful.patch
+	if [ "$WF_HOST_OS" == "linux" ]; then
+		patch -p1 <../0011-linenoise.patch
+	elif [ "$WF_HOST_OS" == "windows" ]; then
+		patch -p1 <../msys2-0001-When-running-lua-on-mintty-or-other.patch
+		patch -p1 <../msys2-0002-Add-Wl-out-implib-liblua.dll.a-to-AR.patch
+		patch -p1 <../msys2-link-implib.patch
+	fi
 }
 
 build() {
 	cd "lua-$pkgver"
-	make linux MYCFLAGS="$WF_RUNTIME_INCLUDES -DLUA_USE_LINENOISE" MYLDFLAGS="$WF_RUNTIME_LDFLAGS" MYLIBS="-llinenoise"
+
+	if [ "$WF_HOST_OS" == "windows" ]; then
+		make mingw MYCFLAGS="$WF_RUNTIME_INCLUDES" MYLDFLAGS="$WF_RUNTIME_LDFLAGS"
+	else
+		make linux MYCFLAGS="$WF_RUNTIME_INCLUDES -DLUA_USE_LINENOISE" MYLDFLAGS="$WF_RUNTIME_LDFLAGS" MYLIBS="-llinenoise"
+	fi
 }
 
 package_wf-lua() {
@@ -42,6 +59,9 @@ package_wf-lua() {
 	mkdir -p "$pkgdir$WF_DESTDIR"/bin
 	cp -a src/lua "$pkgdir$WF_DESTDIR"/bin/wf-lua
 	cp -a src/luac "$pkgdir$WF_DESTDIR"/bin/wf-luac
+	if [ "$WF_HOST_OS" == "windows" ]; then
+		cp -a src/*.dll "$pkgdir$WF_DESTDIR"/bin/
+	fi
 
 	mkdir -p "$pkgdir$WF_DESTDIR"/doc
 	cp -a doc "$pkgdir$WF_DESTDIR"/doc/wf-lua
@@ -54,5 +74,8 @@ package_wf-lua-dev() {
 	for i in lua.h luaconf.h lualib.h lauxlib.h lua.hpp; do cp -a src/"$i" "$pkgdir$WF_DESTDIR"/include; done
 
 	mkdir -p "$pkgdir$WF_DESTDIR"/lib
-	cp -a src/liblua.a "$pkgdir$WF_DESTDIR"/lib
+	cp -a src/liblua.a "$pkgdir$WF_DESTDIR"/lib/
+	if [ "$WF_HOST_OS" == "windows" ]; then
+		cp -a src/liblua.dll.a "$pkgdir$WF_DESTDIR"/lib/
+	fi
 }

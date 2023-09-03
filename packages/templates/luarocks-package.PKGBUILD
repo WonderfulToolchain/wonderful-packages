@@ -4,6 +4,7 @@
 
 build_luarocks() {
 	if [ "$WF_HOST_OS" == "windows" ]; then
+		# TODO: Use toolchain-provided Lua build.
 		luarocks \
 			make --tree=./build "$pkgrock".rockspec
 	else

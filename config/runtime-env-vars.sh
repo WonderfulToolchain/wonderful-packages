@@ -10,7 +10,7 @@ WF_EXECUTABLE_SUFFIX=
 WF_LUA_LDFLAGS=
 WF_HOST_OS=linux
 
-case `uname` in MINGW*)
+case `uname` in MINGW*|MSYS*)
 	WF_USE_MUSL=false
 	WF_LIBRARY_SUFFIX=.dll
 	WF_EXECUTABLE_SUFFIX=.exe
@@ -37,10 +37,7 @@ if [ "$WF_USE_MUSL" == "false" ]; then
 	remove_dependencies runtime-gcc-libs runtime-musl-dev runtime-musl
 fi
 if [ "$WF_HOST_OS" == "windows" ]; then
-	remove_dependencies wf-lua-posix wf-pacman
-fi
-if [ "$WF_HOST_OS" == "darwin" ]; then
-	remove_dependencies wf-pacman
+	remove_dependencies wf-lua-posix runtime-linenoise-dev
 fi
 
 WF_RUNTIME_LDFLAGS="-Wl,-rpath,$WF_PATH/lib -Wl,--dynamic-linker=$WF_PATH/lib/ld-musl-$CARCH.so.1"

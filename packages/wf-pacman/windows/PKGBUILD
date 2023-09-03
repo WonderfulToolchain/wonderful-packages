@@ -3,7 +3,7 @@
 # [Wonderful] pkgname
 pkgname=wf-pacman
 pkgver=6.0.2
-pkgrel=6
+pkgrel=7
 # [Wonderful] pkgdesc
 pkgdesc="Wonderful toolchain build of the pacman package manager"
 arch=('x86_64')
@@ -68,6 +68,7 @@ package() {
     cd "$pkgdir"
     install -dm755 bin
     mv ."$WF_PATH"/bin/pacman.exe bin/wf-pacman.exe
+    mv ."$WF_PATH"/bin/vercmp.exe bin/wf-pacman-vercmp.exe
 #   mv ."$WF_PATH"/bin/pacman-conf bin/wf-pacman-conf
 #   mv ."$WF_PATH"/bin/pacman-db-upgrade bin/wf-pacman-db-upgrade
 #   mv ."$WF_PATH"/bin/pacman-key bin/wf-pacman-key

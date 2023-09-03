@@ -21,7 +21,7 @@ def clean_unused_packages(ctx, package_caches, file_list):
 
 def cmd_mirror(ctx, args):
     targets = args.targets
-    if targets is None:
+    if targets is None or len(targets) == 0:
         if args.all:
             targets = ctx.all_known_environments
         else:
@@ -62,6 +62,10 @@ def cmd_mirror(ctx, args):
         target_path = Path(f"build/packages/{target}")
 
         for package_name, package in package_cache.get_packages().items():
+            if ctx.platform == "windows":
+                if ":" in package['filename']:
+                    print(f"Skipping {package['filename']} - contains colon on Windows")
+                    continue
             url = f"{ctx.repository_http_root}/{target}/{package['filename']}"
             dest = target_path / package['filename']
             file_list[dest.resolve()] = True
