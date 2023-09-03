@@ -11,10 +11,16 @@ pkgdesc="The Swiss Army knife of sound processing tools"
 arch=("i686" "x86_64" "armv6h" "aarch64")
 url="https://github.com/WonderfulToolchain/sox"
 license=("GPL2" "LGPL2.1")
-source=("$pkgname::git+https://github.com/WonderfulToolchain/sox#branch=master")
+source=(
+	"$pkgname::git+https://github.com/WonderfulToolchain/sox#branch=master"
+	"msys2-0001-ucrt-no-rewind-pipe.patch"
+)
 depends=(runtime-gcc-libs runtime-musl)
 makedepends=(runtime-musl-dev)
-sha256sums=('SKIP')
+sha256sums=(
+	'SKIP'
+	'SKIP'
+)
 
 . "/wf/config/runtime-env-vars.sh"
 
@@ -22,6 +28,11 @@ sha256sums=('SKIP')
 
 prepare() {
 	cd wf-sox
+
+	if [ "$WF_HOST_OS" == "windows" ]; then
+		patch -p1 <../msys2-0001-ucrt-no-rewind-pipe.patch
+	fi
+
 	autoreconf -vfi
 }
 
