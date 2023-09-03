@@ -3,6 +3,7 @@
 # SPDX-FileContributor: Adrian "asie" Siekierka, 2023
 
 pkgrel=1
+epoch=
 GCC_TARGET=mipsel-elf
 GCC_EXTRA_ARGS=(--enable-languages=c,c++,lto --enable-lto --enable-tls --with-float=soft)
 

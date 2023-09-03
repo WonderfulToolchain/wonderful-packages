@@ -16,7 +16,6 @@ _gmpver=6.2.1
 _mpfrver=4.2.0
 _mpcver=1.3.1
 _islver=0.26
-epoch=1
 pkgdesc="The GNU Compiler Collection"
 makedepends=(runtime-musl-dev)
 groups=(toolchain-gcc-$GCC_TARGET)
@@ -65,6 +64,11 @@ build() {
 		configure_cmd=../"gcc-$pkgver"/configure
 	fi
 	cd gcc-build
+
+	# workaround for https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108300
+	if [ "$WF_HOST_OS" == "windows" ]; then
+		CPPFLAGS='-DWIN32_LEAN_AND_MEAN'
+	fi
 
 	$configure_cmd \
 		--prefix="/opt/wonderful/toolchain/gcc-$GCC_TARGET" \

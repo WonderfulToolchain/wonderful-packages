@@ -70,6 +70,11 @@ build() {
 	fi
 	cd gcc-build
 
+	# workaround for https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108300
+	if [ "$WF_HOST_OS" == "windows" ]; then
+		CPPFLAGS='-DWIN32_LEAN_AND_MEAN'
+	fi
+
 	$configure_cmd \
 		--prefix="/opt/wonderful/toolchain/gcc-$GCC_TARGET" \
 		--target=$GCC_TARGET \
