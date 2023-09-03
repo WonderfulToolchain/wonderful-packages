@@ -81,7 +81,7 @@ wf_disable_host_build() {
 	# disable MinGW environment patches
 	if [ "$WF_HOST_OS" == "windows" ]; then
 		export CONFIG_SITE=/wf/config/empty-config.site
-		unset CC CXX
+		unset CC CXX CPPFLAGS CFLAGS CXXFLAGS LDFLAGS
 	fi
 }
 
