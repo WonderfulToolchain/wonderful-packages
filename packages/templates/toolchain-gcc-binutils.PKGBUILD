@@ -10,7 +10,7 @@ arch=("i686" "x86_64" "armv6h" "aarch64")
 url="http://www.gnu.org/software/binutils"
 license=("GPL-3.0-or-later")
 source=("http://ftp.gnu.org/gnu/binutils/binutils-$pkgver.tar.xz")
-depends=(runtime-musl)
+depends=(runtime-gcc-libs runtime-musl)
 makedepends=(runtime-musl-dev)
 groups=(toolchain-gcc-$GCC_TARGET)
 sha256sums=('ae9a5789e23459e59606e6714723f2d3ffc31c03174191ef0d015bdf06007450')
@@ -27,6 +27,7 @@ build() {
 		--prefix="$WF_PATH"/toolchain/gcc-$GCC_TARGET \
 		--target=$GCC_TARGET \
 		--with-bugurl=https://github.com/WonderfulToolchain/wonderful-packages/issues \
+		--without-zstd \
 		--enable-gold \
 		--enable-ld-default \
 		--enable-threads \

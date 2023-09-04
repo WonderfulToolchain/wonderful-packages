@@ -5,7 +5,7 @@
 pkgname=(wf-sox wf-sox-dev)
 _pkgver=14.4.2
 pkgver=14.4.2.r3246.5ec1b44f
-pkgrel=1
+pkgrel=2
 epoch=
 pkgdesc="The Swiss Army knife of sound processing tools"
 arch=("i686" "x86_64" "armv6h" "aarch64")

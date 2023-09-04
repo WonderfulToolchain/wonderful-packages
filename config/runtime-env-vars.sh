@@ -19,22 +19,31 @@ case `uname` in MINGW*|MSYS*)
 esac
 
 remove_dependencies() {
+	local result=1
 	for rem in "$@"; do
 		for i in "${!depends[@]}"; do
 			if [[ "${depends[$i]}" == "$rem" ]]; then
 				unset depends[$i]
+				result=0
 			fi
 		done
 		for i in "${!makedepends[@]}"; do
 			if [[ "${makedepends[$i]}" == "$rem" ]]; then
 				unset makedepends[$i]
+				result=0
 			fi
 		done
 	done
+	return $result
 }
 
 if [ "$WF_USE_MUSL" == "false" ]; then
 	remove_dependencies runtime-gcc-libs runtime-musl-dev runtime-musl
+	if [ "x$?" == "x0" ]; then
+		if [ "$WF_HOST_OS" == "windows" ]; then
+			depends+=(runtime-gcc-libs)
+		fi
+	fi
 fi
 if [ "$WF_HOST_OS" == "windows" ]; then
 	remove_dependencies wf-lua-posix runtime-linenoise-dev
