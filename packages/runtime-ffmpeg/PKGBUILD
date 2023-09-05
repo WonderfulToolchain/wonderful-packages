@@ -5,23 +5,39 @@
 # TODO: trim down decoder/parser/demuxer/bsf list
 pkgname=(runtime-ffmpeg runtime-ffmpeg-dev)
 pkgver=6.0
-pkgrel=1
+pkgrel=2
 epoch=
 pkgdesc="ffmpeg video library"
 arch=("i686" "x86_64" "armv6h" "aarch64")
 url="http://www.ffmpeg.org"
 license=("MIT")
-source=("https://www.ffmpeg.org/releases/ffmpeg-$pkgver.tar.xz")
+source=(
+	"https://www.ffmpeg.org/releases/ffmpeg-$pkgver.tar.xz"
+	"https://github.com/FFmpeg/FFmpeg/commit/effadce6c756247ea8bae32dc13bb3e6f464f0eb.patch"
+)
 depends=(runtime-musl)
 makedepends=(runtime-musl-dev)
-sha256sums=('SKIP')
+sha256sums=(
+	"SKIP"
+	"SKIP"
+)
 
 . "/wf/config/runtime-env-vars.sh"
 
+prepare() {
+	cd "ffmpeg-$pkgver"
+	patch -p1 < ../effadce6c756247ea8bae32dc13bb3e6f464f0eb.patch
+}
+
 build() {
+	EXTRA_ARGS=
+	if [ "$WF_HOST_OS" == "windows" ]; then
+		EXTRA_ARGS=--target-os=mingw32
+	fi
+
 	cd "ffmpeg-$pkgver"
 	./configure \
-		--prefix="$WF_PATH" \
+		--prefix="$WF_PATH" --arch="$CARCH" \
 		--extra-cflags="$WF_RUNTIME_INCLUDES" \
 		--extra-ldflags="$WF_RUNTIME_LDFLAGS" \
 		--disable-static --enable-shared \
@@ -40,7 +56,7 @@ build() {
 		--enable-demuxer=apng,avi,flac,matroska,ogg,wav \
 		--enable-demuxer=pcm_alaw,pcm_s16le,pcm_u16le,pcm_s8,pcm_u8 \
 		--enable-demuxer=image2,mov,rawvideo,mp3 \
-		--enable-protocol=file
+		--enable-protocol=file $EXTRA_ARGS
 	make
 }
 
@@ -49,7 +65,11 @@ package_runtime-ffmpeg() {
 	make DESTDIR="$pkgdir" install
 	cd "$pkgdir"
 	wf_relocate_path_to_destdir
-	rm -r include share lib/pkgconfig
+	if [ "$WF_HOST_OS" == "windows" ]; then
+		rm -r include share lib
+	else
+		rm -r include share lib/pkgconfig
+	fi
 }
 
 package_runtime-ffmpeg-dev() {
@@ -60,5 +80,9 @@ package_runtime-ffmpeg-dev() {
 	make DESTDIR="$pkgdir" install
 	cd "$pkgdir"
 	wf_relocate_path_to_destdir
-	rm -r lib/*"$WF_LIBRARY_SUFFIX" lib/*"$WF_LIBRARY_SUFFIX".*
+	if [ "$WF_HOST_OS" == "windows" ]; then
+		rm -r bin
+	else
+		rm -r lib/*"$WF_LIBRARY_SUFFIX" lib/*"$WF_LIBRARY_SUFFIX".*
+	fi
 }
