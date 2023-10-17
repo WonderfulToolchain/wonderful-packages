@@ -3,8 +3,8 @@
 # SPDX-FileContributor: Adrian "asie" Siekierka, 2023
 
 pkgname=toolchain-gcc-arm-none-eabi-picolibc-generic
-_pkgver=1.8.3
-pkgver=1.8.3.r23612.55de37ded
+_pkgver=1.8.5
+pkgver=1.8.5.r23917.2e40c4c5c
 pkgrel=1
 epoch=
 pkgdesc="picolibc-based C library for Wonderful toolchain"
