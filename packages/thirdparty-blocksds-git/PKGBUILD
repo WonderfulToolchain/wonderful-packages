@@ -13,7 +13,7 @@ fi
 
 groups=($_pkgname)
 _pkgver=0.8.1
-pkgver=0.8.1.r202.3f38e3c
+pkgver=0.8.1.r223.12fe8d8
 pkgrel=1
 epoch=
 pkgdesc="DS/DSi console homebrew toolchain maintained by AntonioND"
@@ -46,20 +46,8 @@ prepare() {
 	wf_disable_host_build
 
 	if [ "$WF_HOST_OS" == "windows" ]; then
-		# pull in experimental grit libplum fork
-		# keep this to Git/Windows only until more testing is performed
-		cd tools/grit
-		git remote add asie https://github.com/asiekierka/grit
-		git fetch --all
-		git checkout asie/libplum
-		cd ../..
-
 		# patch ndstool to link iconv explicitly
 		sed -i -e 's/$(LIBS)/$(LIBS) -liconv/' tools/ndstool/Makefile
-	else
-		# patch grit to build statically, as we do not bundle
-		# a dynamic library version of freeimage
-		sed -i -e 's/$(LIBS)/-static $(LIBS)/' tools/grit/Makefile
 	fi
 }
 
