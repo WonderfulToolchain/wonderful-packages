@@ -3,7 +3,7 @@
 # SPDX-FileContributor: Adrian "asie" Siekierka, 2023
 
 _pkgname=thirdparty-blocksds
-source=("$_pkgname::git+https://github.com/blocksds/sdk#tag=v0.8.1")
+source=("$_pkgname::git+https://github.com/blocksds/sdk#tag=v0.9.0")
 
 if [ "x$_pkgname" = "xthirdparty-blocksds-git" ]; then
 	pkgname=(thirdparty-blocksds-git-toolchain thirdparty-blocksds-git-docs)
@@ -12,7 +12,7 @@ else
 fi
 
 groups=($_pkgname)
-pkgver=0.8.1
+pkgver=0.9.0
 pkgrel=1
 epoch=
 pkgdesc="DS/DSi console homebrew toolchain maintained by AntonioND"
@@ -42,9 +42,12 @@ prepare() {
 	git submodule init
 	git submodule update
 
-	# patch grit to build statically, as we do not bundle
-	# a dynamic library version of freeimage
-	sed -i -e 's/$(LIBS)/-static $(LIBS)/' tools/grit/Makefile
+	wf_disable_host_build
+
+	if [ "$WF_HOST_OS" == "windows" ]; then
+		# patch ndstool to link iconv explicitly
+		sed -i -e 's/$(LIBS)/$(LIBS) -liconv/' tools/ndstool/Makefile
+	fi
 }
 
 . "/wf/config/runtime-env-vars.sh"
