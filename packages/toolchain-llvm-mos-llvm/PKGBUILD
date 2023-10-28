@@ -64,30 +64,24 @@ package_toolchain-llvm-mos-llvm() {
 	cd "$pkgdir"
 	wf_relocate_path_to_destdir
 
-	cd toolchain/llvm-mos/bin
-	for i in *; do
-		mv "$i" mos-"$i"
-	done
-	cd ..
-
 	# remove unnecessary files
 	rm -r share/clang share/opt-viewer share/scan-build share/scan-view
 	rm -r include lib/*.a lib/cmake bin/*-test
 
 	# moved to llvm-dev
-	rm bin/mos-llvm-config
-	rm bin/mos-llvm-tblgen
+	rm bin/llvm-config
+	rm bin/llvm-tblgen
 
 	# removed
 	# TODO: expand this list
-	rm bin/mos-amdgpu-arch
-	rm bin/mos-llvm-cvtres
-	rm bin/mos-llvm-dlltool
-	rm bin/mos-llvm-exegesis
-	rm bin/mos-llvm-pdbutil
-	rm bin/mos-llvm-rc
-	rm bin/mos-nvptx-arch
-	rm bin/mos-wasm-ld
+	rm bin/amdgpu-arch
+	rm bin/llvm-cvtres
+	rm bin/llvm-dlltool
+	rm bin/llvm-exegesis
+	rm bin/llvm-pdbutil
+	rm bin/llvm-rc
+	rm bin/nvptx-arch
+	rm bin/wasm-ld
 }
 
 package_toolchain-llvm-mos-llvm-dev() {
@@ -98,19 +92,13 @@ package_toolchain-llvm-mos-llvm-dev() {
 	cd "$pkgdir"
 	wf_relocate_path_to_destdir
 
-	cd toolchain/llvm-mos/bin
-	for i in *; do
-		mv "$i" mos-"$i"
-	done
-	cd ..
-
 	# remove unnecessary files
 	rm -r libexec share
 
 	# moved to llvm-dev
 	mkdir bin2
-	mv bin/mos-llvm-config bin2/
-	mv bin/mos-llvm-tblgen bin2/
+	mv bin/llvm-config bin2/
+	mv bin/llvm-tblgen bin2/
 	rm -r bin
 	mv bin2 bin
 
