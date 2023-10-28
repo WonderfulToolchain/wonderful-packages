@@ -5,7 +5,7 @@
 pkgname=toolchain-gcc-arm-none-eabi-picolibc-generic
 _pkgver=1.8.5
 pkgver=1.8.5.r23918.46b7394f9
-pkgrel=1
+pkgrel=2
 epoch=
 pkgdesc="picolibc-based C library for Wonderful toolchain"
 arch=(any)
@@ -48,6 +48,8 @@ build() {
 		\
 		-Dio-long-long=true \
 		-Dio-pos-args=true \
+		-Dio-stream-read-write=true \
+		-Dio-percent-b=true \
 		\
 		-Dposix-console=true \
 		-Dformat-default=double \
