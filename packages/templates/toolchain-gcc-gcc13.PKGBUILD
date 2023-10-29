@@ -26,14 +26,16 @@ source=("http://ftp.gnu.org/gnu/gcc/gcc-$pkgver/gcc-$pkgver.tar.xz"
         "http://www.mpfr.org/mpfr-$_mpfrver/mpfr-$_mpfrver.tar.xz"
         "http://ftp.gnu.org/gnu/mpc/mpc-$_mpcver.tar.gz"
 	"https://libisl.sourceforge.io/isl-$_islver.tar.xz"
-	"gcc13-poison-system-directories.patch")
+	"file:///wf/patches/gcc13-poison-system-directories.patch"
+	"file:///wf/patches/gcc13-clang-MJ.patch")
 sha256sums=(
 	'e275e76442a6067341a27f04c5c6b83d8613144004c0413528863dc6b5c743da'
 	'fd4829912cddd12f84181c3451cc752be224643e87fac497b69edddadc49b4f2'
 	'06a378df13501248c1b2db5aa977a2c8126ae849a9d9b7be2546fb4a9c26d993'
 	'ab642492f5cf882b74aa0cb730cd410a81edcdbec895183ce930e706c1c759b8'
 	'a0b5cb06d24f9fa9e77b55fabbe9a3c94a336190345c2555f9915bb38e976504'
-	'7b864e393b44a7addca4d47277d18054799f82c9dacab099591febfd4f51126a'
+	'SKIP'
+	'SKIP'
 )
 
 . "/wf/config/runtime-env-vars.sh"
@@ -44,6 +46,7 @@ prepare() {
 
 	# Not strictly necessary, but a nice-to-have.
 	patch -p1 <../gcc13-poison-system-directories.patch
+	patch -p1 <../gcc13-clang-MJ.patch
 
 	# HACK: hijack RTEMS's libstdc++ crossconfig for our own purposes (which has the dynamic feature checks we want)
 	sed -i "s/\*-rtems\*/*-unknown*/" libstdc++-v3/configure

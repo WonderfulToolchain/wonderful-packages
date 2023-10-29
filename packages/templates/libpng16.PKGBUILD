@@ -11,7 +11,7 @@ url=""
 license=("libpng")
 source=(
 	"https://download.sourceforge.net/libpng/libpng-$pkgver.tar.xz"
-	"libpng-1.6.34-disable-tests.patch"
+	"file:///wf/patches/libpng-1.6.34-disable-tests.patch"
 )
 depends=(
 	toolchain-$WF_TOOLCHAIN-binutils

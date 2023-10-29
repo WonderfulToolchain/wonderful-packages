@@ -1,0 +1,141 @@
+diff -Nrup gcc-13.2.0/gcc/common.opt gcc-13.2.0-patched/gcc/common.opt
+--- gcc-13.2.0/gcc/common.opt	2023-07-27 10:13:04.000000000 +0200
++++ gcc-13.2.0-patched/gcc/common.opt	2023-10-29 11:23:33.421759619 +0100
+@@ -458,6 +458,10 @@ Driver
+ L
+ Driver Joined Separate
+ 
++MJ
++Driver Joined Separate MissingArgError(missing filename after %qs)
++-MJ <file>	Write compile_commands.json fragment to the given file.
++
+ N
+ Driver
+ 
+diff -Nrup gcc-13.2.0/gcc/gcc.cc gcc-13.2.0-patched/gcc/gcc.cc
+--- gcc-13.2.0/gcc/gcc.cc	2023-07-27 10:13:04.000000000 +0200
++++ gcc-13.2.0-patched/gcc/gcc.cc	2023-10-29 11:25:33.108427089 +0100
+@@ -245,6 +245,10 @@ static const char *use_ld;
+ 
+ FILE *report_times_to_file = NULL;
+ 
++/* Filename for compile_commands.json output. */
++
++static const char *cc_json_file = NULL;
++
+ /* Nonzero means place this string before uses of /, so that include
+    and library files can be found in an alternate location.  */
+ 
+@@ -4572,6 +4576,11 @@ driver_handle_option (struct gcc_options
+       do_save = false;
+       break;
+ 
++    case OPT_MJ:
++      cc_json_file = arg;
++      do_save = false;
++      break;
++
+     default:
+       /* Various driver options need no special processing at this
+ 	 point, having been handled in a prescan above or being
+@@ -7514,7 +7523,81 @@ give_switch (int switchnum, int omit_fir
+   do_spec_1 (" ", 0, NULL);
+   switches[switchnum].validated = true;
+ }
+-
++
++/* Prints an escaped JSON string. */
++static void
++print_json_fragment_string (FILE *stream, const char *s)
++{
++  while (*s)
++    {
++      if (*s == '\\' || *s == '\"')
++	fputc ('\\', stream);
++      fputc (*(s++), stream);
++    }
++}
++
++/* Prints the compile_commands.json fragment. */
++static void
++maybe_print_cc_json_file (int argc, const char **argv, const char *filename)
++{
++  FILE *stream;
++  const char *pwd;
++  int i_arg, i_infile;
++
++  if (!filename)
++    return;
++
++  stream = fopen (filename, "w");
++
++  if (!stream)
++    fatal_error (input_location,
++		 "opening compile_commands.json fragment file %s: %m",
++		 filename);
++  else
++    {
++      pwd = getcwd (NULL, 0);
++
++      for (i_infile = 0; i_infile < n_infiles; i_infile++)
++	{
++	  fprintf (stream, "{\"arguments\": [");
++	  for (i_arg = 0; i_arg < argc; i_arg++)
++	    {
++	      if (i_arg > 0)
++		fprintf (stream, ", ");
++	      fprintf (stream, "\"");
++	      print_json_fragment_string (stream, argv[i_arg]);
++	      fprintf (stream, "\"");
++	    }
++	  fprintf (stream, "]");
++
++	  if (pwd)
++	    {
++	      fprintf (stream, ", \"directory\": \"");
++	      print_json_fragment_string (stream, pwd);
++	      fprintf (stream, "\"");
++	    }
++
++ 	  if (output_file)
++	    {
++	      fprintf (stream, ", \"output\": \"");
++	      print_json_fragment_string (stream, output_file);
++	      fprintf (stream, "\"");
++	    }
++
++	  fprintf (stream, ", \"file\": \"");
++	  print_json_fragment_string (stream, infiles[i_infile].name);
++	  fprintf (stream, "\"");
++
++	  fprintf (stream, "},\n");
++	}
++
++      if (stream && (ferror (stream) || fclose (stream)))
++	fatal_error (input_location,
++		     "closing compile_commands.json fragment file %s: %m",
++		     filename);
++    }
++}
++
+ /* Print GCC configuration (e.g. version, thread model, target,
+    configuration_arguments) to a given FILE.  */
+ 
+@@ -8128,6 +8211,9 @@ driver::main (int argc, char **argv)
+   if (early_exit)
+     return get_exit_code ();
+ 
++  maybe_print_cc_json_file (argc, const_cast <const char **> (argv),
++			    cc_json_file);
++
+   do_spec_on_infiles ();
+   maybe_run_linker (argv[0]);
+   final_actions ();
+@@ -11048,6 +11134,7 @@ driver::finalize ()
+   verbose_only_flag = 0;
+   print_subprocess_help = 0;
+   use_ld = NULL;
++  cc_json_file = NULL;
+   report_times_to_file = NULL;
+   target_system_root = DEFAULT_TARGET_SYSTEM_ROOT;
+   target_system_root_changed = 0;
