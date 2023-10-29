@@ -8,7 +8,7 @@ pkgver=11.0.0.r340442.a7c09171cf9
 pkgrel=1
 epoch=
 pkgdesc="LLVM fork modified to target Teak DSPs"
-arch=("i686" "x86_64" "aarch64")
+arch=("x86_64" "aarch64")
 url="https://github.com/WonderfulToolchain/teak-llvm"
 license=("Apache-2.0")
 source=(
@@ -72,16 +72,16 @@ package_toolchain-llvm-teak-llvm() {
 	rm -r include lib/*.a lib/cmake bin/*-test
 
 	# moved to llvm-dev
-	rm bin/llvm-config
-	rm bin/llvm-tblgen
+	rm bin/llvm-config$WF_EXECUTABLE_SUFFIX
+	rm bin/llvm-tblgen$WF_EXECUTABLE_SUFFIX
 
 	# removed
 	# TODO: expand this list
-	rm bin/llvm-cvtres
-	rm bin/llvm-dlltool
-	rm bin/llvm-pdbutil
-	rm bin/llvm-rc
-	rm bin/wasm-ld
+	rm bin/llvm-cvtres$WF_EXECUTABLE_SUFFIX
+	rm bin/llvm-dlltool$WF_EXECUTABLE_SUFFIX
+	rm bin/llvm-pdbutil$WF_EXECUTABLE_SUFFIX
+	rm bin/llvm-rc$WF_EXECUTABLE_SUFFIX
+	rm bin/wasm-ld$WF_EXECUTABLE_SUFFIX
 }
 
 package_toolchain-llvm-teak-llvm-dev() {
@@ -98,8 +98,8 @@ package_toolchain-llvm-teak-llvm-dev() {
 
 	# moved to llvm-dev
 	mkdir bin2
-	mv bin/llvm-config bin2/
-	mv bin/llvm-tblgen bin2/
+	mv bin/llvm-config$WF_EXECUTABLE_SUFFIX bin2/
+	mv bin/llvm-tblgen$WF_EXECUTABLE_SUFFIX bin2/
 	rm -r bin
 	mv bin2 bin
 

@@ -49,8 +49,11 @@ if [ "$WF_HOST_OS" == "windows" ]; then
 	remove_dependencies wf-lua-posix runtime-linenoise-dev
 fi
 
-WF_RUNTIME_LDFLAGS="-Wl,-rpath,$WF_PATH/lib -Wl,--dynamic-linker=$WF_PATH/lib/ld-musl-$CARCH.so.1"
-
+if [ "$WF_USE_MUSL" == "true" ]; then
+	WF_RUNTIME_LDFLAGS="-Wl,-rpath,$WF_PATH/lib -Wl,--dynamic-linker=$WF_PATH/lib/ld-musl-$CARCH.so.1"
+else
+	WF_RUNTIME_LDFLAGS=""
+fi
 WF_RUNTIME_INCLUDES="-isystem $WF_PATH/include"
 WF_RUNTIME_LDFLAGS="$WF_RUNTIME_LDFLAGS -L$WF_PATH/lib"
 WF_RUNTIME_PKG_CONFIG_PATH="$WF_PATH/lib/pkgconfig"
