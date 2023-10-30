@@ -1,0 +1,23 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# SPDX-FileContributor: Adrian "asie" Siekierka, 2023
+
+target=gba
+pkgname=target-gba-examples
+_pkgver=0.1.0
+pkgver=0.1.0.r4.a8d2b7b
+pkgrel=1
+epoch=
+pkgdesc="GBA target examples"
+arch=(any)
+url="https://github.com/WonderfulToolchain/target-gba-examples"
+license=("CC0")
+source=("$pkgname::git+https://github.com/WonderfulToolchain/target-gba-examples#branch=main")
+depends=()
+sha256sums=('SKIP')
+options=(!strip)
+
+. "/wf/config/runtime-env-vars.sh"
+
+. "../templates/git-pkgver.PKGBUILD"
+. "../templates/wf-examples.PKGBUILD"

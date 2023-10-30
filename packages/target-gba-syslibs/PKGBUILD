@@ -1,0 +1,39 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# SPDX-FileContributor: Adrian "asie" Siekierka, 2023
+
+pkgname=target-gba-syslibs
+_pkgver=0.1.0
+pkgver=0.1.0.r6.3661d2a
+pkgrel=1
+epoch=
+pkgdesc="GBA target system libraries"
+arch=(any)
+url="https://github.com/WonderfulToolchain/target-gba-syslibs"
+license=("zlib")
+source=("$pkgname::git+https://github.com/WonderfulToolchain/target-gba-syslibs#branch=main")
+depends=()
+makedepends=(
+	toolchain-gcc-arm-none-eabi-binutils
+	toolchain-gcc-arm-none-eabi-gcc
+	toolchain-gcc-arm-none-eabi-picolibc-gba
+	wf-tools
+)
+sha256sums=('SKIP')
+options=(!strip)
+
+. "/wf/config/runtime-env-vars.sh"
+
+. "../templates/git-pkgver.PKGBUILD"
+
+build() {
+	CFLAGS=""
+	cd "$pkgname"
+	./build.sh
+}
+
+package() {
+	cd "$pkgname"
+	mkdir -p "$pkgdir$WF_DESTDIR"
+	cp -aR build/target "$pkgdir$WF_DESTDIR"
+}

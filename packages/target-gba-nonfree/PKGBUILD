@@ -1,0 +1,29 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# SPDX-FileContributor: Adrian "asie" Siekierka, 2023
+
+pkgname=target-gba-nonfree
+pkgver=0.1.0
+pkgrel=1
+epoch=
+pkgdesc="GBA target nonfree components"
+arch=(any)
+url=""
+license=("nonfree")
+source=(
+	"file:///wf/nonfree/gba/logos/official.bin"
+)
+depends=()
+makedepends=()
+sha256sums=(
+	'SKIP'
+)
+options=(!strip)
+
+. "/wf/config/runtime-env-vars.sh"
+
+package() {
+	mkdir -p "$pkgdir$WF_DESTDIR"
+	mkdir -p "$pkgdir$WF_DESTDIR"/target/gba/logos
+	cp -a official.bin "$pkgdir$WF_DESTDIR"/target/gba/logos
+}
