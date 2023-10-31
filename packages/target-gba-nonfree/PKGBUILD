@@ -4,14 +4,14 @@
 
 pkgname=target-gba-nonfree
 pkgver=0.1.0
-pkgrel=1
+pkgrel=2
 epoch=
 pkgdesc="GBA target nonfree components"
 arch=(any)
 url=""
 license=("nonfree")
 source=(
-	"file:///wf/nonfree/gba/logos/official.bin"
+	"file:///wf/nonfree/gba/header/official.bin"
 )
 depends=()
 makedepends=()
@@ -24,6 +24,6 @@ options=(!strip)
 
 package() {
 	mkdir -p "$pkgdir$WF_DESTDIR"
-	mkdir -p "$pkgdir$WF_DESTDIR"/target/gba/logos
-	cp -a official.bin "$pkgdir$WF_DESTDIR"/target/gba/logos
+	mkdir -p "$pkgdir$WF_DESTDIR"/target/gba/header
+	cp -pL official.bin "$pkgdir$WF_DESTDIR"/target/gba/header
 }

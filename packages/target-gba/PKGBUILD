@@ -4,7 +4,7 @@
 
 pkgname=target-gba
 pkgver=0.1.0
-pkgrel=1
+pkgrel=2
 epoch=
 pkgdesc="GBA target metapackage"
 arch=(any)
@@ -18,6 +18,7 @@ depends=(
 	toolchain-gcc-arm-none-eabi-picolibc-gba
 	wf-tools
 	target-gba-examples
+	target-gba-nonfree
 	target-gba-syslibs
 )
 makedepends=()

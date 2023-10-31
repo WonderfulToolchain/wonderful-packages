@@ -5,7 +5,7 @@
 target=gba
 pkgname=target-gba-examples
 _pkgver=0.1.0
-pkgver=0.1.0.r4.a8d2b7b
+pkgver=0.1.0.r6.6f1ad47
 pkgrel=1
 epoch=
 pkgdesc="GBA target examples"

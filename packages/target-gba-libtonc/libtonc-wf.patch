@@ -1,0 +1,55 @@
+diff -rup libtonc-original/include/tonc_tte.h libtonc/include/tonc_tte.h
+--- libtonc-original/include/tonc_tte.h	2023-10-31 08:00:54.384827298 +0100
++++ libtonc/include/tonc_tte.h	2023-10-31 08:01:28.181494278 +0100
+@@ -59,8 +59,7 @@
+ 	use \c NULL.<br>
+ 
+ 	After the calling the initializer, you can write utf-8 encoded text 
+-	with tte_write() or tte_write_ex(). You can also enable stdio-related 
+-	functions by calling tte_init_con().<br>
++	with tte_write() or tte_write_ex().
+ 
+ 	The system also supposed rudimentary scripting for positions, colors, 
+ 	margins and erases. See tte_cmd_default() and con_cmd_parse() for 
+@@ -83,15 +82,6 @@
+ 	\brief	Basic getters and setters.
+ */
+ 
+-/*! \defgroup grpTTEConio Console IO
+-	\ingroup grpTTE
+-	\brief	Stdio functionality.
+-
+-	These functions allow you to use stdio routines for writing, like 
+-	printf, puts and such. Note that tte_printf is just iprintf ... 
+-	at least for now.
+-*/
+-
+ /*! \defgroup grpTTEMap Tilemap text
+ 	\ingroup grpTTE
+ 	\brief	Text for regular and affine tilemaps. 
+@@ -455,25 +445,6 @@ void tte_set_margins(int left, int top,
+ /*! \}	*/	// grpTTEAttr
+ 
+ 
+-// === Console functions ==============================================
+-
+-/*! \addtogroup grpTTEConio	*/
+-/*!	\{	*/
+-
+-void tte_init_con(void);
+-int tte_cmd_vt100(const char *text);
+-
+-ssize_t tte_con_write(struct _reent *r, void *fd, const char *text, size_t len);
+-ssize_t tte_con_nocash(struct _reent *r, void *fd, const char *text, size_t len);
+-
+-/*! Wrapper 'function' to hide that we're making iprintf do
+-	things it doesn't usually do.
+-*/
+-#define tte_printf iprintf
+-
+-/*!	\}	*/
+-
+-
+ // === Render families ================================================
+ 
+ /*! \addtogroup grpTTEMap	*/

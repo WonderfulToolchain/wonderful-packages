@@ -1,0 +1,133 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# SPDX-FileContributor: Adrian "asie" Siekierka, 2023
+
+WONDERFUL_TOOLCHAIN ?= /opt/wonderful
+TARGET ?= gba/rom
+DESTDIR ?= $(WONDERFUL_TOOLCHAIN)
+include $(WONDERFUL_TOOLCHAIN)/target/$(TARGET)/makedefs.mk
+
+# Source code paths
+# -----------------
+
+INCLUDEDIRS	:= include
+SOURCEDIRS	:= asm src
+
+# Disable source files (requires bundled patchset)
+BLOCKED_SOURCES :=
+# Dependent on devkitARM libc
+BLOCKED_SOURCES += src/tte/tte_iohook.c
+
+# Defines passed to all files
+# ---------------------------
+
+DEFINES		:=
+
+# Libraries
+# ---------
+
+LIBS		:= -lc
+LIBDIRS		:= $(WF_ARCH_LIBDIRS)
+
+# Build artifacts
+# ---------------
+
+NAME		:= tonc
+BUILDDIR	:= build/$(TARGET)
+ARCHIVE		:= $(BUILDDIR)/lib$(NAME).a
+
+# Verbose flag
+# ------------
+
+ifeq ($(V),1)
+_V		:=
+else
+_V		:= @
+endif
+
+# Source files
+# ------------
+
+SOURCES_S	:= $(shell find -L $(SOURCEDIRS) -name "*.s")
+SOURCES_C	:= $(shell find -L $(SOURCEDIRS) -name "*.c")
+SOURCES_S	:= $(filter-out $(BLOCKED_SOURCES),$(SOURCES_S))
+SOURCES_C	:= $(filter-out $(BLOCKED_SOURCES),$(SOURCES_C))
+
+# Compiler and linker flags
+# -------------------------
+
+WARNFLAGS	:= -Wall
+
+INCLUDEFLAGS	:= $(foreach path,$(INCLUDEDIRS),-I$(path)) \
+		   $(foreach path,$(LIBDIRS),-isystem $(path)/include)
+
+LIBDIRSFLAGS	:= $(foreach path,$(LIBDIRS),-L$(path)/lib)
+
+ASFLAGS		+= -x assembler-with-cpp $(DEFINES) $(WF_ARCH_CFLAGS) \
+		   $(INCLUDEFLAGS) -ffunction-sections -fdata-sections
+
+CFLAGS		+= -std=gnu2x $(WARNFLAGS) $(DEFINES) $(WF_ARCH_CFLAGS) \
+		   $(INCLUDEFLAGS) -ffunction-sections -fdata-sections -O2 \
+		   -flto -ffat-lto-objects
+
+# Intermediate build files
+# ------------------------
+
+OBJS_SOURCES	:= $(addsuffix .o,$(addprefix $(BUILDDIR)/,$(SOURCES_S))) \
+		   $(addsuffix .o,$(addprefix $(BUILDDIR)/,$(SOURCES_C)))
+
+OBJS		:= $(OBJS_SOURCES)
+
+DEPS		:= $(OBJS:.o=.d)
+
+# Targets
+# -------
+
+.PHONY: all clean doc
+
+all: $(ARCHIVE) compile_commands.json
+
+$(ARCHIVE): $(OBJS)
+	@echo "  AR      $@"
+	@$(MKDIR) -p $(@D)
+	$(_V)$(AR) rcs $@ $(OBJS)
+
+clean:
+	@echo "  CLEAN"
+	$(_V)$(RM) $(ARCHIVE) $(BUILDDIR) compile_commands.json
+
+compile_commands.json: $(OBJS) | Makefile
+	@echo "  MERGE   compile_commands.json"
+	$(_V)$(WF)/bin/wf-compile-commands-merge $@ $(patsubst %.o,%.cc.json,$^)
+
+doc:
+	@echo "  MKDIR    build/doc"
+	$(_V)$(MKDIR) -p build/doc
+	@echo "  DOXYGEN"
+	doxygen
+
+install: all
+	@echo "  INSTALL $(ARCHIVE)"
+	$(_V)$(MKDIR) -p $(DESTDIR)/target/gba/external/libtonc/lib
+	$(_V)$(CP) -ar include $(DESTDIR)/target/gba/external/libtonc
+	$(_V)$(CP) -ar $(ARCHIVE) $(DESTDIR)/target/gba/external/libtonc/lib
+
+# TODO: Write install stage.
+
+# Rules
+# -----
+
+$(BUILDDIR)/%.s.o : %.s
+	@echo "  AS      $<"
+	@$(MKDIR) -p $(@D)
+	$(_V)$(CC) $(ASFLAGS) -MMD -MP -MJ $(patsubst %.o,%.cc.json,$@) -c -o $@ $<
+
+$(BUILDDIR)/%.c.o : %.c
+	@echo "  CC      $<"
+	@$(MKDIR) -p $(@D)
+	$(_V)$(CC) $(CFLAGS) -MMD -MP -MJ $(patsubst %.o,%.cc.json,$@) -c -o $@ $<
+
+# Include dependency files if they exist
+# --------------------------------------
+
+-include $(DEPS)

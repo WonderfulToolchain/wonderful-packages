@@ -1,0 +1,53 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# SPDX-FileContributor: Adrian "asie" Siekierka, 2023
+
+pkgname=target-gba-libtonc
+_pkgver=1.4.3
+pkgver=1.4.3.r15.cc862ce
+pkgrel=1
+epoch=
+pkgdesc="GBA libtonc library"
+arch=(any)
+url="https://github.com/gbadev-org/libtonc"
+license=("MIT")
+source=(
+	"$pkgname::git+https://github.com/gbadev-org/libtonc#branch=master"
+	"libtonc-wf.patch"
+	"Makefile.wf"
+)
+depends=()
+makedepends=(target-gba)
+sha256sums=(
+	'SKIP'
+	'SKIP'
+	'SKIP'
+)
+options=(!strip)
+
+. "/wf/config/runtime-env-vars.sh"
+
+. "../templates/git-pkgver.PKGBUILD"
+
+prepare() {
+	cd "$pkgname"
+	cp ../Makefile.wf .
+
+	# ._.
+	unix2dos ../libtonc-wf.patch
+	patch --binary -p1 <../libtonc-wf.patch
+
+	# long-deprecated header with distinct licensing
+	rm include/tonc_libgba.h
+}
+
+build() {
+	CFLAGS=""
+	cd "$pkgname"
+	make -f Makefile.wf
+}
+
+package() {
+	cd "$pkgname"
+	make -f Makefile.wf DESTDIR="$pkgdir$WF_DESTDIR" install
+}
