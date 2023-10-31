@@ -4,7 +4,7 @@
 
 pkgname=wf-tools
 _pkgver=0.1.0
-pkgver=0.1.0.r66.e12c4a7
+pkgver=0.1.0.r68.87ab859
 pkgrock=wf-tools-dev-1
 pkgrel=1
 epoch=
