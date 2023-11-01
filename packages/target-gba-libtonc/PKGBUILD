@@ -5,7 +5,7 @@
 pkgname=target-gba-libtonc
 _pkgver=1.4.3
 pkgver=1.4.3.r15.cc862ce
-pkgrel=1
+pkgrel=2
 epoch=
 pkgdesc="GBA libtonc library"
 arch=(any)
@@ -39,6 +39,9 @@ prepare() {
 
 	# long-deprecated header with distinct licensing
 	rm include/tonc_libgba.h
+
+	# use .bss.ewram instead of .sbss
+	sed -i -e "s/\\.sbss/.bss.ewram/g" include/tonc_asminc.h include/tonc_types.h
 }
 
 build() {
