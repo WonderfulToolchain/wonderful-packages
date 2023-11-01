@@ -4,7 +4,7 @@
 
 pkgname=wf-lua-penlight
 _pkgver=1.13.1
-pkgver=1.13.1.r908.3bf0326
+pkgver=1.13.1.r909.dc6d19c
 pkgrel=1
 pkgdesc="Lua Penlight library"
 arch=(any)
