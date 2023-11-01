@@ -1,0 +1,37 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# SPDX-FileContributor: Adrian "asie" Siekierka, 2023
+
+pkgname=wf-nnpack
+_pkgver=1.4
+pkgver=1.4.r6.7cd22ce
+pkgrel=1
+epoch=
+pkgdesc="GBA/NDS compression tools"
+arch=("i686" "x86_64" "armv6h" "aarch64")
+url="https://github.com/WonderfulToolchain/wf-nnpack"
+license=("GPL-3.0-or-later")
+source=("$pkgname::git+https://github.com/WonderfulToolchain/wf-nnpack#branch=master")
+depends=(runtime-musl)
+makedepends=(runtime-musl-dev)
+sha256sums=('SKIP')
+
+. "/wf/config/runtime-env-vars.sh"
+
+. "../templates/git-pkgver.PKGBUILD"
+
+build() {
+	cd "$pkgname"
+	for i in huffman lzss rle; do
+		gcc -o wf-nnpack-"$i"$WF_EXECUTABLE_SUFFIX "$i".c \
+			-O3 -Wall -Wextra -Wno-unused-parameter -pedantic -std=c99 $WF_RUNTIME_LDFLAGS
+	done
+}
+
+package() {
+	cd "$pkgname"
+	mkdir -p "$pkgdir$WF_DESTDIR"/bin
+	for i in huffman lzss rle; do
+		cp -a wf-nnpack-"$i"$WF_EXECUTABLE_SUFFIX "$pkgdir$WF_DESTDIR"/bin
+	done
+}
