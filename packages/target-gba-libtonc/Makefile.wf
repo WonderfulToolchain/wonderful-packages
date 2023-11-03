@@ -2,7 +2,7 @@
 #
 # SPDX-FileContributor: Adrian "asie" Siekierka, 2023
 
-WONDERFUL_TOOLCHAIN ?= /opt/wonderful
+export WONDERFUL_TOOLCHAIN ?= /opt/wonderful
 TARGET ?= gba/rom
 DESTDIR ?= $(WONDERFUL_TOOLCHAIN)
 include $(WONDERFUL_TOOLCHAIN)/target/$(TARGET)/makedefs.mk
@@ -26,8 +26,8 @@ DEFINES		:=
 # Libraries
 # ---------
 
-LIBS		:= -lc
-LIBDIRS		:= $(WF_ARCH_LIBDIRS)
+LIBS		:=
+LIBDIRS		:=
 
 # Build artifacts
 # ---------------
