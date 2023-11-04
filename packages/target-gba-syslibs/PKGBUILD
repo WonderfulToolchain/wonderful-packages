@@ -4,7 +4,7 @@
 
 pkgname=target-gba-syslibs
 _pkgver=0.1.0
-pkgver=0.1.0.r19.f84647a
+pkgver=0.1.0.r20.ef8965d
 pkgrel=1
 epoch=
 pkgdesc="GBA target system libraries"
