@@ -3,7 +3,7 @@
 # SPDX-FileContributor: Adrian "asie" Siekierka, 2023
 
 _pkgname=thirdparty-blocksds
-source=("$_pkgname::git+https://github.com/blocksds/sdk#tag=v0.9.1")
+source=("$_pkgname::git+https://github.com/blocksds/sdk#tag=v0.10.0")
 
 if [ "x$_pkgname" = "xthirdparty-blocksds-git" ]; then
 	pkgname=(thirdparty-blocksds-git-toolchain thirdparty-blocksds-git-docs)
@@ -12,7 +12,7 @@ else
 fi
 
 groups=($_pkgname)
-pkgver=0.9.1
+pkgver=0.10.0
 pkgrel=1
 epoch=
 pkgdesc="DS/DSi console homebrew toolchain maintained by AntonioND"
@@ -37,6 +37,13 @@ optdepends=(
 sha256sums=('SKIP')
 options=('!strip')
 
+. "/wf/config/runtime-env-vars.sh"
+
+if [ "$WF_HOST_OS" == "linux" ]; then
+	makedepends+=(toolchain-llvm-teak-llvm )
+	optdepends+=('toolchain-llvm-teak-llvm: Teak DSP build support')
+fi
+
 prepare() {
 	cd "$_pkgname"
 	git submodule init
@@ -49,8 +56,6 @@ prepare() {
 		sed -i -e 's/$(LIBS)/$(LIBS) -liconv/' tools/ndstool/Makefile
 	fi
 }
-
-. "/wf/config/runtime-env-vars.sh"
 
 if [ "x$_pkgname" = "xthirdparty-blocksds-git" ]; then
 	GIT_REPO_DIR=$_pkgname
