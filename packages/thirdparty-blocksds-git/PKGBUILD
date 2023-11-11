@@ -12,8 +12,8 @@ else
 fi
 
 groups=($_pkgname)
-_pkgver=0.10.0
-pkgver=0.10.0.r282.48eace2
+_pkgver=0.10.2
+pkgver=0.10.2.r287.32e81e4
 pkgrel=1
 epoch=
 pkgdesc="DS/DSi console homebrew toolchain maintained by AntonioND"
@@ -41,8 +41,10 @@ options=('!strip')
 . "/wf/config/runtime-env-vars.sh"
 
 if [ "$WF_HOST_OS" == "linux" ]; then
-	makedepends+=(toolchain-llvm-teak-llvm )
-	optdepends+=('toolchain-llvm-teak-llvm: Teak DSP build support')
+	if [ "$CARCH" == "x86_64" ]; then
+		makedepends+=(toolchain-llvm-teak-llvm )
+		optdepends+=('toolchain-llvm-teak-llvm: Teak DSP build support')
+	fi
 fi
 
 prepare() {
