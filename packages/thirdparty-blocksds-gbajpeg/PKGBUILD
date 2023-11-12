@@ -2,32 +2,34 @@
 #
 # SPDX-FileContributor: Adrian "asie" Siekierka, 2023
 
-pkgname=thirdparty-blocksds-nitroengine
+pkgname=thirdparty-blocksds-gbajpeg
 groups=(thirdparty-blocksds-extra)
-pkgver=0.9.1
+pkgver=`date "+%Y%m%d"`
 pkgrel=1
 epoch=
-pkgdesc="AntonioND's library providing functions designed to simplify the process of making a 3D game"
+pkgdesc="Lightweight GBA/NDS-optimized JPEG decoder"
 arch=(any)
-source=("$pkgname::git+https://github.com/AntonioND/nitro-engine#tag=v0.9.0")
-url="https://github.com/AntonioND/nitro-engine"
-license=("MIT")
+source=("$pkgname::git+https://github.com/blocksds/gbajpeg#branch=master")
+url="https://github.com/blocksds/gbajpeg"
+license=("PD")
 depends=(thirdparty-blocksds-toolchain)
 sha256sums=('SKIP')
 options=('!strip')
 
 . "/wf/config/runtime-env-vars.sh"
 
+# . "../templates/git-pkgver.PKGBUILD"
+
 build() {
 	wf_use_toolchain gcc-arm-none-eabi arm-none-eabi
 
 	cd "$pkgname"
-	make -f Makefile.blocksds
+	make
 }
 
 package() {
 	cd "$pkgname"
-
+	
 	BLOCKSDSEXT="$pkgdir$WF_DESTDIR"/thirdparty/blocksds/external \
-	make -f Makefile.blocksds -j1 install
+	make -j1 install
 }
