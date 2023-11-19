@@ -3,7 +3,14 @@
 # SPDX-FileContributor: Adrian "asie" Siekierka, 2023
 
 _pkgname=thirdparty-blocksds
-source=("$_pkgname::git+https://github.com/blocksds/sdk#tag=v0.10.2")
+source=(
+	"$_pkgname::git+https://github.com/blocksds/sdk#tag=v0.10.2"
+	"file:///wf/patches/blocksds-0.10.2-fix-memcpy-memset-regression.patch"
+)
+sha256sums=(
+	'SKIP'
+	'SKIP'
+)
 
 if [ "x$_pkgname" = "xthirdparty-blocksds-git" ]; then
 	pkgname=(thirdparty-blocksds-git-toolchain thirdparty-blocksds-git-docs)
@@ -13,7 +20,7 @@ fi
 
 groups=($_pkgname)
 pkgver=0.10.2
-pkgrel=1
+pkgrel=2
 epoch=
 pkgdesc="DS/DSi console homebrew toolchain maintained by AntonioND"
 arch=("i686" "x86_64" "armv6h" "aarch64")
@@ -34,7 +41,6 @@ makedepends=(
 optdepends=(
 	'toolchain-gcc-arm-none-eabi-extra: additional libraries'
 )
-sha256sums=('SKIP')
 options=('!strip')
 
 . "/wf/config/runtime-env-vars.sh"
@@ -57,6 +63,10 @@ prepare() {
 		# patch ndstool to link iconv explicitly
 		sed -i -e 's/$(LIBS)/$(LIBS) -liconv/' tools/ndstool/Makefile
 	fi
+
+	cd libs/libnds
+	patch -p1 <../../../blocksds-0.10.2-fix-memcpy-memset-regression.patch
+	cd ../..
 }
 
 if [ "x$_pkgname" = "xthirdparty-blocksds-git" ]; then

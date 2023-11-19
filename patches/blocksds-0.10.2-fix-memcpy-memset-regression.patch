@@ -1,0 +1,91 @@
+From 11aa80a8b095a18c433f050c64ea02fb3704aed2 Mon Sep 17 00:00:00 2001
+From: Adrian Siekierka <kontakt@asie.pl>
+Date: Sun, 19 Nov 2023 10:50:15 +0100
+Subject: [PATCH] ndsabi: fix memcpy/memset regression
+
+---
+ include/nds/asminc.h          | 7 +++++++
+ source/common/ndsabi/memcpy.s | 8 ++++----
+ source/common/ndsabi/memset.s | 8 ++++----
+ 3 files changed, 15 insertions(+), 8 deletions(-)
+
+diff --git a/include/nds/asminc.h b/include/nds/asminc.h
+index d79075a..2c5609e 100644
+--- a/include/nds/asminc.h
++++ b/include/nds/asminc.h
+@@ -18,6 +18,13 @@
+ \name:
+ .endm
+ 
++.macro BEGIN_ASM_FUNC_NO_SECTION name
++    .global \name
++    .type \name, %function
++    .align 2
++\name:
++.endm
++
+ #define ICACHE_SIZE     0x2000
+ #define DCACHE_SIZE     0x1000
+ #define CACHE_LINE_SIZE 32
+diff --git a/source/common/ndsabi/memcpy.s b/source/common/ndsabi/memcpy.s
+index bbd1df4..e88ef53 100644
+--- a/source/common/ndsabi/memcpy.s
++++ b/source/common/ndsabi/memcpy.s
+@@ -45,8 +45,8 @@ BEGIN_ASM_FUNC __aeabi_memcpy
+     @ r0, r1 are now word aligned
+ 
+ 
+-BEGIN_ASM_FUNC __aeabi_memcpy8
+-BEGIN_ASM_FUNC __aeabi_memcpy4
++BEGIN_ASM_FUNC_NO_SECTION __aeabi_memcpy8
++BEGIN_ASM_FUNC_NO_SECTION __aeabi_memcpy4
+ 
+     cmp     r2, #32
+     blt     .Lcopy_words
+@@ -94,7 +94,7 @@ BEGIN_ASM_FUNC __aeabi_memcpy4
+     @ r0, r1 are now half aligned
+ 
+ 
+-BEGIN_ASM_FUNC __ndsabi_memcpy2
++BEGIN_ASM_FUNC_NO_SECTION __ndsabi_memcpy2
+ 
+     subs    r2, r2, #2
+     ldrhge  r3, [r1], #2
+@@ -109,7 +109,7 @@ BEGIN_ASM_FUNC __ndsabi_memcpy2
+     bx      lr
+ 
+ 
+-BEGIN_ASM_FUNC __ndsabi_memcpy1
++BEGIN_ASM_FUNC_NO_SECTION __ndsabi_memcpy1
+ 
+     subs    r2, r2, #1
+     ldrbge  r3, [r1], #1
+diff --git a/source/common/ndsabi/memset.s b/source/common/ndsabi/memset.s
+index abf854b..5db555f 100644
+--- a/source/common/ndsabi/memset.s
++++ b/source/common/ndsabi/memset.s
+@@ -49,20 +49,20 @@ BEGIN_ASM_FUNC __aeabi_memset
+     subcs   r1, r1, #2
+ 
+ 
+-BEGIN_ASM_FUNC __aeabi_memset8
+-BEGIN_ASM_FUNC __aeabi_memset4
++BEGIN_ASM_FUNC_NO_SECTION __aeabi_memset8
++BEGIN_ASM_FUNC_NO_SECTION __aeabi_memset4
+ 
+     lsl     r2, r2, #24
+     orr     r2, r2, r2, lsr #8
+     orr     r2, r2, r2, lsr #16
+ 
+ 
+-BEGIN_ASM_FUNC __ndsabi_wordset4
++BEGIN_ASM_FUNC_NO_SECTION __ndsabi_wordset4
+ 
+     mov     r3, r2
+ 
+ 
+-BEGIN_ASM_FUNC __ndsabi_lwordset4
++BEGIN_ASM_FUNC_NO_SECTION __ndsabi_lwordset4
+ 
+     @ 16 words is roughly the threshold when lwordset is slower
+     cmp     r1, #64
