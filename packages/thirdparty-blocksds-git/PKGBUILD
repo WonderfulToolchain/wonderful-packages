@@ -5,10 +5,8 @@
 _pkgname=thirdparty-blocksds-git
 source=(
 	"$_pkgname::git+https://github.com/blocksds/sdk#branch=master"
-	"file:///wf/patches/blocksds-0.10.2-fix-memcpy-memset-regression.patch"
 )
 sha256sums=(
-	'SKIP'
 	'SKIP'
 )
 
@@ -19,8 +17,8 @@ else
 fi
 
 groups=($_pkgname)
-_pkgver=0.10.2
-pkgver=0.10.2.r304.a793bb5
+_pkgver=0.11.0
+pkgver=0.11.0.r314.e0e13e3
 pkgrel=1
 epoch=
 pkgdesc="DS/DSi console homebrew toolchain maintained by AntonioND"
@@ -64,10 +62,6 @@ prepare() {
 		# patch ndstool to link iconv explicitly
 		sed -i -e 's/$(LIBS)/$(LIBS) -liconv/' tools/ndstool/Makefile
 	fi
-
-	cd libs/libnds
-	patch -p1 <../../../blocksds-0.10.2-fix-memcpy-memset-regression.patch
-	cd ../..
 }
 
 if [ "x$_pkgname" = "xthirdparty-blocksds-git" ]; then
