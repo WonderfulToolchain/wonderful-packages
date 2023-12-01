@@ -1,0 +1,15 @@
+diff -rup gcc-13.2.0/gcc/config/arm/arm.cc gcc-13.2.0-patched/gcc/config/arm/arm.cc
+--- gcc-13.2.0/gcc/config/arm/arm.cc	2023-07-27 10:13:04.000000000 +0200
++++ gcc-13.2.0-patched/gcc/config/arm/arm.cc	2023-12-01 16:24:19.711916004 +0100
+@@ -3824,6 +3824,11 @@ arm_option_override (void)
+ 
+   /* Init initial mode for testing.  */
+   thumb_flipper = TARGET_THUMB;
++
++  /* Wonderful: NO$GBA currently crashes on ELF files containing DWARF5
++     symbols. Use DWARF4 by default for now.  */
++  if (!OPTION_SET_P (dwarf_version))
++    dwarf_version = 4;
+ }
+ 
+ 

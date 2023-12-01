@@ -27,13 +27,18 @@ source=("http://ftp.gnu.org/gnu/gcc/gcc-$pkgver/gcc-$pkgver.tar.xz"
         "http://ftp.gnu.org/gnu/mpc/mpc-$_mpcver.tar.gz"
 	"https://libisl.sourceforge.io/isl-$_islver.tar.xz"
 	"file:///wf/patches/gcc13-poison-system-directories.patch"
-	"file:///wf/patches/gcc13-clang-MJ.patch")
+	"file:///wf/patches/gcc13-clang-MJ.patch"
+	"file:///wf/patches/gcc13-arm-dwarf4.patch"
+	"file:///wf/patches/gcc13-multilib-arm-elf"
+)
 sha256sums=(
 	'e275e76442a6067341a27f04c5c6b83d8613144004c0413528863dc6b5c743da'
 	'fd4829912cddd12f84181c3451cc752be224643e87fac497b69edddadc49b4f2'
 	'06a378df13501248c1b2db5aa977a2c8126ae849a9d9b7be2546fb4a9c26d993'
 	'ab642492f5cf882b74aa0cb730cd410a81edcdbec895183ce930e706c1c759b8'
 	'a0b5cb06d24f9fa9e77b55fabbe9a3c94a336190345c2555f9915bb38e976504'
+	'SKIP'
+	'SKIP'
 	'SKIP'
 	'SKIP'
 )
@@ -44,12 +49,23 @@ prepare() {
 	mkdir -p "gcc-build"
 	cd "gcc-$pkgver"
 
-	# Not strictly necessary, but a nice-to-have.
-	patch -p1 <../gcc13-poison-system-directories.patch
-	patch -p1 <../gcc13-clang-MJ.patch
+	### Target patches
 
-	# HACK: hijack RTEMS's libstdc++ crossconfig for our own purposes (which has the dynamic feature checks we want)
+	# These patches are used by the toolchain and most likely necessary.
+	# - HACK: hijack RTEMS's libstdc++ crossconfig for our own purposes (which has the dynamic feature checks we want)
 	sed -i "s/\*-rtems\*/*-unknown*/" libstdc++-v3/configure
+	# - Add -MJ compile_commands.json fragment emitter, matching Clang.
+	patch -p1 <../gcc13-clang-MJ.patch
+	# - Use DWARF4 by default on ARM. Fixes ELF load crashes with NO$GBA.
+	patch -p1 <../gcc13-arm-dwarf4.patch
+
+	# These patches are used by the toolchain, but only serve an optimization purpose.
+	# - Use custom multilib configuration on ARM.
+	cp ../gcc13-multilib-arm-elf gcc/config/arm/t-arm-elf
+
+	# These patches aren't strictly necessary, but they are nice to have.
+	# - Poison system directories: emit warnings if they are mistakenly included.
+	patch -p1 <../gcc13-poison-system-directories.patch
 
 	ln -s ../"gmp-$_gmpver" gmp
 	ln -s ../"mpfr-$_mpfrver" mpfr

@@ -4,7 +4,7 @@
 
 pkgname=toolchain-gcc-arm-none-eabi-picolibc-generic
 _pkgver=1.8.5
-pkgver=1.8.5.r23968.bd7fdc1b7
+pkgver=1.8.5.r23973.22790bc4d
 pkgrel=1
 epoch=
 pkgdesc="picolibc-based C library for Wonderful toolchain"
@@ -39,7 +39,7 @@ build() {
 
 	meson setup \
 		--cross-file=../cross-thumb.txt \
-		-Dmultilib=false \
+		-Dmultilib=true \
 		-Dpicocrt=false \
 		-Dpicolib=false \
 		-Dsemihost=false \

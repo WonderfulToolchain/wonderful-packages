@@ -2,10 +2,10 @@
 #
 # SPDX-FileContributor: Adrian "asie" Siekierka, 2023
 
-pkgrel=3
+pkgrel=4
 epoch=1
 GCC_TARGET=arm-none-eabi
-GCC_EXTRA_ARGS=(--enable-languages=c,c++,lto --enable-lto --enable-interwork --enable-multilib --enable-tls --with-float=soft)
+GCC_EXTRA_ARGS=(--enable-languages=c,c++,lto --enable-lto --enable-interwork --enable-multilib --enable-tls)
 
 . "../templates/toolchain-gcc-gcc13.PKGBUILD"
 
