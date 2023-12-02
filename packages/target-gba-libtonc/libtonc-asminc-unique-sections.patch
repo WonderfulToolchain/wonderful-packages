@@ -1,0 +1,63 @@
+From 643ab041752bc889b318a7c9595a4c6c3c8c7722 Mon Sep 17 00:00:00 2001
+From: Adrian Siekierka <kontakt@asie.pl>
+Date: Tue, 31 Oct 2023 09:20:32 +0100
+Subject: [PATCH] tonc_asminc: use unique code sections
+
+This changes the semantics of BEGIN_FUNC/CSEC slightly (they still work
+without changes when used together) to emit an unique function section for
+every ASM function.
+
+This can lower the size of a ROM by ~200 bytes, as only BIOS/memset/etc.
+functions actually used will be linked, instead of all in a given translation
+unit.
+---
+ include/tonc_asminc.h | 22 +++-------------------
+ 1 file changed, 3 insertions(+), 19 deletions(-)
+
+diff --git a/include/tonc_asminc.h b/include/tonc_asminc.h
+index a28a556..2390bc7 100644
+--- a/include/tonc_asminc.h
++++ b/include/tonc_asminc.h
+@@ -28,8 +28,8 @@
+ //\{
+ 
+ #define CSEC_TEXT	.text								//!< Standard code section directive.
+-#define CSEC_EWRAM	.section .ewram , "ax", %progbits	//!< EWRAM code section directive.
+-#define CSEC_IWRAM	.section .iwram, "ax", %progbits	//!< IWRAM code section directive.
++#define CSEC_EWRAM	.ewram	//!< EWRAM code section directive.
++#define CSEC_IWRAM	.iwram	//!< IWRAM code section directive.
+ 
+ #define DSEC_DATA	.data						//<! Standard data section directive.
+ #define DSEC_ROM	.section .rodata			//!< ROM data section directive.
+@@ -39,22 +39,6 @@
+ #define ARM_FUNC	.arm						//!< Indicates an ARM function.
+ #define THUMB_FUNC	.thumb_func					//!< Indicates a Thumb function.
+ 
+-//# NOTE: because these use commas, I can't pass them through CPP macros.
+-//# Yes, this is stupid, but do you have a better idea?
+-
+-#undef CSEC_EWRAM
+-	.macro CSEC_EWRAM
+-	.section .ewram , "ax", %progbits
+-	.endm
+-
+-#undef CSEC_IWRAM
+-	.macro CSEC_IWRAM
+-	.section .iwram , "ax", %progbits
+-	.endm
+-
+-//\}
+-
+-
+ //! \name Function definition macros.
+ //\{
+ 
+@@ -64,7 +48,7 @@
+ 	\param _section	Section to place function in (like .text)
+ */
+ #define BEGIN_FUNC(_name, _section, _iset)	\
+-	_section;								\
++	.section _section._name , "ax", %progbits;				\
+ 	_iset;									\
+ 	.align 2;								\
+ 	.global _name;							\

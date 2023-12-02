@@ -1,0 +1,71 @@
+From 745932737f4097686c740a6f99ef5b1b4dc7ec6b Mon Sep 17 00:00:00 2001
+From: Jeremy Clarke <geckojsc@gmail.com>
+Date: Mon, 6 Nov 2023 21:03:55 +0100
+Subject: [PATCH 1/2] Fix irq_set's 'replace' feature
+
+---
+ src/tonc_irq.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/tonc_irq.c b/src/tonc_irq.c
+index d3df7fc..077acf0 100644
+--- a/src/tonc_irq.c
++++ b/src/tonc_irq.c
+@@ -131,11 +131,11 @@ fnptr irq_set(enum eIrqIndex irq_id, fnptr isr, u32 opts)
+ 	
+ 	prio= opts&(ISR_LAST|ISR_PRIO_MASK);
+ 
+-	// IRS already exists; replace?
++	// ISR already exists; replace?
+ 	if(pir[slot].flag == irq_flag)
+ 	{
+ 		// Replace desired -> do so
+-		if((prio & ISR_REPLACE) || slot == prio)
++		if((opts & ISR_REPLACE) || slot == prio)
+ 		{
+ 			old_isr= pir[slot].isr;
+ 			pir[slot].isr= isr;
+
+From 86c5954a15a070fb94433ae31cf72cea8e7be4a6 Mon Sep 17 00:00:00 2001
+From: Jeremy Clarke <geckojsc@gmail.com>
+Date: Mon, 6 Nov 2023 21:05:01 +0100
+Subject: [PATCH 2/2] Implement se_hline and se_vline in tonc_video.h
+
+---
+ include/tonc_video.h | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
+
+diff --git a/include/tonc_video.h b/include/tonc_video.h
+index 65c9615..1e26a16 100644
+--- a/include/tonc_video.h
++++ b/include/tonc_video.h
+@@ -258,12 +258,11 @@ INLINE void se_fill(SCR_ENTRY *sbb, SCR_ENTRY se);
+ INLINE void se_plot(SCR_ENTRY *sbb, int x, int y, SCR_ENTRY se);
+ INLINE void se_rect(SCR_ENTRY *sbb, int left, int top, int right, int bottom, SCR_ENTRY se);
+ INLINE void se_frame(SCR_ENTRY *sbb, int left, int top, int right, int bottom, SCR_ENTRY se);
++INLINE void se_hline(SCR_ENTRY *sbb, int x0, int x1, int y, SCR_ENTRY se);
++INLINE void se_vline(SCR_ENTRY *sbb, int x, int y0, int y1, SCR_ENTRY se);
+ 
+ void se_window(SCR_ENTRY *sbb, int left, int top, int right, int bottom, SCR_ENTRY se0);
+ 
+-void se_hline(SCR_ENTRY *sbb, int x0, int x1, int y, SCR_ENTRY se);
+-void se_vline(SCR_ENTRY *sbb, int x, int y0, int y1, SCR_ENTRY se);
+-
+ 
+ // --- Prototypes -----------------------------------------------------
+ 
+@@ -403,6 +402,14 @@ INLINE void se_frame(SCR_ENTRY *sbb, int left, int top, int right, int bottom,
+ 	SCR_ENTRY se)
+ {	bmp16_frame(left, top, right, bottom, se, sbb, 32*2);				}
+ 
++//! Draw a horizontal line on \a sbb with \a se.
++INLINE void se_hline(SCR_ENTRY *sbb, int x0, int x1, int y, SCR_ENTRY se)
++{	bmp16_hline(x0, y, x1, se, sbb, 32*2);				}
++
++//! Draw a vertical line on \a sbb with \a se.
++INLINE void se_vline(SCR_ENTRY *sbb, int x, int y0, int y1, SCR_ENTRY se)
++{	bmp16_vline(x, y0, y1, se, sbb, 32*2);				}
++
+ 
+ // --- Affine ---
+ 
