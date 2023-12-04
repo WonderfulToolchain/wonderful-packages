@@ -4,7 +4,7 @@
 
 _pkgname=thirdparty-blocksds
 source=(
-	"$_pkgname::git+https://github.com/blocksds/sdk#tag=v0.11.2"
+	"$_pkgname::git+https://github.com/blocksds/sdk#tag=v0.11.3"
 )
 sha256sums=(
 	'SKIP'
@@ -17,7 +17,7 @@ else
 fi
 
 groups=($_pkgname)
-pkgver=0.11.2
+pkgver=0.11.3
 pkgrel=1
 epoch=
 pkgdesc="DS/DSi console homebrew toolchain maintained by AntonioND"
