@@ -4,8 +4,8 @@
 
 pkgname=toolchain-gcc-arm-none-eabi-picolibc-generic
 _pkgver=1.8.5
-pkgver=1.8.5.r23974.cdde19ec0
-pkgrel=1
+pkgver=1.8.5.r23981.efa8284d5
+pkgrel=2
 epoch=
 pkgdesc="picolibc-based C library for Wonderful toolchain"
 arch=(any)
@@ -74,4 +74,7 @@ package() {
 
 	cd "$pkgdir"
 	wf_relocate_path_to_destdir
+
+	rm toolchain/gcc-arm-none-eabi/arm-none-eabi/lib/picolibc*.ld
+	cp /wf/patches/picolibc.specs toolchain/gcc-arm-none-eabi/arm-none-eabi/lib/
 }
