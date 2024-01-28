@@ -100,6 +100,8 @@ wf_disable_host_build() {
 wf_use_toolchain() {
 	wf_disable_host_build
 
+	export WF_TOOLCHAIN_NAME="$1"
+	export WF_TOOLCHAIN_TARGET="$2"
 	export WF_TOOLCHAIN_PREFIX="$WF_PATH/toolchain/$1/$2"
 	export PATH="$WF_PATH/toolchain/$1/bin":$PATH
 }
