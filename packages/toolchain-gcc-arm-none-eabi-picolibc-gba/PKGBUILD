@@ -4,7 +4,7 @@
 
 pkgname=toolchain-gcc-arm-none-eabi-picolibc-gba
 _pkgver=1.8.6
-pkgver=1.8.6.r24148.10b34d283
+pkgver=1.8.6.r24149.dfdf0f73a
 pkgrel=1
 epoch=
 pkgdesc="picolibc-based C library for Wonderful toolchain"
@@ -21,6 +21,7 @@ sha256sums=(
 	'SKIP'
 	'SKIP'
 )
+options=(!strip)
 
 . "/wf/config/runtime-env-vars.sh"
 
