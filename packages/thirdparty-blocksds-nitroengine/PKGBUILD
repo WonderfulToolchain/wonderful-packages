@@ -5,11 +5,11 @@
 pkgname=thirdparty-blocksds-nitroengine
 groups=(thirdparty-blocksds-extra)
 pkgver=0.10.0
-pkgrel=1
+pkgrel=2
 epoch=
 pkgdesc="AntonioND's library providing functions designed to simplify the process of making a 3D game"
 arch=(any)
-source=("$pkgname::git+https://github.com/AntonioND/nitro-engine#tag=v0.9.1")
+source=("$pkgname::git+https://github.com/AntonioND/nitro-engine#tag=v$pkgver")
 url="https://github.com/AntonioND/nitro-engine"
 license=("MIT")
 depends=(thirdparty-blocksds-toolchain)
