@@ -4,8 +4,8 @@
 
 pkgname=target-gba-libtonc
 _pkgver=1.4.3
-pkgver=1.4.3.r15.cc862ce
-pkgrel=4
+pkgver=1.4.3.r23.651134f
+pkgrel=1
 epoch=
 pkgdesc="GBA libtonc library"
 arch=(any)
@@ -14,15 +14,11 @@ license=("MIT")
 source=(
 	"$pkgname::git+https://github.com/gbadev-org/libtonc#branch=master"
 	"libtonc-wf.patch"
-	"libtonc-asminc-unique-sections.patch"
-	"libtonc-natu-general-fixes.patch"
 	"Makefile.wf"
 )
 depends=()
 makedepends=(target-gba)
 sha256sums=(
-	'SKIP'
-	'SKIP'
 	'SKIP'
 	'SKIP'
 	'SKIP'
@@ -38,7 +34,7 @@ prepare() {
 	cp ../Makefile.wf .
 
 	# ._.
-	for i in libtonc-wf.patch libtonc-asminc-unique-sections.patch libtonc-natu-general-fixes.patch; do
+	for i in libtonc-wf.patch; do
 		unix2dos ../"$i"
 		patch --binary -p1 <../"$i"
 	done
