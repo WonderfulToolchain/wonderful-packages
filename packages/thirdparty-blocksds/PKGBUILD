@@ -4,7 +4,7 @@
 
 _pkgname=thirdparty-blocksds
 source=(
-	"$_pkgname::git+https://github.com/blocksds/sdk#tag=v0.13.0"
+	"$_pkgname::git+https://github.com/blocksds/sdk#tag=v0.14.0"
 )
 sha256sums=(
 	'SKIP'
@@ -17,7 +17,7 @@ else
 fi
 
 groups=($_pkgname)
-pkgver=0.13.0
+pkgver=0.14.0
 pkgrel=1
 epoch=
 pkgdesc="DS/DSi console homebrew toolchain maintained by AntonioND"
@@ -52,8 +52,7 @@ fi
 
 prepare() {
 	cd "$_pkgname"
-	git submodule init
-	git submodule update
+	git submodule update --init --recursive
 
 	wf_disable_host_build
 
@@ -96,10 +95,8 @@ package_thirdparty-blocksds-docs() {
 	cd "$_pkgname"
 
 	mkdir -p "$pkgdir$WF_DESTDIR"/thirdparty/blocksds/core
-	cp -aR changelog.rst "$pkgdir$WF_DESTDIR"/thirdparty/blocksds/core || true
 	cp -aR docs "$pkgdir$WF_DESTDIR"/thirdparty/blocksds/core || true
 	cp -aR examples "$pkgdir$WF_DESTDIR"/thirdparty/blocksds/core || true
-	cp -aR readme.rst "$pkgdir$WF_DESTDIR"/thirdparty/blocksds/core || true
 	cp -aR templates "$pkgdir$WF_DESTDIR"/thirdparty/blocksds/core || true
 	cp -aR tests "$pkgdir$WF_DESTDIR"/thirdparty/blocksds/core || true
 }
