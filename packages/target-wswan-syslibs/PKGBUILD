@@ -5,7 +5,7 @@
 pkgname=target-wswan-syslibs
 _pkgver=0.1.0
 pkgver=0.1.0.r82.c46d313
-pkgrel=1
+pkgrel=2
 epoch=
 pkgdesc="WSwan target system libraries"
 arch=(any)
