@@ -4,7 +4,7 @@
 
 pkgname=(toolchain-gcc-ia16-elf-gcc toolchain-gcc-ia16-elf-gcc-libs)
 _pkgver=6.3.0
-pkgver=6.3.0.r147138.5817b46fdb3
+pkgver=6.3.0.r147140.4f47aef6d53
 pkgrel=1
 _gmpver=6.1.2
 _mpfrver=3.1.5
