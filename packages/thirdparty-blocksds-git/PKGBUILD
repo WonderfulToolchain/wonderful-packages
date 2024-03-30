@@ -17,8 +17,8 @@ else
 fi
 
 groups=($_pkgname)
-_pkgver=0.14.0
-pkgver=0.14.0.r533.d2ab2a6
+_pkgver=1.0.0
+pkgver=1.0.0.r569.c9f9e01
 pkgrel=1
 epoch=
 pkgdesc="DS/DSi console homebrew toolchain maintained by AntonioND"
