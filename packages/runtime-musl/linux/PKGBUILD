@@ -3,7 +3,7 @@
 # SPDX-FileContributor: Adrian "asie" Siekierka, 2023
 
 pkgname=(runtime-musl runtime-musl-dev)
-pkgver=1.2.4
+pkgver=1.2.5
 pkgrel=1
 epoch=
 pkgdesc="musl runtime"
@@ -11,7 +11,9 @@ arch=("i686" "x86_64" "armv6h" "aarch64")
 url="http://www.musl-libc.org"
 license=("MIT")
 source=("https://www.musl-libc.org/releases/musl-$pkgver.tar.gz")
-sha256sums=('7a35eae33d5372a7c0da1188de798726f68825513b7ae3ebe97aaaa52114f039')
+sha256sums=('a9a118bbe84d8764da0ea0d28b3ab3fae8477fc7e4085d90102b8596fc7c75e4')
+
+. "/wf/config/runtime-env-vars.sh"
 
 prepare() {
 	mkdir -p "musl-$pkgver-build"
