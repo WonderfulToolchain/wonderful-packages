@@ -4,7 +4,7 @@
 
 pkgname=toolchain-gcc-arm-none-eabi-picolibc-generic
 _pkgver=1.8.6
-pkgver=1.8.6.r24150.69afcf636
+pkgver=1.8.6.r24148.10b34d283
 pkgrel=1
 epoch=
 pkgdesc="picolibc-based C library for Wonderful toolchain"
@@ -23,7 +23,6 @@ sha256sums=(
 	'SKIP'
 	'SKIP'
 )
-options=(!strip)
 
 . "/wf/config/runtime-env-vars.sh"
 
@@ -56,7 +55,7 @@ build() {
 		-Dformat-default=double \
 		\
 		-Dnewlib-nano-malloc=false \
-		\
+a		\
 		-Dprefix="$WF_PATH"/toolchain/gcc-arm-none-eabi \
 		-Dlibdir=arm-none-eabi/lib \
 		-Dincludedir=arm-none-eabi/include \
