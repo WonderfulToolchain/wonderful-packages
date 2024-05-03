@@ -74,6 +74,10 @@ On Arch Linux, this can be resolved using the following steps:
   * etc.
 2. Run `systemctl restart systemd-binfmt` to apply changes.
 
+### newuidmap: write to uid_map failed: Invalid argument
+
+The system's `/etc/subgid` and `/etc/subuid` files most likely have overlapping entries.
+
 ## License
 
 Unless otherwise specified, the build scripts (`config/`, `packages/`) are licensed under Creative Commons 0. I don't see why instructions on building otherwise libre toolchains should be restricted by copyright in any way.
