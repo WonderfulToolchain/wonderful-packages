@@ -68,4 +68,4 @@ class ContainerLinuxEnvironment(Environment):
         if not ("skip_package_sync" in kwargs and kwargs["skip_package_sync"]):
             cmd = "pacman -Syu && " + cmd
         clean_custom_keys(kwargs)
-        return subprocess.run(["podman", "run", "-i", "--user", "root", "--userns=keep-id", "-v", f"{cwd}:/wf", f"wonderful-{self.container_name}", "sh", "-c", cmd], **kwargs)
+        return subprocess.run(["podman", "run", "-i", "-v", f"{cwd}:/wf", f"wonderful-{self.container_name}", "sh", "-c", cmd], **kwargs)
