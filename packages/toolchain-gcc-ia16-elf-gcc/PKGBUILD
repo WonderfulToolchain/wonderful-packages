@@ -49,6 +49,8 @@ prepare() {
 . "../templates/git-pkgver.PKGBUILD"
 
 build() {
+	export PATH=/opt/wonderful/toolchain/gcc-ia16-elf/bin:$PATH
+
 	cd gcc-build
 
 	# workaround for https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108300

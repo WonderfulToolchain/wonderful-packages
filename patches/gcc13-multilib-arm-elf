@@ -83,6 +83,11 @@ MULTILIB_DIRNAMES    += arm7tdmi arm946e-s mpcore
 MULTILIB_MATCHES += mcpu?arm946e-s+nofp=march?armv5te
 MULTILIB_MATCHES += mcpu?arm946e-s+nofp=march?armv5te+fp
 
+# Wonderful: MPCore multilibs can be used as (mistuned) ARMv6k+FP multilibs.
+
+MULTILIB_MATCHES += mcpu?mpcore=march?armv6k+vfpv2
+MULTILIB_MATCHES += mcpu?mpcore=march?armv6k+fp
+
 # Wonderful: Map +nofp arch variants, too.
 
 MULTILIB_MATCHES     += march?armv5te=march?armv5te+nofp)

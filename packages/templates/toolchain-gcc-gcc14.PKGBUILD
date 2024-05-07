@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: CC0-1.0
 #
-# SPDX-FileContributor: Adrian "asie" Siekierka, 2023
+# SPDX-FileContributor: Adrian "asie" Siekierka, 2024
 
 if [ "x$GCC_IS_LIBSTDCXX" = "xyes" ]; then
 	pkgname=(toolchain-gcc-$GCC_TARGET-libstdcxx-picolibc)
@@ -11,9 +11,10 @@ else
 	depends=(runtime-gcc-libs runtime-musl toolchain-gcc-$GCC_TARGET-binutils)
 	arch=("i686" "x86_64" "armv6h" "aarch64")
 fi
-pkgver=13.2.0
-_gmpver=6.2.1
-_mpfrver=4.2.0
+pkgver=14.1.0
+_gccver=14.1.0
+_gmpver=6.3.0
+_mpfrver=4.2.1
 _mpcver=1.3.1
 _islver=0.26
 pkgdesc="The GNU Compiler Collection"
@@ -26,18 +27,16 @@ source=("http://ftp.gnu.org/gnu/gcc/gcc-$pkgver/gcc-$pkgver.tar.xz"
         "http://www.mpfr.org/mpfr-$_mpfrver/mpfr-$_mpfrver.tar.xz"
         "http://ftp.gnu.org/gnu/mpc/mpc-$_mpcver.tar.gz"
 	"https://libisl.sourceforge.io/isl-$_islver.tar.xz"
-	"file:///wf/patches/gcc13-poison-system-directories.patch"
+	"file:///wf/patches/gcc14-poison-system-directories.patch"
 	"file:///wf/patches/gcc13-clang-MJ.patch"
-	"file:///wf/patches/gcc13-arm-dwarf4.patch"
 	"file:///wf/patches/gcc13-multilib-arm-elf"
 )
 sha256sums=(
-	'e275e76442a6067341a27f04c5c6b83d8613144004c0413528863dc6b5c743da'
-	'fd4829912cddd12f84181c3451cc752be224643e87fac497b69edddadc49b4f2'
-	'06a378df13501248c1b2db5aa977a2c8126ae849a9d9b7be2546fb4a9c26d993'
+	'e283c654987afe3de9d8080bc0bd79534b5ca0d681a73a11ff2b5d3767426840'
+	'a3c2b80201b89e68616f4ad30bc66aee4927c3ce50e33929ca819d5c43538898'
+	'277807353a6726978996945af13e52829e3abd7a9a5b7fb2793894e18f1fcbb2'
 	'ab642492f5cf882b74aa0cb730cd410a81edcdbec895183ce930e706c1c759b8'
 	'a0b5cb06d24f9fa9e77b55fabbe9a3c94a336190345c2555f9915bb38e976504'
-	'SKIP'
 	'SKIP'
 	'SKIP'
 	'SKIP'
@@ -47,7 +46,7 @@ sha256sums=(
 
 prepare() {
 	mkdir -p "gcc-build"
-	cd "gcc-$pkgver"
+	cd "gcc-$_gccver"
 
 	### Target patches
 
@@ -56,8 +55,6 @@ prepare() {
 	sed -i "s/\*-rtems\*/*-unknown*/" libstdc++-v3/configure
 	# - Add -MJ compile_commands.json fragment emitter, matching Clang.
 	patch -p1 <../gcc13-clang-MJ.patch
-	# - Use DWARF4 by default on ARM. Fixes ELF load crashes with NO$GBA.
-	patch -p1 <../gcc13-arm-dwarf4.patch
 
 	# These patches are used by the toolchain, but only serve an optimization purpose.
 	# - Use custom multilib configuration on ARM.
@@ -65,7 +62,7 @@ prepare() {
 
 	# These patches aren't strictly necessary, but they are nice to have.
 	# - Poison system directories: emit warnings if they are mistakenly included.
-	patch -p1 <../gcc13-poison-system-directories.patch
+	patch -p1 <../gcc14-poison-system-directories.patch
 
 	ln -s ../"gmp-$_gmpver" gmp
 	ln -s ../"mpfr-$_mpfrver" mpfr
@@ -78,12 +75,12 @@ build() {
 
 	if [ "x$GCC_IS_LIBSTDCXX" = "xyes" ]; then
 		build_libstdcxx_arg="--enable-libstdcxx"
-		configure_cmd=../"gcc-$pkgver"/libstdc++-v3/configure
+		configure_cmd=../"gcc-$_gccver"/libstdc++-v3/configure
 
 		wf_disable_host_build
 	else
 		build_libstdcxx_arg="--disable-libstdcxx"
-		configure_cmd=../"gcc-$pkgver"/configure
+		configure_cmd=../"gcc-$_gccver"/configure
 	fi
 	cd gcc-build
 
@@ -92,7 +89,7 @@ build() {
 		CPPFLAGS='-DWIN32_LEAN_AND_MEAN'
 	fi
 
-	# It's strange that --with-gnu-as/--with-gnu-ld is required for cross-compilation.
+	# TODO: It's strange that --with-gnu-as/--with-gnu-ld is required for cross-compilation.
 	# I'd assume it would automatically check the target assembler/linker. I wonder what the issue is.
 	$configure_cmd \
 		--prefix="/opt/wonderful/toolchain/gcc-$GCC_TARGET" \
@@ -136,7 +133,7 @@ package_toolchain-gcc-template-gcc() {
 	# HACK: As we don't build with a C library present, limits.h
 	# assumes no such library is present.
 
-	cd "$srcdir"/gcc-"$pkgver"/gcc
+	cd "$srcdir"/gcc-"$_gccver"/gcc
 	cat limitx.h glimits.h limity.h > "$pkgdir"/toolchain/gcc-$GCC_TARGET/lib/gcc/$GCC_TARGET/$pkgver/include/limits.h
 }
 

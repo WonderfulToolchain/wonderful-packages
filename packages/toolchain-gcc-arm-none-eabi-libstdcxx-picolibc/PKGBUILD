@@ -2,7 +2,7 @@
 #
 # SPDX-FileContributor: Adrian "asie" Siekierka, 2023
 
-pkgrel=2
+pkgrel=1
 arch=(any)
 
 GCC_TARGET=arm-none-eabi
@@ -13,13 +13,13 @@ GCC_TARGET=arm-none-eabi
 GCC_EXTRA_ARGS=(--host=$GCC_TARGET --with-target-subdir --enable-languages=c,c++,lto --enable-lto --enable-interwork --enable-multilib)
 GCC_IS_LIBSTDCXX=yes
 
-TARGET_CFLAGS="-g -O2 -mthumb-interwork -ffunction-sections"
+TARGET_CFLAGS="-g -O2 -ffunction-sections"
 export CFLAGS="$TARGET_CFLAGS"
 export CFLAGS_FOR_TARGET="$TARGET_CFLAGS"
 export CXXFLAGS="$TARGET_CFLAGS"
 export CXXFLAGS_FOR_TARGET="$TARGET_CFLAGS"
 
-. "../templates/toolchain-gcc-gcc13.PKGBUILD"
+. "../templates/toolchain-gcc-gcc14.PKGBUILD"
 
 package_toolchain-gcc-arm-none-eabi-libstdcxx-picolibc() {
 	package_toolchain-gcc-template-libstdcxx-picolibc
