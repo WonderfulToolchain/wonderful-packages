@@ -5,7 +5,7 @@
 pkgname=target-gba-libtonc
 _pkgver=1.4.3
 pkgver=1.4.3.r23.651134f
-pkgrel=1
+pkgrel=2
 epoch=
 pkgdesc="GBA libtonc library"
 arch=(any)

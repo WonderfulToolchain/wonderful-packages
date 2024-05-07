@@ -58,6 +58,9 @@ SOURCES_C	:= $(filter-out $(BLOCKED_SOURCES),$(SOURCES_C))
 
 WARNFLAGS	:= -Wall
 
+# FIXME
+WARNFLAGS	+= -Wno-incompatible-pointer-types
+
 INCLUDEFLAGS	:= $(foreach path,$(INCLUDEDIRS),-I$(path)) \
 		   $(foreach path,$(LIBDIRS),-isystem $(path)/include)
 
