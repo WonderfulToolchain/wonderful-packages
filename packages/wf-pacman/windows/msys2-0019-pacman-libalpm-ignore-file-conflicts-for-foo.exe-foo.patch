@@ -1,7 +1,7 @@
-From d694a347ac4647bc27d2bae25b112c2f24792314 Mon Sep 17 00:00:00 2001
+From 8bdcffbf45a57229a161cf7fd8fac1706fc545d2 Mon Sep 17 00:00:00 2001
 From: Christoph Reiter <reiter.christoph@gmail.com>
 Date: Fri, 21 May 2021 22:55:24 +0200
-Subject: [PATCH 19/N] pacman/libalpm: ignore file conflicts for foo.exe ->
+Subject: [PATCH 15/N] pacman/libalpm: ignore file conflicts for foo.exe ->
  foo renames
 
 In case a file "foo.exe" gets renamed to "foo" the msys2 .exe
@@ -14,10 +14,10 @@ old package and ignore the conflict.
  1 file changed, 26 insertions(+)
 
 diff --git a/lib/libalpm/conflict.c b/lib/libalpm/conflict.c
-index b471bf2..f7fa9d8 100644
+index 38d28c6..6b531fc 100644
 --- a/lib/libalpm/conflict.c
 +++ b/lib/libalpm/conflict.c
-@@ -521,6 +521,32 @@ alpm_list_t *_alpm_db_find_fileconflicts(alpm_handle_t *handle,
+@@ -518,6 +518,32 @@ alpm_list_t *_alpm_db_find_fileconflicts(alpm_handle_t *handle,
  
  			_alpm_log(handle, ALPM_LOG_DEBUG, "checking possible conflict: %s\n", path);
  

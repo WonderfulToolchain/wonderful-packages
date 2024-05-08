@@ -1,14 +1,14 @@
-From f973a61a290a1c5f85b9f3d5541b75d0f887c993 Mon Sep 17 00:00:00 2001
+From 9336f25f1c529d370e66d4b34500f89bb5a0af01 Mon Sep 17 00:00:00 2001
 From: Christoph Reiter <reiter.christoph@gmail.com>
 Date: Fri, 21 May 2021 22:56:23 +0200
-Subject: [PATCH 21/N] Use pipe instead of socket
+Subject: [PATCH 17/N] Use pipe instead of socket
 
 ---
  lib/libalpm/util.c | 26 ++++++++++++++++++++++++++
  1 file changed, 26 insertions(+)
 
 diff --git a/lib/libalpm/util.c b/lib/libalpm/util.c
-index fecee3a..ce28fd8 100644
+index 95f30a4..f09077c 100644
 --- a/lib/libalpm/util.c
 +++ b/lib/libalpm/util.c
 @@ -30,7 +30,9 @@
@@ -18,10 +18,10 @@ index fecee3a..ce28fd8 100644
 +#ifndef __MSYS__
  #include <sys/socket.h>
 +#endif
+ #include <fcntl.h>
  #include <fnmatch.h>
  #include <poll.h>
- #include <signal.h>
-@@ -483,6 +485,9 @@ static int _alpm_chroot_write_to_child(alpm_handle_t *handle, int fd,
+@@ -471,6 +473,9 @@ static int _alpm_chroot_write_to_child(alpm_handle_t *handle, int fd,
  		_alpm_cb_io out_cb, void *cb_ctx)
  {
  	ssize_t nwrite;
@@ -31,7 +31,7 @@ index fecee3a..ce28fd8 100644
  
  	if(*buf_size == 0) {
  		/* empty buffer, ask the callback for more */
-@@ -492,7 +497,20 @@ static int _alpm_chroot_write_to_child(alpm_handle_t *handle, int fd,
+@@ -480,7 +485,20 @@ static int _alpm_chroot_write_to_child(alpm_handle_t *handle, int fd,
  		}
  	}
  
@@ -52,7 +52,7 @@ index fecee3a..ce28fd8 100644
  
  	if(nwrite != -1) {
  		/* write was successful, remove the written data from the buffer */
-@@ -630,13 +648,21 @@ int _alpm_run_chroot(alpm_handle_t *handle, const char *cmd, char *const argv[],
+@@ -618,13 +636,21 @@ int _alpm_run_chroot(alpm_handle_t *handle, const char *cmd, char *const argv[],
  	/* Flush open fds before fork() to avoid cloning buffers */
  	fflush(NULL);
  

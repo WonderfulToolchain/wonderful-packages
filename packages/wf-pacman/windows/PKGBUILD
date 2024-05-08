@@ -2,8 +2,8 @@
 
 # [Wonderful] pkgname
 pkgname=wf-pacman
-pkgver=6.0.2
-pkgrel=7
+pkgver=6.1.0
+pkgrel=1
 # [Wonderful] pkgdesc
 pkgdesc="Wonderful toolchain build of the pacman package manager"
 arch=('x86_64')
@@ -11,13 +11,13 @@ url="https://www.archlinux.org/pacman/"
 license=('GPL')
 options=('!emptydirs')
 
-source=("https://sources.archlinux.org/other/pacman/pacman-${pkgver}.tar.xz"{,.sig})
+source=("https://gitlab.archlinux.org/pacman/pacman/-/releases/v$pkgver/downloads/pacman-$pkgver.tar.xz"{,.sig})
 validpgpkeys=('6645B0A8C7005E78DB1D7864F99FFE0FEAE999BD'  # Allan McRae <allan@archlinux.org>
               'B8151B117037781095514CA7BBDFFC92306B1121') # Andrew Gregory (pacman) <andrew@archlinux.org>
 # [Wonderful] group
 groups=("wonderful-base")
 
-sha512sums=('9d76fb58c3a50e89a4b92b1f9e3bfdecca3f69e05022ea88fbd34f9df540c4fc688ad4f8b27e77eedb791aa682c27037abe65c789c6d9ee393bae5b620c3df13'
+sha512sums=('da5e78506e0505aac47def4b658a8cd6012be90c7ad7f7343da2edca2df5bd019091eec0a297f79c6f2fc264c139f139175778015d928cace26cb81c87d0477b'
             'SKIP')
 
 # [Wonderful]
@@ -26,15 +26,19 @@ sha512sums=('9d76fb58c3a50e89a4b92b1f9e3bfdecca3f69e05022ea88fbd34f9df540c4fc688
 # [Wonderful]
 prepare() {
     cd "${srcdir}"/pacman-${pkgver}
-    patch -p1 < /wf/packages/wf-pacman/pacman-rootless.patch
+    patch -p1 < /wf/packages/wf-pacman/pacman-drop-result-warn.patch
+    patch -p1 < /wf/packages/wf-pacman/pacman-fix-msg-unknown-key.patch
+    patch -p1 < /wf/packages/wf-pacman/pacman-make-aligned-titles.patch
+    patch -p1 < /wf/packages/wf-pacman/pacman-man-gitlab.patch
+    patch -p1 < /wf/packages/wf-pacman/pacman-6.1.0-rootless.patch
     patch -p1 < /wf/packages/wf-pacman/pacman-windows-friendly-epoch-separator.patch
     sed -i -e "s/Pacman v\%s - libalpm v\%s/Pacman v%s - libalpm v%s (wf-pacman)/" src/pacman/pacman.c
 
-    patch -p1 < /wf/packages/wf-pacman/msys2-0006-fill_progress.patch
-    patch -p1 < /wf/packages/wf-pacman/msys2-0019-pacman-libalpm-ignore-file-conflicts-for-foo.exe-foo.patch
-    patch -p1 < /wf/packages/wf-pacman/msys2-0021-Use-pipe-instead-of-socket.patch
-    patch -p1 < /wf/packages/wf-pacman/msys2-0022-pacman-make-file-list-comparisons-between-packages-c.patch
-    patch -p1 < /wf/packages/wf-pacman/msys2-0027-pacman.c-handle-cr-on-stdin-as-well.patch
+    patch -p1 < /wf/packages/wf-pacman/windows/msys2-0006-fill_progress.patch
+    patch -p1 < /wf/packages/wf-pacman/windows/msys2-0019-pacman-libalpm-ignore-file-conflicts-for-foo.exe-foo.patch
+    patch -p1 < /wf/packages/wf-pacman/windows/msys2-0021-Use-pipe-instead-of-socket.patch
+    patch -p1 < /wf/packages/wf-pacman/windows/msys2-0022-pacman-make-file-list-comparisons-between-packages-c.patch
+    patch -p1 < /wf/packages/wf-pacman/windows/msys2-0027-pacman.c-handle-cr-on-stdin-as-well.patch
 }
 
 build() {

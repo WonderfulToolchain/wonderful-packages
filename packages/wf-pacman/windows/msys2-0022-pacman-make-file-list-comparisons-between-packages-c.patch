@@ -1,7 +1,7 @@
-From ae18ca4f394458a4316d20a784142477ca9db7c0 Mon Sep 17 00:00:00 2001
+From 441ed6cce7153b384b4decba2b3178a91ee49a22 Mon Sep 17 00:00:00 2001
 From: Christoph Reiter <reiter.christoph@gmail.com>
 Date: Fri, 21 May 2021 22:57:25 +0200
-Subject: [PATCH 22/N] pacman: make file list comparisons between packages
+Subject: [PATCH 18/N] pacman: make file list comparisons between packages
  case insensitive
 
 In case a package gets upgrade and a filename has changed case this allows
@@ -17,7 +17,7 @@ lead to invalid conflict detection.
  1 file changed, 42 insertions(+), 5 deletions(-)
 
 diff --git a/lib/libalpm/filelist.c b/lib/libalpm/filelist.c
-index 07239c3..9c044b5 100644
+index 1399067..3d34e84 100644
 --- a/lib/libalpm/filelist.c
 +++ b/lib/libalpm/filelist.c
 @@ -25,6 +25,43 @@
@@ -99,7 +99,7 @@ index 07239c3..9c044b5 100644
 +	return _cmppath(file1->name, file2->name);
  }
  
- alpm_file_t SYMEXPORT *alpm_filelist_contains(alpm_filelist_t *filelist,
+ alpm_file_t SYMEXPORT *alpm_filelist_contains(const alpm_filelist_t *filelist,
 @@ -137,7 +174,7 @@ void _alpm_filelist_sort(alpm_filelist_t *filelist)
  {
  	size_t i;
