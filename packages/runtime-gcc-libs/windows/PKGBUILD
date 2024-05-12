@@ -1,0 +1,29 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# SPDX-FileContributor: Adrian "asie" Siekierka, 2023
+
+pkgname=(runtime-gcc-libs)
+pkgver=0.1.0
+pkgrel=2
+epoch=
+pkgdesc="MSYS/UCRT64 GCC runtime libraries"
+arch=("i686" "x86_64" "aarch64")
+url=""
+license=("GPL-3.0-or-later")
+source=()
+sha256sums=()
+groups=(wonderful-base)
+
+. "/wf/config/runtime-env-vars.sh"
+	
+package() {
+	cd "$pkgdir"
+	mkdir bin
+	cp -d /ucrt64/bin/libgcc_s_seh-1.dll bin/
+	cp -d /ucrt64/bin/libgomp-1.dll bin/
+	cp -d /ucrt64/bin/libiconv-2.dll bin/
+	cp -d /ucrt64/bin/libstdc++-6.dll bin/
+	cp -d /ucrt64/bin/libwinpthread-1.dll bin/
+	cp -d /ucrt64/bin/libzstd.dll bin/
+	wf_relocate_path_to_destdir
+}
