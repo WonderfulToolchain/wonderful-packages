@@ -22,12 +22,12 @@ build() {
 	wf_use_toolchain gcc-arm-none-eabi arm-none-eabi
 
 	cd "$pkgname"
-	make -f Makefile.blocksds
+	make
 }
 
 package() {
 	cd "$pkgname"
 
 	BLOCKSDSEXT="$pkgdir$WF_DESTDIR"/thirdparty/blocksds/external \
-	make -f Makefile.blocksds -j1 install
+	make -j1 install
 }
