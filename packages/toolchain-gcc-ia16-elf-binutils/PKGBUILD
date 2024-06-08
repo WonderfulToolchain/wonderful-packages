@@ -8,7 +8,7 @@ pkgver=2.39.r110783.b0bae6a7e4
 pkgrel=1
 epoch=
 pkgdesc="GNU binary utilities (ia16 fork)"
-arch=("i686" "x86_64" "armv6h" "aarch64")
+arch=("x86_64" "aarch64")
 url="https://github.com/WonderfulToolchain/binutils-ia16"
 license=("GPL-3.0-or-later")
 source=("$pkgname::git+https://github.com/WonderfulToolchain/binutils-ia16#branch=binutils-2_39-ia16")

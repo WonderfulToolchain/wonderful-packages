@@ -9,7 +9,7 @@ if [ "x$GCC_IS_LIBSTDCXX" = "xyes" ]; then
 else
 	pkgname=(toolchain-gcc-$GCC_TARGET-gcc toolchain-gcc-$GCC_TARGET-gcc-libs)
 	depends=(runtime-gcc-libs runtime-musl toolchain-gcc-$GCC_TARGET-binutils)
-	arch=("i686" "x86_64" "armv6h" "aarch64")
+	arch=("x86_64" "aarch64")
 fi
 pkgver=13.2.0
 _gmpver=6.2.1
