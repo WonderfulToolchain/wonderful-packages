@@ -5,8 +5,10 @@
 _pkgname=thirdparty-blocksds
 source=(
 	"$_pkgname::git+https://github.com/blocksds/sdk#tag=v1.2.0"
+	"grit-fix-windows-build.patch"
 )
 sha256sums=(
+	'SKIP'
 	'SKIP'
 )
 
@@ -59,6 +61,10 @@ prepare() {
 	if [ "$WF_HOST_OS" == "windows" ]; then
 		# patch ndstool to link iconv explicitly
 		sed -i -e 's/$(LIBS)/$(LIBS) -liconv/' tools/ndstool/Makefile
+
+		# patch grit to build on newer MinGW
+		cd tools/grit
+		patch -p1 <../../../grit-fix-windows-build.patch
 	fi
 }
 
