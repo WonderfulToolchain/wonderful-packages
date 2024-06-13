@@ -4,7 +4,7 @@
 
 pkgname=wf-nnpack
 _pkgver=1.4
-pkgver=1.4.r6.7cd22ce
+pkgver=1.4.r32.d65bf0b
 pkgrel=1
 epoch=
 pkgdesc="GBA/NDS compression tools"
