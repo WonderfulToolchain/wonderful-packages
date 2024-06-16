@@ -37,6 +37,15 @@ class NativeWindowsEnvironment(Environment):
         # kwargs["shell"] = True
         clean_custom_keys(kwargs)
         return subprocess.run(["sh", "-c", " ".join(args)], **kwargs)
+
+class NativeMacOsEnvironment(Environment):
+    def __init__(self, arch):
+        super().__init__("macos", arch, os.getcwd())
+
+    def run(self, args, **kwargs):
+        # kwargs["shell"] = True
+        clean_custom_keys(kwargs)
+        return subprocess.run(["sh", "-c", " ".join(args)], **kwargs)
         
 class NativeLinuxEnvironment(Environment):
     def __init__(self, arch):
