@@ -1,0 +1,20 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# SPDX-FileContributor: Adrian "asie" Siekierka, 2024
+
+pkgname=(runtime-gcc-libs)
+pkgver=0.1.0
+pkgrel=1
+epoch=
+pkgdesc="Stubbed runtime libraries"
+arch=("x86_64" "aarch64")
+url=""
+license=("")
+source=()
+sha256sums=()
+groups=(wonderful-base)
+
+. "/wf/config/runtime-env-vars.sh"
+	
+package() {
+}
