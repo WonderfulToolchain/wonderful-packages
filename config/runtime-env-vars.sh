@@ -10,6 +10,11 @@ WF_EXECUTABLE_SUFFIX=
 WF_LUA_LDFLAGS=
 WF_HOST_OS=linux
 
+case `uname` in Darwin*)
+	WF_USE_MUSL=false
+	WF_HOST_OS=macos
+esac
+
 case `uname` in MINGW*|MSYS*)
 	WF_USE_MUSL=false
 	WF_LIBRARY_SUFFIX=.dll
