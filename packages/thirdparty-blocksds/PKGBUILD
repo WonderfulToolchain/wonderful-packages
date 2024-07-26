@@ -3,7 +3,7 @@
 # SPDX-FileContributor: Adrian "asie" Siekierka, 2023
 
 _pkgname=thirdparty-blocksds
-source=("$_pkgname::git+https://github.com/blocksds/sdk#tag=v1.3.0")
+source=("$_pkgname::git+https://github.com/blocksds/sdk#tag=v1.3.1")
 sha256sums=('SKIP')
 
 if [ "x$_pkgname" = "xthirdparty-blocksds-git" ]; then
@@ -13,7 +13,7 @@ else
 fi
 
 groups=($_pkgname)
-pkgver=1.3.0
+pkgver=1.3.1
 pkgrel=1
 epoch=
 pkgdesc="DS/DSi console homebrew toolchain maintained by AntonioND"
