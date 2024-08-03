@@ -1,0 +1,32 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# SPDX-FileContributor: Adrian "asie" Siekierka, 2023, 2024
+
+pkgname=wf-zx0-salvador
+_pkgver=1.4.2
+pkgver=1.4.2.r102.e41846d
+pkgrel=1
+epoch=
+pkgdesc="A free, open-source compressor for the ZX0 format"
+arch=("i686" "x86_64" "armv6h" "aarch64")
+url="https://github.com/WonderfulToolchain/salvador"
+license=("zlib")
+source=("$pkgname::git+https://github.com/WonderfulToolchain/salvador#branch=main")
+depends=(runtime-musl)
+makedepends=(runtime-musl-dev)
+sha256sums=('SKIP')
+
+. "/wf/config/runtime-env-vars.sh"
+
+. "../templates/git-pkgver.PKGBUILD"
+
+build() {
+	cd "$pkgname"
+	make APP=wf-zx0-salvador LDFLAGS="$WF_RUNTIME_LDFLAGS"
+}
+
+package() {
+	cd "$pkgname"
+	mkdir -p "$pkgdir$WF_DESTDIR"/bin
+	cp -a wf-zx0-salvador "$pkgdir$WF_DESTDIR"/bin
+}
