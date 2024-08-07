@@ -5,7 +5,7 @@
 pkgname=toolchain-gcc-arm-none-eabi-picolibc-generic
 _pkgver=1.8.6
 pkgver=1.8.6.r24502.b29ec578f
-pkgrel=1
+pkgrel=2
 epoch=
 pkgdesc="picolibc-based C library for Wonderful toolchain"
 arch=(any)

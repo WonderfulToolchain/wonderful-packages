@@ -11,8 +11,8 @@ else
 	depends=(runtime-gcc-libs runtime-musl toolchain-gcc-$GCC_TARGET-binutils)
 	arch=("x86_64" "aarch64")
 fi
-pkgver=14.1.0
-_gccver=14.1.0
+pkgver=14.2.0
+_gccver=14.2.0
 _gmpver=6.3.0
 _mpfrver=4.2.1
 _mpcver=1.3.1
@@ -32,7 +32,7 @@ source=("http://ftp.gnu.org/gnu/gcc/gcc-$pkgver/gcc-$pkgver.tar.xz"
 	"file:///wf/patches/gcc13-multilib-arm-elf"
 )
 sha256sums=(
-	'e283c654987afe3de9d8080bc0bd79534b5ca0d681a73a11ff2b5d3767426840'
+	'a7b39bc69cbf9e25826c5a60ab26477001f7c08d85cec04bc0e29cabed6f3cc9'
 	'a3c2b80201b89e68616f4ad30bc66aee4927c3ce50e33929ca819d5c43538898'
 	'277807353a6726978996945af13e52829e3abd7a9a5b7fb2793894e18f1fcbb2'
 	'ab642492f5cf882b74aa0cb730cd410a81edcdbec895183ce930e706c1c759b8'

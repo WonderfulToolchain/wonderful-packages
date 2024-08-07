@@ -3,7 +3,7 @@
 # SPDX-FileContributor: Adrian "asie" Siekierka, 2023
 
 pkgname=toolchain-gcc-$GCC_TARGET-binutils
-pkgver=2.42
+pkgver=2.43
 epoch=
 pkgdesc="GNU binary utilities"
 arch=("x86_64" "aarch64")
@@ -13,7 +13,7 @@ source=("http://ftp.gnu.org/gnu/binutils/binutils-$pkgver.tar.xz")
 depends=(runtime-gcc-libs runtime-musl)
 makedepends=(runtime-musl-dev)
 groups=(toolchain-gcc-$GCC_TARGET)
-sha256sums=('f6e4d41fd5fc778b06b7891457b3620da5ecea1006c6a4a41ae998109f85a800')
+sha256sums=('b53606f443ac8f01d1d5fc9c39497f2af322d99e14cea5c0b4b124d630379365')
 
 . "/wf/config/runtime-env-vars.sh"
 
