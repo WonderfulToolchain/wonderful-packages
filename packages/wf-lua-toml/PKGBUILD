@@ -3,22 +3,33 @@
 # SPDX-FileContributor: Adrian "asie" Siekierka, 2023
 
 pkgname=(wf-lua-toml)
-_pkgver=0.3.0
-pkgver=0.3.0.r45.9ac034b
+_pkgver=0.4.0
+pkgver=0.4.0.r47.44a4056
 pkgrel=1
 epoch=
 pkgdesc="Lua TOML library"
 arch=("i686" "x86_64" "armv6h" "aarch64")
 url="https://github.com/LebJe/toml.lua"
 license=("MIT")
-source=("$pkgname::git+https://github.com/LebJe/toml.lua#branch=main")
+source=(
+	"$pkgname::git+https://github.com/LebJe/toml.lua#branch=main"
+	"file:///wf/patches/lua-toml-0.4.0-remove-march-native.patch"
+)
 depends=(wf-lua)
 makedepends=(wf-lua-dev)
-sha256sums=("SKIP")
+sha256sums=(
+	"SKIP"
+	"SKIP"
+)
 
 . "/wf/config/runtime-env-vars.sh"
 
 . "../templates/git-pkgver.PKGBUILD"
+
+prepare() {
+	cd "$pkgname"
+	patch -p1 <../lua-toml-0.4.0-remove-march-native.patch
+}
 
 build() {
 	cd "$pkgname"
