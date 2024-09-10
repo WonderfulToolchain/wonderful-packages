@@ -2,7 +2,7 @@
 #
 # SPDX-FileContributor: Adrian "asie" Siekierka, 2023
 
-pkgrel=1
+pkgrel=2
 arch=(any)
 
 GCC_TARGET=arm-none-eabi
