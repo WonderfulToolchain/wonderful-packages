@@ -4,19 +4,19 @@
 # [Wonderful] pkgname
 pkgname=wf-pacman
 pkgver=6.1.0
-_cares_ver=1.27.0
-_nghttp2_ver=1.60.0
-_curlver=8.6.0
-_sslver=3.2.1
+_cares_ver=1.33.0
+_nghttp2_ver=1.62.1
+_curlver=8.9.1
+_sslver=3.3.1
 _zlibver=1.3.1
-_xzver=5.4.4
+_xzver=5.6.2
 _bzipver=1.0.8
-_zstdver=1.5.5
-_libarchive_ver=3.7.2
-_gpgerrorver=1.48
-_libassuanver=2.5.6
+_zstdver=1.5.6
+_libarchive_ver=3.7.4
+_gpgerrorver=1.50
+_libassuanver=3.0.0
 _gpgmever=1.23.2
-pkgrel=1
+pkgrel=2
 # [Wonderful] pkgdesc
 pkgdesc="Wonderful toolchain build of the pacman package manager"
 arch=('i486' 'i686' 'pentium4' 'x86_64' 'arm' 'armv6h' 'armv7h' 'aarch64')
@@ -32,8 +32,9 @@ validpgpkeys=('6645B0A8C7005E78DB1D7864F99FFE0FEAE999BD'  # Allan McRae <allan@a
 # nghttp2
 source+=("https://github.com/nghttp2/nghttp2/releases/download/v$_nghttp2_ver/nghttp2-$_nghttp2_ver.tar.xz")
 # c-ares
-source+=("https://c-ares.haxx.se/download/c-ares-${_cares_ver}.tar.gz"{,.asc})
-validpgpkeys+=('27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2') # Daniel Stenberg <daniel@haxx.se>
+source+=("https://github.com/c-ares/c-ares/releases/download/v$_cares_ver/c-ares-$_cares_ver.tar.gz"{,.asc})
+validpgpkeys+=('27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2'  # Daniel Stenberg <daniel@haxx.se>
+               'DA7D64E4C82C6294CB73A20E22E3D13B5411B7CA') # Brad House <brad@brad-house.com>
 # curl
 source+=("https://curl.haxx.se/download/curl-${_curlver}.tar.gz"{,.asc})
 validpgpkeys+=('27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2') # Daniel Stenberg
@@ -54,7 +55,7 @@ validpgpkeys+=('8657ABB260F056B1E5190839D9C4D26D0E604491'  # Matt Caswell <matt@
 source+=("https://zlib.net/zlib-${_zlibver}.tar.gz"{,.asc})
 validpgpkeys+=('5ED46A6721D365587791E2AA783FCD8E58BCAFBA') # Mark Adler <madler@alumni.caltech.edu>
 # xz
-source+=("git+https://git.tukaani.org/xz.git#tag=v${_xzver}")
+source+=("git+https://github.com/tukaani-project/xz#tag=v${_xzver}")
 validpgpkeys+=('3690C240CE51B4670D30AD1C38EE757D69184620')  # Lasse Collin <lasse.collin@tukaani.org>
 # bzip2
 source+=("https://sourceware.org/pub/bzip2/bzip2-${_bzipver}.tar.gz"{,.sig})
@@ -81,12 +82,12 @@ groups=("wonderful-base")
 
 sha512sums=('da5e78506e0505aac47def4b658a8cd6012be90c7ad7f7343da2edca2df5bd019091eec0a297f79c6f2fc264c139f139175778015d928cace26cb81c87d0477b'
             'SKIP'
-            '5e6365d9118596d41848930de70f4a918d72463920184df60a7e1678c3a6c9cf1416236888e7e34395c87f41bba00a114994ba5a6e73f6a389769abf1b5cc842'
-            'd0bffeeabdc5f1d4cececd46bd495b8224a64eaaf6d2a91c5475517440effe0e096146a1ebf19ece07367198be576c61b11961d5e4c3f601c5c5529ce4fcb46a'
+            'd5d6b068712e9b467547b0e5380465b8540317134f3f26c2b0c60eb9c604be2f37b4517a98b371d5f5fb668ce2ee35603ddd944224f11e96382aa541a6a17b4c'
+            '3cf1b94d6e8e53742703a679d7e35d3f985320720f41fa58189a0bcad4aca80405c73c4689abe7879df292dbe8f3ddca34b2d48429af5afcc9d2933edb075788'
             'SKIP'
-            '43fdb6b81b394f3382d353d5f57673b2b3d26cfe34b25d08a526bc0597f508d5298e5a7088d0736d1f139cad19cd922affa51533c3a5a4bb5f2de68891c2958d'
+            '27c91a58f23f02dd150556edaa73e1be08a93134d3d05049e546b39f05e0f4383e41bf6a56a643eae03eda0f39a527059510b2e34167ae9e7c75b393964a9f8b'
             'SKIP'
-            'bab2b2419319f1feffaba4692f03edbf13b44d1090c6e075a2d69dad67a2d51e64e6edbf83456a26c83900a726d20d2c4ee4ead9c94b322fd0b536f3b5a863c4'
+            'd3682a5ae0721748c6b9ec2f1b74d2b1ba61ee6e4c0d42387b5037a56ef34312833b6abb522d19400b45d807dd65cc834156f5e891cb07fbaf69fcf67e1c595d'
             'SKIP'
             'b1873dbb7a49460b007255689102062756972de5cc2d38b12cc9f389b6be412da6797579b1acd3717a8cd2ee118fd9801b94e55f063d4328f050f0876a5eb53c'
             'b5887ea77417fae49b6cb1e9fa782d3021f268d5219701d87a092235964f73fa72a31428b630445517f56f2bb69dcbbb24119ef9dbf8b4e40a753369a9f9a16f'
@@ -95,15 +96,15 @@ sha512sums=('da5e78506e0505aac47def4b658a8cd6012be90c7ad7f7343da2edca2df5bd01909
             'SKIP'
             '083f5e675d73f3233c7930ebe20425a533feedeaaa9d8cc86831312a6581cefbe6ed0d08d2fa89be81082f2a5abdabca8b3c080bf97218a1bd59dc118a30b9f3'
             'SKIP'
-            'c2d88b2c2050262f85be32877142c94e36a8ee451890f579cd2426c7de565fb22d21c369bad11f306093f0b356e935cef5a8ff5a2b0c007ade0f7e7eb944d2a5'
+            '21f9da445afd76acaf3acb22d216c2b584d95e8c68e00f5cb3f6673f2d556dd14a7593344adf8ffd194bba3314387ee0e486d6248f6c935abca2edd8a4cf95ed'
             'SKIP'
-            '3e9ea99cfb7d706791eb3349a9356b6bc44a53ef8bfa9a4e89afb5203dad5af3f466a039a1764361c0c7f697a6fa668a21d05ceaeb8e44ec5a11d6468998adf2'
+            '96e466d892a50843af6d7c08c0da602518bc6a28836bfc35f0a28cde74d368f57c5c70c65f0f41edb4fc1ca5ebd00f2ece531d8b3eb1bd6db566adbb29bc61ff'
             'SKIP'
-            'dcca942d222a2c226a7e34ba7988ee0c3c55bd6032166eb472caf2053db89aeeea7a40e93d8c2887c7ee73c5f838e8b0725e8cfb595accc1606646559362f7ee'
+            '7c5c95c1b85bef2d4890c068a5a8ea8a1fe0d8def6ab09e5f34fc2746d8808bbb0fc168e3bd66d52ee5ed799dcf9f258f4125cda98c8384f6411bcad8d8b3139'
             'SKIP'
             '6cfcd07e81a93de240582de5a46545420cee93d1f27fe20ea2c983780fdd3036b69fdba073cf549d68a20791e189bf4b3cdde14a43f912d2ab9ef3414c83ac75'
             'SKIP'
-            'a21bebb27b808cb7d2ed13a70739904a1b7b55661d8dea83c9897a0129cf71e20c962f13666c571782ff0f4f753ca885619c2097d9e7691c2dee4e6e4b9a2971'
+            '84bc346ba15861ab10aa54a3d687de955178e4efbe12bf3a49a467181e7f819673949f131f4c8338de8ed6e319a8565af376e5a540380bda08e60dffbc7c8686'
             'SKIP')
 
 export LDFLAGS="$LDFLAGS -static"
@@ -123,6 +124,11 @@ prepare() {
     patch -p1 < /wf/packages/wf-pacman/pacman-6.1.0-rootless.patch
     patch -p1 < /wf/packages/wf-pacman/pacman-windows-friendly-epoch-separator.patch
     sed -i -e "s/Pacman v\%s - libalpm v\%s/Pacman v%s - libalpm v%s (wf-pacman)/" src/pacman/pacman.c
+
+    # Use access() instead of faccessat() by reverting the relevant patch [Wonderful]
+    # As musl's faccessat() only supports fairly recent Linux kernel versions, this causes Pacman to not work
+    # with a confusing error message on older distros and WSL1.
+    patch -R -p1 < /wf/packages/wf-pacman/linux/pacman-alpm-use-faccessat.patch
 
     # gpgme [Wonderful]
     cd "${srcdir}"/gpgme-${_gpgmever}
