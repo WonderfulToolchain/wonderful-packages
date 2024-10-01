@@ -2,14 +2,14 @@
 setlocal EnableDelayedExpansion
 
 rem Based on msys2_shell.cmd (BSD-3-Clause)
-set "WD=%__CD__%..\..\usr\bin\"
+set "WD=%~dp0\..\..\usr\bin\"
 set "LOGINSHELL=bash"
 set /a msys2_shiftCounter=0
 
 rem Wonderful shell configuration
 set MSYS2_PATH_TYPE=inherit
 set MSYSTEM=UCRT64
-set "PATH=%__CD__%bin;%PATH%"
+set "PATH=%WD%../../opt/wonderful/bin;%PATH%"
 set "CONTITLE=Wonderful Toolchain Shell"
 set "CONICON=wonderful_shell.ico"
 
@@ -96,9 +96,9 @@ if NOT EXIST "%WD%mintty.exe" goto startsh
 set MSYSCON=mintty.exe
 :startmintty
 if not defined MSYS2_NOSTART (
-  start "%CONTITLE%" "%WD%mintty" -i "/opt/wonderful/%CONICON%" -t "%CONTITLE%" "/usr/bin/%LOGINSHELL%" -l !SHELL_ARGS!
+  start "%CONTITLE%" "%WD%mintty" -i "%WD%../../opt/wonderful/%CONICON%" -t "%CONTITLE%" "/usr/bin/%LOGINSHELL%" -l !SHELL_ARGS!
 ) else (
-  "%WD%mintty" -i "/opt/wonderful/%CONICON%" -t "%CONTITLE%" "/usr/bin/%LOGINSHELL%" -l !SHELL_ARGS!
+  "%WD%mintty" -i "%WD%../../opt/wonderful/%CONICON%" -t "%CONTITLE%" "/usr/bin/%LOGINSHELL%" -l !SHELL_ARGS!
 )
 exit /b %ERRORLEVEL%
 
@@ -108,9 +108,9 @@ call :conemudetect || (
   exit /b 1
 )
 if not defined MSYS2_NOSTART (
-  start "%CONTITLE%" "%ComEmuCommand%" /Here /Icon "%__CD__%%CONICON%" /cmd "%WD%\%LOGINSHELL%" -l !SHELL_ARGS!
+  start "%CONTITLE%" "%ComEmuCommand%" /Here /Icon "%WD%../../opt/wonderful/%CONICON%" /cmd "%WD%\%LOGINSHELL%" -l !SHELL_ARGS!
 ) else (
-  "%ComEmuCommand%" /Here /Icon "%__CD__%%CONICON%" /cmd "%WD%\%LOGINSHELL%" -l !SHELL_ARGS!
+  "%ComEmuCommand%" /Here /Icon "%WD%../../opt/wonderful/%CONICON%" /cmd "%WD%\%LOGINSHELL%" -l !SHELL_ARGS!
 )
 exit /b %ERRORLEVEL%
 
