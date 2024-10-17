@@ -4,7 +4,7 @@
 
 pkgname=target-wswan-syslibs
 _pkgver=0.1.0
-pkgver=0.1.0.r122.12e31ef
+pkgver=0.1.0.r123.2741963
 pkgrel=1
 epoch=
 pkgdesc="WSwan target system libraries"
@@ -20,6 +20,11 @@ options=(!strip)
 . "/wf/config/runtime-env-vars.sh"
 
 . "../templates/git-pkgver.PKGBUILD"
+
+prepare() {
+	cd "$pkgname"
+	git submodule update --init --recursive
+}
 
 build() {
 	CFLAGS=""
