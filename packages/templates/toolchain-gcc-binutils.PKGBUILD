@@ -3,7 +3,7 @@
 # SPDX-FileContributor: Adrian "asie" Siekierka, 2023
 
 pkgname=toolchain-gcc-$GCC_TARGET-binutils
-pkgver=2.43
+pkgver=2.43.1
 epoch=
 pkgdesc="GNU binary utilities"
 arch=("x86_64" "aarch64")
@@ -13,7 +13,7 @@ source=("http://ftp.gnu.org/gnu/binutils/binutils-$pkgver.tar.xz")
 depends=(runtime-gcc-libs runtime-musl)
 makedepends=(runtime-musl-dev)
 groups=(toolchain-gcc-$GCC_TARGET)
-sha256sums=('b53606f443ac8f01d1d5fc9c39497f2af322d99e14cea5c0b4b124d630379365')
+sha256sums=('13f74202a3c4c51118b797a39ea4200d3f6cfbe224da6d1d95bb938480132dfd')
 
 . "/wf/config/runtime-env-vars.sh"
 
@@ -28,17 +28,20 @@ build() {
 		--target=$GCC_TARGET \
 		--with-bugurl=https://github.com/WonderfulToolchain/wonderful-packages/issues \
 		--without-zstd \
-		--enable-gold \
-		--enable-ld-default \
-		--enable-threads \
+		--enable-64-bit-bfd \
+		--enable-colored-disassembly \
+		--enable-gold=no \
+		--enable-ld=default \
 		--enable-lto \
 		--enable-plugins \
+		--enable-threads \
 		--disable-gdb \
 		--disable-gprof \
 		--disable-libdecnumber \
 		--disable-nls \
 		--disable-shared \
 		--disable-sim \
+		--disable-warn-rwx-segments \
 		--disable-werror \
 		--with-float=soft \
 		"${GCC_EXTRA_ARGS[@]}"
