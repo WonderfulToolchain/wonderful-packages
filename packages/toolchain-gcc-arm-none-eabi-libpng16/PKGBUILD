@@ -2,9 +2,10 @@
 #
 # SPDX-FileContributor: Adrian "asie" Siekierka, 2023
 
-pkgrel=2
+pkgrel=3
 WF_TOOLCHAIN=gcc-arm-none-eabi
 WF_TARGET=arm-none-eabi
 arch=(any)
+LIBPNG_COMPILE_FLAGS="-DPNG_NO_FLOATING_ARITHMETIC"
 
 . "../templates/libpng16.PKGBUILD"

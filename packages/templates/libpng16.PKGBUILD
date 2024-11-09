@@ -31,6 +31,7 @@ build() {
 	wf_use_toolchain $WF_TOOLCHAIN $WF_TARGET
 
 	cd libpng-$pkgver
+	CPPFLAGS="$LIBPNG_COMPILE_FLAGS" \
 	./configure --prefix="$WF_TOOLCHAIN_PREFIX" --host=$WF_TARGET \
 		--disable-shared --enable-static \
 		--disable-tests --disable-tools
