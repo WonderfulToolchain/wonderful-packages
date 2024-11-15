@@ -1,7 +1,7 @@
 #!/bin/bash
 shopt -s extglob
 
-# wf-pacman sees $WF_PATH as $WF_DESTDIR
+WF_PACMAN_CONFIG_PATH=$(dirname "$(realpath -s "${BASH_SOURCE[0]}" )")
 WF_PATH="/opt/wonderful"
 WF_DESTDIR="/"
 WF_USE_MUSL=true
@@ -92,7 +92,7 @@ wf_runtime_patchelf() {
 wf_disable_host_build() {
 	# disable MinGW environment patches
 	if [ "$WF_HOST_OS" == "windows" ]; then
-		export CONFIG_SITE=/wf/config/empty-config.site
+		export CONFIG_SITE="$WF_PACMAN_CONFIG_PATH"/empty-config.site
 		unset CC CXX CPPFLAGS CFLAGS CXXFLAGS LDFLAGS
 	fi
 }
