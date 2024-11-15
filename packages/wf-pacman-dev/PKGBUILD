@@ -4,20 +4,25 @@
 
 pkgname=wf-pacman-dev
 pkgver=0.1.0
-pkgrel=2
+pkgrel=3
 epoch=
 pkgdesc="Pacman package development scripts"
 arch=(any)
 url="https://github.com/WonderfulToolchain/wonderful-packages/"
 license=("MIT")
-depends=()
+depends=("wf-pacman")
 makedepends=()
 options=(!strip)
+source=("wf-makepkg")
+sha256sums=("SKIP")
 
 . "/wf/config/runtime-env-vars.sh"
 
 package() {
 	mkdir -p "$pkgdir$WF_DESTDIR"
+	mkdir -p "$pkgdir$WF_DESTDIR"/bin
 	mkdir -p "$pkgdir$WF_DESTDIR"/lib/wf-pacman
-	cp -a /wf/config/* "$pkgdir$WF_DESTDIR"/lib/wf-pacman/
+	cp -aL /wf/config/* "$pkgdir$WF_DESTDIR"/lib/wf-pacman/
+	chmod 755 wf-makepkg
+	cp -pL wf-makepkg "$pkgdir$WF_DESTDIR"/bin/
 }

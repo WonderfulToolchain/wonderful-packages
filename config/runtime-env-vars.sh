@@ -1,7 +1,7 @@
 #!/bin/bash
 shopt -s extglob
 
-WF_PACMAN_CONFIG_PATH=$(dirname "$(realpath -s "${BASH_SOURCE[0]}" )")
+WF_PACMAN_CONFIG_PATH=$(dirname "$(realpath "${BASH_SOURCE[0]}" )")
 WF_PATH="/opt/wonderful"
 WF_DESTDIR="/"
 WF_USE_MUSL=true

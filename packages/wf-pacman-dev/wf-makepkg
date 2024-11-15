@@ -1,0 +1,3 @@
+#!/bin/sh
+WF_BIN_PATH=$(dirname "$(realpath "${BASH_SOURCE[0]}" )")
+PACMAN="$WF_BIN_PATH"/wf-pacman makepkg "$@"
