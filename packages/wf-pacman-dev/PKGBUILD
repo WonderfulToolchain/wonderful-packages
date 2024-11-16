@@ -4,7 +4,7 @@
 
 pkgname=wf-pacman-dev
 pkgver=0.1.0
-pkgrel=3
+pkgrel=4
 epoch=
 pkgdesc="Pacman package development scripts"
 arch=(any)
