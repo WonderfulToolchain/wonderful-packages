@@ -1,0 +1,38 @@
+diff -Nrup pacman-7.0.0.orig/lib/libalpm/diskspace.c pacman-7.0.0/lib/libalpm/diskspace.c
+--- pacman-7.0.0.orig/lib/libalpm/diskspace.c	2024-07-14 11:11:18.000000000 +0200
++++ pacman-7.0.0/lib/libalpm/diskspace.c	2024-11-16 10:47:20.501668317 +0100
+@@ -389,14 +389,15 @@ int _alpm_check_downloadspace(alpm_handl
+ 	mount_points = mount_point_list(handle);
+ 	if(mount_points == NULL) {
+ 		_alpm_log(handle, ALPM_LOG_ERROR, _("could not determine filesystem mount points\n"));
+-		return -1;
++		/* Wonderful: to ease CI builds if we're in a chroot, log the error but ignore CheckSpace result */
++		return 0;
+ 	}
+ 
+ 	cachedir_mp = match_mount_point(mount_points, cachedir);
+ 	if(cachedir_mp == NULL) {
+ 		_alpm_log(handle, ALPM_LOG_ERROR, _("could not determine cachedir mount point %s\n"),
+ 				cachedir);
+-		error = 1;
++		/* Wonderful: to ease CI builds if we're in a chroot, log the error but ignore CheckSpace result */
+ 		goto finish;
+ 	}
+ 
+@@ -443,13 +444,14 @@ int _alpm_check_diskspace(alpm_handle_t
+ 	mount_points = mount_point_list(handle);
+ 	if(mount_points == NULL) {
+ 		_alpm_log(handle, ALPM_LOG_ERROR, _("could not determine filesystem mount points\n"));
+-		return -1;
++		/* Wonderful: to ease CI builds if we're in a chroot, log the error but ignore CheckSpace result */
++		return 0;
+ 	}
+ 	root_mp = match_mount_point(mount_points, handle->root);
+ 	if(root_mp == NULL) {
+ 		_alpm_log(handle, ALPM_LOG_ERROR, _("could not determine root mount point %s\n"),
+ 				handle->root);
+-		error = 1;
++		/* Wonderful: to ease CI builds if we're in a chroot, log the error but ignore CheckSpace result */
+ 		goto finish;
+ 	}
+ 

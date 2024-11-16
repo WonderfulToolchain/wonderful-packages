@@ -1,0 +1,29 @@
+diff -Nrup pacman-7.0.0.orig/lib/libalpm/util.c pacman-7.0.0/lib/libalpm/util.c
+--- pacman-7.0.0.orig/lib/libalpm/util.c	2024-07-14 11:11:18.000000000 +0200
++++ pacman-7.0.0/lib/libalpm/util.c	2024-11-16 10:50:43.511664393 +0100
+@@ -1452,11 +1452,6 @@ int _alpm_access(alpm_handle_t *handle,
+ 	size_t len = 0;
+ 	int ret = 0;
+ 
+-	int flag = 0;
+-#ifdef AT_SYMLINK_NOFOLLOW
+-	flag |= AT_SYMLINK_NOFOLLOW;
+-#endif
+-
+ 	if(dir) {
+ 		char *check_path;
+ 
+@@ -1464,11 +1459,11 @@ int _alpm_access(alpm_handle_t *handle,
+ 		CALLOC(check_path, len, sizeof(char), RET_ERR(handle, ALPM_ERR_MEMORY, -1));
+ 		snprintf(check_path, len, "%s%s", dir, file);
+ 
+-		ret = faccessat(AT_FDCWD, check_path, amode, flag);
++		ret = access(check_path, amode);
+ 		free(check_path);
+ 	} else {
+ 		dir = "";
+-		ret = faccessat(AT_FDCWD, file, amode, flag);
++		ret = access(file, amode);
+ 	}
+ 
+ 	if(ret != 0) {

@@ -3,20 +3,23 @@
 
 # [Wonderful] pkgname
 pkgname=wf-pacman
-pkgver=6.1.0
-_cares_ver=1.33.0
-_nghttp2_ver=1.62.1
-_curlver=8.9.1
-_sslver=3.3.1
+pkgver=7.0.0
+_cares_ver=1.34.2
+_nghttp2_ver=1.64.0
+_curlver=8.11.0
+_sslver=3.4.0
 _zlibver=1.3.1
-_xzver=5.6.2
+_xzver=5.6.3
 _bzipver=1.0.8
 _zstdver=1.5.6
-_libarchive_ver=3.7.4
+_libarchive_ver=3.7.7
 _gpgerrorver=1.50
 _libassuanver=3.0.0
-_gpgmever=1.23.2
-pkgrel=2
+_gpgmever=1.24.0
+pkgrel=3
+# use annotated tag and patch level commit from release branch (can be empty for no patches)
+_git_tag=7.0.0
+_git_patch_level_commit=77361331ae3864c6ea880e715c5864d59336f275
 # [Wonderful] pkgdesc
 pkgdesc="Wonderful toolchain build of the pacman package manager"
 arch=('i486' 'i686' 'pentium4' 'x86_64' 'arm' 'armv6h' 'armv7h' 'aarch64')
@@ -26,7 +29,7 @@ license=('GPL')
 options=('!emptydirs')
 
 # pacman
-source=("https://gitlab.archlinux.org/pacman/pacman/-/releases/v$pkgver/downloads/pacman-$pkgver.tar.xz"{,.sig})
+source=("git+https://gitlab.archlinux.org/pacman/pacman.git#tag=v${_git_tag}?signed")
 validpgpkeys=('6645B0A8C7005E78DB1D7864F99FFE0FEAE999BD'  # Allan McRae <allan@archlinux.org>
               'B8151B117037781095514CA7BBDFFC92306B1121') # Andrew Gregory (pacman) <andrew@archlinux.org>
 # nghttp2
@@ -45,7 +48,8 @@ source+=("https://www.openssl.org/source/openssl-${_sslver}.tar.gz"{,.asc}
 validpgpkeys+=('8657ABB260F056B1E5190839D9C4D26D0E604491'
               '7953AC1FBC3DC8B3B292393ED5E9E43F7DF9EE8C'
               'A21FAB74B0088AA361152586B8EF1A6BA9DA2D5C'
-              'EFC0A467D613CB83C7ED6D30D894E2CE8B3D79F5')
+              'EFC0A467D613CB83C7ED6D30D894E2CE8B3D79F5'
+              'BA5473A2B0587B07FB27CF2D216094DFD0CB81EF')
 
 validpgpkeys+=('8657ABB260F056B1E5190839D9C4D26D0E604491'  # Matt Caswell <matt@openssl.org>
               '7953AC1FBC3DC8B3B292393ED5E9E43F7DF9EE8C'   # Matt Caswell <matt@openssl.org>
@@ -80,14 +84,13 @@ validpgpkeys+=('A5A45B12AD92D964B89EEE2DEC560C81CEC2276E'  # Martin Matuska <mm@
 # [Wonderful] group
 groups=("wonderful-base")
 
-sha512sums=('da5e78506e0505aac47def4b658a8cd6012be90c7ad7f7343da2edca2df5bd019091eec0a297f79c6f2fc264c139f139175778015d928cace26cb81c87d0477b'
+sha512sums=('44e00c2bc259fe6a85de71f7fd8a43fcfd1b8fb7d920d2267bd5b347e02f1dab736b3d96e31faf7b535480398e2348f7c0b9914e51ca7e12bab2d5b8003926b4'
+            'b544196c3b7a55faacd11700d11e2fe4f16a7418282c9abb24a668544a15293580fd1a2cc5f93367c8a17c7ee45335c6d2f5c68a72dd176d516fd033f203eeec'
+            'ddcda2f4c82ece7d670d0beb11485253a0f0db1f01131164e7253a20405c081844d2c69e366300c76ca0419a025e0fed516ee54314443afc39d55ce292354ad9'
             'SKIP'
-            'd5d6b068712e9b467547b0e5380465b8540317134f3f26c2b0c60eb9c604be2f37b4517a98b371d5f5fb668ce2ee35603ddd944224f11e96382aa541a6a17b4c'
-            '3cf1b94d6e8e53742703a679d7e35d3f985320720f41fa58189a0bcad4aca80405c73c4689abe7879df292dbe8f3ddca34b2d48429af5afcc9d2933edb075788'
+            'b1dc36cfb40188d3a0f58d41968f69134e53803075b250e3e31579b8f680d9a083f3ad8f10c886a94fcd1b9b92873530ba6f73ca6ea41bbe07cb59d00918b066'
             'SKIP'
-            '27c91a58f23f02dd150556edaa73e1be08a93134d3d05049e546b39f05e0f4383e41bf6a56a643eae03eda0f39a527059510b2e34167ae9e7c75b393964a9f8b'
-            'SKIP'
-            'd3682a5ae0721748c6b9ec2f1b74d2b1ba61ee6e4c0d42387b5037a56ef34312833b6abb522d19400b45d807dd65cc834156f5e891cb07fbaf69fcf67e1c595d'
+            '0784096f00c7907e477919d5ddeadb14b61bcb569a938fa739c1c714949214a7daf63574149d718dae372ed0c91c300042f4e3ba5e8633607e8034a3bda75a26'
             'SKIP'
             'b1873dbb7a49460b007255689102062756972de5cc2d38b12cc9f389b6be412da6797579b1acd3717a8cd2ee118fd9801b94e55f063d4328f050f0876a5eb53c'
             'b5887ea77417fae49b6cb1e9fa782d3021f268d5219701d87a092235964f73fa72a31428b630445517f56f2bb69dcbbb24119ef9dbf8b4e40a753369a9f9a16f'
@@ -102,9 +105,9 @@ sha512sums=('da5e78506e0505aac47def4b658a8cd6012be90c7ad7f7343da2edca2df5bd01909
             'SKIP'
             '7c5c95c1b85bef2d4890c068a5a8ea8a1fe0d8def6ab09e5f34fc2746d8808bbb0fc168e3bd66d52ee5ed799dcf9f258f4125cda98c8384f6411bcad8d8b3139'
             'SKIP'
-            '6cfcd07e81a93de240582de5a46545420cee93d1f27fe20ea2c983780fdd3036b69fdba073cf549d68a20791e189bf4b3cdde14a43f912d2ab9ef3414c83ac75'
+            'f9d3786f27eaf88b6544a453e4b0f800cf2259d5321bf387bd1978c5ba5824b3746d28af4ec5491502cd4d5c776361805b75cb02d9bbbae26cf2a8fcfd86b871'
             'SKIP'
-            '84bc346ba15861ab10aa54a3d687de955178e4efbe12bf3a49a467181e7f819673949f131f4c8338de8ed6e319a8565af376e5a540380bda08e60dffbc7c8686'
+            '2524f71f4c2ebc254a1927279be3394e820d0a0c6dec7ef835a862aa08c35756edaa4208bcdc710dd092872b59c200b555b78670372e2830822e278ff1ec4e4a'
             'SKIP')
 
 export LDFLAGS="$LDFLAGS -static"
@@ -115,20 +118,27 @@ export LDFLAGS="$LDFLAGS -static"
 
 prepare() {
     # pacman
-    cd "${srcdir}"/pacman-${pkgver}
-    patch -p1 < /wf/packages/wf-pacman/pacman-drop-result-warn.patch
-    patch -p1 < /wf/packages/wf-pacman/pacman-fix-msg-unknown-key.patch
-    patch -p1 < /wf/packages/wf-pacman/pacman-make-aligned-titles.patch
-    patch -p1 < /wf/packages/wf-pacman/pacman-man-gitlab.patch
+    cd "${srcdir}"/pacman
+
+    # apply patch level commits on top of annotated tag for pacman
+    if [[ -n ${_git_patch_level_commit} ]]; then
+        if [[ v${_git_tag} != $(git describe --tags --abbrev=0 "${_git_patch_level_commit}") ]] then
+            error "patch level commit ${_git_patch_level_commit} is not a descendant of v${_git_tag}"
+            exit 1
+        fi
+        git rebase "${_git_patch_level_commit}"
+    fi
+
     # [Wonderful]
     patch -p1 < /wf/packages/wf-pacman/pacman-6.1.0-rootless.patch
+    patch -p1 < /wf/packages/wf-pacman/pacman-7.0.0-soft-checkspace.patch
     patch -p1 < /wf/packages/wf-pacman/pacman-windows-friendly-epoch-separator.patch
     sed -i -e "s/Pacman v\%s - libalpm v\%s/Pacman v%s - libalpm v%s (wf-pacman)/" src/pacman/pacman.c
 
-    # Use access() instead of faccessat() by reverting the relevant patch [Wonderful]
+    # Use access() instead of faccessat() [Wonderful]
     # As musl's faccessat() only supports fairly recent Linux kernel versions, this causes Pacman to not work
     # with a confusing error message on older distros and WSL1.
-    patch -R -p1 < /wf/packages/wf-pacman/linux/pacman-alpm-use-faccessat.patch
+    patch -p1 < /wf/packages/wf-pacman/linux/pacman-7.0.0-alpm-remove-faccessat.patch
 
     # gpgme [Wonderful]
     cd "${srcdir}"/gpgme-${_gpgmever}
@@ -294,8 +304,8 @@ build() {
     rm "${srcdir}"/temp/usr/lib/lib*.la
 
     # Finally, it's a pacman!
-    mkdir -p "${srcdir}"/pacman-${pkgver}/builddir
-    cd "${srcdir}"/pacman-${pkgver}/builddir
+    mkdir -p "${srcdir}"/pacman/builddir
+    cd "${srcdir}"/pacman/builddir
     # [Wonderful] meson flag changes
     meson setup \
         --prefix="$WF_PATH" \
@@ -319,7 +329,7 @@ build() {
 }
 
 package() {
-    cd "${srcdir}"/pacman-${pkgver}/builddir
+    cd "${srcdir}"/pacman/builddir
     DESTDIR="${pkgdir}" ninja install
 
     # [Wonderful] custom packaging process
@@ -327,12 +337,30 @@ package() {
     install -dm755 bin
     mv ."$WF_PATH"/bin/pacman bin/wf-pacman
     mv ."$WF_PATH"/bin/vercmp bin/wf-pacman-vercmp
-#   mv ."$WF_PATH"/bin/pacman-conf bin/wf-pacman-conf
-#   mv ."$WF_PATH"/bin/pacman-db-upgrade bin/wf-pacman-db-upgrade
-#   mv ."$WF_PATH"/bin/pacman-key bin/wf-pacman-key
+    #mv ."$WF_PATH"/bin/pacman-conf bin/wf-pacman-conf
     install -dm755 etc
+
+    install -m644 "/wf/packages/wf-pacman/makepkg.conf" etc
+    sed -i -e "s/%ARCH%/"$CARCH"/g" -e "s/%OS%/"$WF_HOST_OS"/g" etc/makepkg.conf
     install -m644 "/wf/packages/wf-pacman/pacman.conf" etc
     sed -i -e "s/%ARCH%/"$CARCH"/g" -e "s/%OS%/"$WF_HOST_OS"/g" etc/pacman.conf
+
+    install -dm755 lib
+    install -dm755 lib/wf-pacman
+    cp -aL /wf/config/* lib/wf-pacman/
+
+    install -dm755 share
+    cp -aL ."$WF_PATH"/share/makepkg share/
+    mv ."$WF_PATH"/bin/pacman-key bin/wf-pacman-key
+    mv ."$WF_PATH"/bin/makepkg bin/wf-makepkg
+    mv ."$WF_PATH"/bin/repo-add bin/wf-repo-add
+    ln -s wf-repo-add bin/wf-repo-remove
+
+    # [Wonderful] relocate helper binary references, remove dependency on pacman-conf
+    sed -E -i -e "s/repo-add/wf-repo-add/g" -e "s/repo-remove/wf-repo-remove/g" -e "s/vercmp/wf-pacman-vercmp/g" bin/wf-repo-add
+    sed -E -i -e "s/-pacman/-wf-pacman/g" -e "s@confdir=.+@confdir='/opt/wonderful/etc'@" -e "s@\\$\\(pacman-conf DBPath\\)@/opt/wonderful/pacman/db@" bin/wf-makepkg
+    sed -E -i -e "s@^PACMAN_KEYRING_DIR=.+@PACMAN_KEYRING_DIR=/opt/wonderful/pacman/gnupg/@" bin/wf-pacman-key
+
     rm -r opt
 
     wf_relocate_path_to_destdir
