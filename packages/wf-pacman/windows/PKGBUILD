@@ -4,8 +4,6 @@
 pkgname=wf-pacman
 pkgver=7.0.0
 pkgrel=3
-# use annotated tag and patch level commit from release branch (can be empty for no patches)
-_git_tag=7.0.0
 _git_patch_level_commit=77361331ae3864c6ea880e715c5864d59336f275
 # [Wonderful] pkgdesc
 pkgdesc="Wonderful toolchain build of the pacman package manager"
@@ -14,13 +12,13 @@ url="https://www.archlinux.org/pacman/"
 license=('GPL')
 options=('!emptydirs')
 
-source=("git+https://gitlab.archlinux.org/pacman/pacman.git#tag=v${_git_tag}?signed")
+source=("git+https://gitlab.archlinux.org/pacman/pacman.git#commit=${_git_patch_level_commit}")
 validpgpkeys=('6645B0A8C7005E78DB1D7864F99FFE0FEAE999BD'  # Allan McRae <allan@archlinux.org>
               'B8151B117037781095514CA7BBDFFC92306B1121') # Andrew Gregory (pacman) <andrew@archlinux.org>
 # [Wonderful] group
 groups=("wonderful-base")
 
-sha512sums=('44e00c2bc259fe6a85de71f7fd8a43fcfd1b8fb7d920d2267bd5b347e02f1dab736b3d96e31faf7b535480398e2348f7c0b9914e51ca7e12bab2d5b8003926b4')
+sha512sums=('4333b03f39d96b4afdf913da6bc81da0ad762f16fdf268c74001703f22b481462b50a2dab9d767b53a4e17f711201fef057a77cf9267f015949af8e98a7939b6')
 
 # [Wonderful]
 . "/wf/config/runtime-env-vars.sh"
@@ -29,14 +27,9 @@ sha512sums=('44e00c2bc259fe6a85de71f7fd8a43fcfd1b8fb7d920d2267bd5b347e02f1dab736
 prepare() {
     cd "${srcdir}"/pacman
 
-    # apply patch level commits on top of annotated tag for pacman
-    if [[ -n ${_git_patch_level_commit} ]]; then
-        if [[ v${_git_tag} != $(git describe --tags --abbrev=0 "${_git_patch_level_commit}") ]] then
-            error "patch level commit ${_git_patch_level_commit} is not a descendant of v${_git_tag}"
-            exit 1
-        fi
-        git rebase "${_git_patch_level_commit}"
-    fi
+    # FIXME: Apply this globally
+    git config core.symlinks true
+    git checkout -- .
 
     patch -p1 < /wf/packages/wf-pacman/pacman-6.1.0-rootless.patch
     patch -p1 < /wf/packages/wf-pacman/pacman-7.0.0-soft-checkspace.patch
@@ -85,8 +78,8 @@ package() {
     #mv ."$WF_PATH"/bin/pacman-conf.exe bin/wf-pacman-conf.exe
     install -dm755 etc
 
-    install -m644 "/wf/packages/wf-pacman/makepkg.conf" etc
-    sed -i -e "s/%ARCH%/"$CARCH"/g" -e "s/%OS%/"$WF_HOST_OS"/g" etc/makepkg.conf
+    #install -m644 "/wf/packages/wf-pacman/makepkg.conf" etc
+    #sed -i -e "s/%ARCH%/"$CARCH"/g" -e "s/%OS%/"$WF_HOST_OS"/g" etc/makepkg.conf
     install -m644 "/wf/packages/wf-pacman/pacman.conf" etc
     sed -i -e "s/%ARCH%/"$CARCH"/g" -e "s/%OS%/"$WF_HOST_OS"/g" etc/pacman.conf
 
@@ -97,17 +90,16 @@ package() {
     install -dm755 share
     cp -aL ."$WF_PATH"/share/makepkg share/
     mv ."$WF_PATH"/bin/pacman-key bin/wf-pacman-key
-    mv ."$WF_PATH"/bin/makepkg bin/wf-makepkg
-    mv ."$WF_PATH"/bin/repo-add bin/wf-repo-add
-    ln -s wf-repo-add bin/wf-repo-remove
+    #mv ."$WF_PATH"/bin/makepkg bin/wf-makepkg
+    #mv ."$WF_PATH"/bin/repo-add bin/wf-repo-add
+    #ln -s wf-repo-add bin/wf-repo-remove
 
     # [Wonderful] relocate helper binary references, remove dependency on pacman-conf
-    sed -E -i -e "s/repo-add/wf-repo-add/g" -e "s/repo-remove/wf-repo-remove/g" -e "s/vercmp/wf-pacman-vercmp/g" bin/wf-repo-add
-    sed -E -i -e "s/-pacman/-wf-pacman/g" -e "s@confdir=.+@confdir='/opt/wonderful/etc'@" -e "s@\\$\\(pacman-conf DBPath\\)@/opt/wonderful/pacman/db@" bin/wf-makepkg
+    #sed -E -i -e "s/repo-add/wf-repo-add/g" -e "s/repo-remove/wf-repo-remove/g" -e "s/vercmp/wf-pacman-vercmp/g" bin/wf-repo-add
+    #sed -E -i -e "s/-pacman/-wf-pacman/g" -e "s@confdir=.+@confdir='/opt/wonderful/etc'@" -e "s@\\$\\(pacman-conf DBPath\\)@/opt/wonderful/pacman/db@" bin/wf-makepkg
     sed -E -i -e "s@^PACMAN_KEYRING_DIR=.+@PACMAN_KEYRING_DIR=/opt/wonderful/pacman/gnupg/@" bin/wf-pacman-key
 
     rm -r opt
 
     wf_relocate_path_to_destdir
 }
-

@@ -18,9 +18,9 @@ index 95f30a4..f09077c 100644
 +#ifndef __MSYS__
  #include <sys/socket.h>
 +#endif
+ #include <sys/types.h>
  #include <fcntl.h>
  #include <fnmatch.h>
- #include <poll.h>
 @@ -471,6 +473,9 @@ static int _alpm_chroot_write_to_child(alpm_handle_t *handle, int fd,
  		_alpm_cb_io out_cb, void *cb_ctx)
  {
