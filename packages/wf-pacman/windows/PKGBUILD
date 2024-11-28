@@ -3,7 +3,7 @@
 # [Wonderful] pkgname
 pkgname=wf-pacman
 pkgver=7.0.0
-pkgrel=3
+pkgrel=4
 _git_patch_level_commit=77361331ae3864c6ea880e715c5864d59336f275
 # [Wonderful] pkgdesc
 pkgdesc="Wonderful toolchain build of the pacman package manager"
@@ -36,7 +36,9 @@ prepare() {
     patch -p1 < /wf/packages/wf-pacman/pacman-windows-friendly-epoch-separator.patch
     sed -i -e "s/Pacman v\%s - libalpm v\%s/Pacman v%s - libalpm v%s (wf-pacman)/" src/pacman/pacman.c
 
+    patch -p1 < /wf/packages/wf-pacman/windows/msys2-0005-Remove-everything-related-to-sudo-fakeroot-file-perm.patch
     patch -p1 < /wf/packages/wf-pacman/windows/msys2-0006-fill_progress.patch
+    patch -p1 < /wf/packages/wf-pacman/windows/msys2-0014-makepkg-avoid-creating-.tar-files-with-extended-attr.patch
     patch -p1 < /wf/packages/wf-pacman/windows/msys2-0019-pacman-libalpm-ignore-file-conflicts-for-foo.exe-foo.patch
     patch -p1 < /wf/packages/wf-pacman/windows/msys2-0021-Use-pipe-instead-of-socket.patch
     patch -p1 < /wf/packages/wf-pacman/windows/msys2-0022-pacman-make-file-list-comparisons-between-packages-c.patch
@@ -78,8 +80,8 @@ package() {
     #mv ."$WF_PATH"/bin/pacman-conf.exe bin/wf-pacman-conf.exe
     install -dm755 etc
 
-    #install -m644 "/wf/packages/wf-pacman/makepkg.conf" etc
-    #sed -i -e "s/%ARCH%/"$CARCH"/g" -e "s/%OS%/"$WF_HOST_OS"/g" etc/makepkg.conf
+    install -m644 "/wf/packages/wf-pacman/makepkg.conf" etc
+    sed -i -e "s/%ARCH%/"$CARCH"/g" -e "s/%OS%/"$WF_HOST_OS"/g" etc/makepkg.conf
     install -m644 "/wf/packages/wf-pacman/pacman.conf" etc
     sed -i -e "s/%ARCH%/"$CARCH"/g" -e "s/%OS%/"$WF_HOST_OS"/g" etc/pacman.conf
 
@@ -90,13 +92,13 @@ package() {
     install -dm755 share
     cp -aL ."$WF_PATH"/share/makepkg share/
     mv ."$WF_PATH"/bin/pacman-key bin/wf-pacman-key
-    #mv ."$WF_PATH"/bin/makepkg bin/wf-makepkg
-    #mv ."$WF_PATH"/bin/repo-add bin/wf-repo-add
-    #ln -s wf-repo-add bin/wf-repo-remove
+    mv ."$WF_PATH"/bin/makepkg bin/wf-makepkg
+    mv ."$WF_PATH"/bin/repo-add bin/wf-repo-add
+    ln -s wf-repo-add bin/wf-repo-remove
 
     # [Wonderful] relocate helper binary references, remove dependency on pacman-conf
-    #sed -E -i -e "s/repo-add/wf-repo-add/g" -e "s/repo-remove/wf-repo-remove/g" -e "s/vercmp/wf-pacman-vercmp/g" bin/wf-repo-add
-    #sed -E -i -e "s/-pacman/-wf-pacman/g" -e "s@confdir=.+@confdir='/opt/wonderful/etc'@" -e "s@\\$\\(pacman-conf DBPath\\)@/opt/wonderful/pacman/db@" bin/wf-makepkg
+    sed -E -i -e "s/repo-add/wf-repo-add/g" -e "s/repo-remove/wf-repo-remove/g" -e "s/vercmp/wf-pacman-vercmp/g" bin/wf-repo-add
+    sed -E -i -e "s/-pacman/-wf-pacman/g" -e "s@confdir=.+@confdir='/opt/wonderful/etc'@" -e "s@\\$\\(pacman-conf DBPath\\)@/opt/wonderful/pacman/db@" bin/wf-makepkg
     sed -E -i -e "s@^PACMAN_KEYRING_DIR=.+@PACMAN_KEYRING_DIR=/opt/wonderful/pacman/gnupg/@" bin/wf-pacman-key
 
     rm -r opt
