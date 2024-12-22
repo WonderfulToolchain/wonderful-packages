@@ -14,7 +14,7 @@ fi
 
 groups=($_pkgname)
 pkgver=1.6.3
-pkgrel=1
+pkgrel=2
 epoch=
 pkgdesc="DS/DSi console homebrew toolchain maintained by AntonioND"
 arch=("x86_64" "aarch64")
@@ -28,6 +28,7 @@ depends=(
 	toolchain-gcc-arm-none-eabi-gcc
 	toolchain-gcc-arm-none-eabi-picolibc-generic
 	toolchain-gcc-arm-none-eabi-libstdcxx-picolibc
+	wf-tools
 )
 makedepends=(
 	runtime-musl-dev

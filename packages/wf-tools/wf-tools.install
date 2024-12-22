@@ -1,3 +1,7 @@
+post_install() {
+	bin/wf-config migrate
+}
+
 post_upgrade() {
 	bin/wf-config migrate
 }
