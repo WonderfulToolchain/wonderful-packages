@@ -18,7 +18,7 @@ validpgpkeys=('6645B0A8C7005E78DB1D7864F99FFE0FEAE999BD'  # Allan McRae <allan@a
 # [Wonderful] group
 groups=("wonderful-base")
 
-sha512sums=('4333b03f39d96b4afdf913da6bc81da0ad762f16fdf268c74001703f22b481462b50a2dab9d767b53a4e17f711201fef057a77cf9267f015949af8e98a7939b6')
+sha512sums=('57d7af624772ad0b5cf931d5d55f927e80e5ca5d77a1b2fb039e7ad309f5555cab1b37dee52b4811ac02aa8587214369c9440c0f297f8e89e146ecbf0e03d518')
 
 # [Wonderful]
 . "/wf/config/runtime-env-vars.sh"
