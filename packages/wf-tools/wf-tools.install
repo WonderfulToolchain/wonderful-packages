@@ -1,0 +1,3 @@
+post_upgrade() {
+	bin/wf-config migrate
+}

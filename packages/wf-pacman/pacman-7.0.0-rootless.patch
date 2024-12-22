@@ -1,0 +1,84 @@
+diff -Nrup pacman-7.0.0.orig/lib/libalpm/add.c pacman-7.0.0/lib/libalpm/add.c
+--- pacman-7.0.0.orig/lib/libalpm/add.c	2024-07-14 11:11:18.000000000 +0200
++++ pacman-7.0.0/lib/libalpm/add.c	2024-12-22 17:09:26.399449519 +0100
+@@ -115,9 +115,7 @@ static int perform_extraction(alpm_handl
+ {
+ 	int ret;
+ 	struct archive *archive_writer;
+-	const int archive_flags = ARCHIVE_EXTRACT_OWNER |
+-	                          ARCHIVE_EXTRACT_PERM |
+-	                          ARCHIVE_EXTRACT_TIME |
++	const int archive_flags = ARCHIVE_EXTRACT_TIME |
+ 	                          ARCHIVE_EXTRACT_UNLINK |
+ 	                          ARCHIVE_EXTRACT_XATTR |
+ 	                          ARCHIVE_EXTRACT_SECURE_SYMLINKS;
+diff -Nrup pacman-7.0.0.orig/lib/libalpm/trans.c pacman-7.0.0/lib/libalpm/trans.c
+--- pacman-7.0.0.orig/lib/libalpm/trans.c	2024-07-14 11:11:18.000000000 +0200
++++ pacman-7.0.0/lib/libalpm/trans.c	2024-12-22 18:23:28.832808087 +0100
+@@ -394,8 +394,7 @@ int _alpm_runscriptlet(alpm_handle_t *ha
+ 		goto cleanup;
+ 	}
+ 
+-	/* chop off the root so we can find the tmpdir in the chroot */
+-	scriptpath = scriptfn + strlen(handle->root) - 1;
++	scriptpath = scriptfn;
+ 
+ 	if(oldver) {
+ 		snprintf(cmdline, PATH_MAX, ". %s; %s %s %s",
+diff -Nrup pacman-7.0.0.orig/lib/libalpm/util.c pacman-7.0.0/lib/libalpm/util.c
+--- pacman-7.0.0.orig/lib/libalpm/util.c	2024-07-14 11:11:18.000000000 +0200
++++ pacman-7.0.0/lib/libalpm/util.c	2024-12-22 18:10:12.066136636 +0100
+@@ -631,7 +631,7 @@ int _alpm_run_chroot(alpm_handle_t *hand
+ 		goto cleanup;
+ 	}
+ 
+-	_alpm_log(handle, ALPM_LOG_DEBUG, "executing \"%s\" under chroot \"%s\"\n",
++	_alpm_log(handle, ALPM_LOG_DEBUG, "executing \"%s\" under directory \"%s\"\n",
+ 			cmd, handle->root);
+ 
+ 	/* Flush open fds before fork() to avoid cloning buffers */
+@@ -673,16 +673,9 @@ int _alpm_run_chroot(alpm_handle_t *hand
+ 			close(cwdfd);
+ 		}
+ 
+-		/* use fprintf instead of _alpm_log to send output through the parent */
+-		/* don't chroot() to "/": this allows running with less caps when the
+-		 * caller puts us in the right root */
+-		if(strcmp(handle->root, "/") != 0 && chroot(handle->root) != 0) {
+-			fprintf(stderr, _("could not change the root directory (%s)\n"), strerror(errno));
+-			exit(1);
+-		}
+-		if(chdir("/") != 0) {
++		if(chdir(handle->root) != 0) {
+ 			fprintf(stderr, _("could not change directory to %s (%s)\n"),
+-					"/", strerror(errno));
++					handle->root, strerror(errno));
+ 			exit(1);
+ 		}
+ 		/* bash assumes it's being run under rsh/ssh if stdin is a socket and
+diff -Nrup pacman-7.0.0.orig/src/pacman/check.c pacman-7.0.0/src/pacman/check.c
+--- pacman-7.0.0.orig/src/pacman/check.c	2024-07-14 11:11:18.000000000 +0200
++++ pacman-7.0.0/src/pacman/check.c	2024-12-22 17:09:26.399449519 +0100
+@@ -388,8 +388,6 @@ int check_pkg_full(alpm_pkg_t *pkg)
+ 			continue;
+ 		}
+ 
+-		file_errors += check_file_permissions(pkgname, filepath, &st, entry);
+-
+ 		if(type == AE_IFLNK) {
+ 			file_errors += check_file_link(pkgname, filepath, &st, entry);
+ 		}
+diff -Nrup pacman-7.0.0.orig/src/pacman/util.c pacman-7.0.0/src/pacman/util.c
+--- pacman-7.0.0.orig/src/pacman/util.c	2024-07-14 11:11:18.000000000 +0200
++++ pacman-7.0.0/src/pacman/util.c	2024-12-22 17:09:26.399449519 +0100
+@@ -122,6 +122,10 @@ int trans_release(void)
+ 
+ int needs_root(void)
+ {
++	if (1) {
++		return 0;
++	}
++
+ 	switch(config->op) {
+ 		case PM_OP_DATABASE:
+ 			return !config->op_q_check;

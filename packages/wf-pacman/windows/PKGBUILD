@@ -31,7 +31,7 @@ prepare() {
     git config core.symlinks true
     git checkout -- .
 
-    patch -p1 < /wf/packages/wf-pacman/pacman-6.1.0-rootless.patch
+    patch -p1 < /wf/packages/wf-pacman/pacman-7.0.0-rootless.patch
     patch -p1 < /wf/packages/wf-pacman/pacman-7.0.0-soft-checkspace.patch
     patch -p1 < /wf/packages/wf-pacman/pacman-windows-friendly-epoch-separator.patch
     sed -i -e "s/Pacman v\%s - libalpm v\%s/Pacman v%s - libalpm v%s (wf-pacman)/" src/pacman/pacman.c
