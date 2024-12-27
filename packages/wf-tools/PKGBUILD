@@ -4,9 +4,9 @@
 
 pkgname=wf-tools
 _pkgver=0.1.0
-pkgver=0.1.0.r104.9515701
+pkgver=0.1.0.r106.ffff234
 pkgrock=wf-tools-dev-1
-pkgrel=2
+pkgrel=1
 epoch=
 pkgdesc="Wonderful toolchain tools"
 arch=("i686" "x86_64" "armv6h" "aarch64")
