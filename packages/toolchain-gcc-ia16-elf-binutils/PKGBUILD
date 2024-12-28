@@ -3,15 +3,15 @@
 # SPDX-FileContributor: Adrian "asie" Siekierka, 2023
 
 pkgname=toolchain-gcc-ia16-elf-binutils
-_pkgver=2.39
-pkgver=2.39.r110783.b0bae6a7e4
+_pkgver=2.43.1
+pkgver=2.43.1.r119446.b38b48f4420
 pkgrel=1
 epoch=
-pkgdesc="GNU binary utilities (ia16 fork)"
+pkgdesc="GNU binary utilities (IA-16 fork)"
 arch=("x86_64" "aarch64")
 url="https://github.com/WonderfulToolchain/binutils-ia16"
 license=("GPL-3.0-or-later")
-source=("$pkgname::git+https://github.com/WonderfulToolchain/binutils-ia16#branch=binutils-2_39-ia16")
+source=("$pkgname::git+https://github.com/WonderfulToolchain/binutils-ia16#branch=binutils-2_43_1-ia16")
 depends=(runtime-musl)
 makedepends=(runtime-musl-dev)
 groups=(toolchain-gcc-ia16-elf)
@@ -33,15 +33,19 @@ build() {
 		--enable-targets=ia16-elf \
 		--enable-x86-hpa-segelf=yes \
 		--with-bugurl=https://github.com/WonderfulToolchain/binutils-ia16/issues \
-		--enable-gold \
+		--without-zstd \
+		--enable-colored-disassembly \
+		--enable-gold=no \
 		--enable-ld-default \
 		--enable-plugins \
+		--enable-threads \
 		--disable-gdb \
 		--disable-gprof \
 		--disable-libdecnumber \
 		--disable-nls \
 		--disable-shared \
 		--disable-sim \
+		--disable-warn-rwx-segments \
 		--disable-werror
 	make configure-host
 	make LDFLAGS="$WF_RUNTIME_LDFLAGS"
