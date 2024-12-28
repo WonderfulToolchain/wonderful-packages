@@ -1,6 +1,6 @@
 # If you change the OS version here, make sure to bump up and rebuild runtime-gcc-libs.
 # If the musl version changes drastically, it may also be a good idea to review runtime-musl.
-FROM alpine:3.20
+FROM alpine:3.21
 # Install packages:
 # - compiler/make/etc. [build-base]
 # - tools for building/installing packages [fakeroot git pacman pacman-makepkg curl xz zstd sudo cmake patchelf pkgconf coreutils autoconf automake gettext gettext-dev libtool]
@@ -17,6 +17,10 @@ RUN apk add --no-cache build-base fakeroot git pacman pacman-makepkg curl xz zst
 # Configure pacman/makepkg
 RUN mkdir -p /opt/wonderful/pacman/db
 COPY makepkg.conf pacman.conf /etc
+# Patch makepkg to fix git clone bug
+COPY pacman-7.0.0-makepkg-fix-git.patch /tmp
+RUN patch -d /usr/share/makepkg -p3 -i /tmp/pacman-7.0.0-makepkg-fix-git.patch
+RUN rm /tmp/pacman-7.0.0-makepkg-fix-git.patch
 # wf-pacman/gpgme workaround: if no pkgconfig directory exists in any of the library
 # search paths, the check for gpg-error will fail
 RUN mkdir -p /usr/lib/pkgconfig

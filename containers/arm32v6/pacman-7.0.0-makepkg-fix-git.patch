@@ -1,0 +1,28 @@
+From c3aa1bc12367a8c29ddac310d8bb86ae10719bd2 Mon Sep 17 00:00:00 2001
+From: Allan McRae <allan@archlinux.org>
+Date: Mon, 15 Jul 2024 14:18:19 +1000
+Subject: [PATCH] Fix typo in git source handling
+
+Fixes #171
+
+Signed-off-by: Allan McRae <allan@archlinux.org>
+---
+ scripts/libmakepkg/source/git.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/scripts/libmakepkg/source/git.sh b/scripts/libmakepkg/source/git.sh
+index 35e31fc16..d9c2416e0 100644
+--- a/scripts/libmakepkg/source/git.sh
++++ b/scripts/libmakepkg/source/git.sh
+@@ -49,7 +49,7 @@ download_git() {
+ 
+ 	if [[ ! -d "$dir" ]] || dir_is_empty "$dir" ; then
+ 		msg2 "$(gettext "Cloning %s %s repo...")" "${repo}" "git"
+-		if ! git clone --origin=origin ---mirror "$url" "$dir"; then
++		if ! git clone --origin=origin --mirror "$url" "$dir"; then
+ 			error "$(gettext "Failure while downloading %s %s repo")" "${repo}" "git"
+ 			plainerr "$(gettext "Aborting...")"
+ 			exit 1
+-- 
+GitLab
+
