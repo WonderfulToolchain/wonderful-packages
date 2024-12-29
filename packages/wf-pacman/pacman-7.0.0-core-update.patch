@@ -1,0 +1,160 @@
+Update wf-pacman separately from other packages.
+
+This is done to allow wf-pacman patches to be applied before other package updates.
+It also happens to solve issues when forking a replaced executable on Windows.
+
+Original code from MSYS2, credited to Christopher Reiter <reiter.christoph@gmail.com>
+
+diff -Nrup pacman-7.0.0.orig/lib/libalpm/alpm.h pacman-7.0.0/lib/libalpm/alpm.h
+--- pacman-7.0.0.orig/lib/libalpm/alpm.h	2024-07-14 11:11:18.000000000 +0200
++++ pacman-7.0.0/lib/libalpm/alpm.h	2024-12-29 15:25:16.472029042 +0100
+@@ -2888,6 +2888,13 @@ int alpm_trans_release(alpm_handle_t *ha
+  * @return 0 on success, -1 on error (pm_errno is set accordingly)
+  */
+ int alpm_sync_sysupgrade(alpm_handle_t *handle, int enable_downgrade);
++int alpm_sync_sysupgrade_core(alpm_handle_t *handle, int enable_downgrade);
++
++/** Informs whether a package is a core package.
++ * @param pkg the package to check
++ * @return non-zero if this is a core package, zero otherwise
++ */
++int alpm_pkg_is_core_package(const alpm_pkg_t *pkg);
+ 
+ /** Add a package to the transaction.
+  * If the package was loaded by alpm_pkg_load(), it will be freed upon
+diff -Nrup pacman-7.0.0.orig/lib/libalpm/package.c pacman-7.0.0/lib/libalpm/package.c
+--- pacman-7.0.0.orig/lib/libalpm/package.c	2024-07-14 11:11:18.000000000 +0200
++++ pacman-7.0.0/lib/libalpm/package.c	2024-12-29 15:25:42.565361819 +0100
+@@ -900,3 +900,10 @@ int _alpm_pkg_check_meta(alpm_pkg_t *pkg
+ 
+ 	return error_found;
+ }
++
++int SYMEXPORT alpm_pkg_is_core_package(const alpm_pkg_t *pkg)
++{
++	if (pkg == NULL)
++		return 0;
++	return strcmp(pkg->name, "wf-pacman") == 0;
++}
+diff -Nrup pacman-7.0.0.orig/lib/libalpm/sync.c pacman-7.0.0/lib/libalpm/sync.c
+--- pacman-7.0.0.orig/lib/libalpm/sync.c	2024-07-14 11:11:18.000000000 +0200
++++ pacman-7.0.0/lib/libalpm/sync.c	2024-12-29 15:26:00.868694763 +0100
+@@ -197,7 +197,9 @@ static alpm_list_t *check_replacers(alpm
+ 	return replacers;
+ }
+ 
+-int SYMEXPORT alpm_sync_sysupgrade(alpm_handle_t *handle, int enable_downgrade)
++/** Search for packages to upgrade and add them to the transaction. */
++static
++int SYMEXPORT do_alpm_sync_sysupgrade(alpm_handle_t *handle, int enable_downgrade, int core_update)
+ {
+ 	alpm_list_t *i, *j;
+ 	alpm_trans_t *trans;
+@@ -211,6 +213,11 @@ int SYMEXPORT alpm_sync_sysupgrade(alpm_
+ 	for(i = _alpm_db_get_pkgcache(handle->db_local); i; i = i->next) {
+ 		alpm_pkg_t *lpkg = i->data;
+ 
++		/* Skip regular packages in core update, and core packages in regular update */
++		if(core_update != alpm_pkg_is_core_package(lpkg)) {
++			continue;
++		}
++
+ 		if(alpm_pkg_find(trans->remove, lpkg->name)) {
+ 			_alpm_log(handle, ALPM_LOG_DEBUG, "%s is marked for removal -- skipping\n", lpkg->name);
+ 			continue;
+@@ -252,6 +259,16 @@ int SYMEXPORT alpm_sync_sysupgrade(alpm_
+ 	return 0;
+ }
+ 
++int SYMEXPORT alpm_sync_sysupgrade(alpm_handle_t *handle, int enable_downgrade)
++{
++	return do_alpm_sync_sysupgrade(handle, enable_downgrade, 0);
++}
++
++int SYMEXPORT alpm_sync_sysupgrade_core(alpm_handle_t *handle, int enable_downgrade)
++{
++	return do_alpm_sync_sysupgrade(handle, enable_downgrade, 1);
++}
++
+ alpm_list_t SYMEXPORT *alpm_find_group_pkgs(alpm_list_t *dbs,
+ 		const char *name)
+ {
+diff -Nrup pacman-7.0.0.orig/src/pacman/sync.c pacman-7.0.0/src/pacman/sync.c
+--- pacman-7.0.0.orig/src/pacman/sync.c	2024-07-14 11:11:18.000000000 +0200
++++ pacman-7.0.0/src/pacman/sync.c	2024-12-29 15:39:10.678677926 +0100
+@@ -28,6 +28,9 @@
+ #include <sys/stat.h>
+ #include <fnmatch.h>
+ 
++#include <handle.h>
++#include <trans.h>
++
+ #include <alpm.h>
+ #include <alpm_list.h>
+ 
+@@ -699,8 +702,52 @@ cleanup:
+ 	return ret;
+ }
+ 
++static int core_update(int *needed)
++{
++	int retval;
++	alpm_list_t *i;
++	alpm_list_t *core = NULL;
++
++	colon_printf(_("Starting core system upgrade...\n"));
++	alpm_logaction(config->handle, PACMAN_CALLER_PREFIX,
++			"starting core system upgrade\n");
++
++	if(alpm_sync_sysupgrade_core(config->handle, config->op_s_upgrade >= 2) == -1) {
++		pm_printf(ALPM_LOG_ERROR, "%s\n", alpm_strerror(alpm_errno(config->handle)));
++		trans_release();
++		return 1;
++	}
++
++	*needed = 0;
++	for(i = alpm_trans_get_add(config->handle); i; i = i->next) {
++		alpm_pkg_t *pkg = i->data;
++		if (alpm_pkg_is_core_package(pkg)) {
++			core = alpm_list_add(core, pkg);
++			*needed = 1;
++		}
++	}
++
++	if(!(*needed)) {
++		if (!config->print) {
++			printf(_(" there is nothing to do\n"));
++		}
++		return 0;
++	}
++
++	/* hooks are most likely doomed to fail in a core upgrade, so disable them */
++	alpm_option_set_hookdirs(config->handle, NULL);
++
++	config->handle->trans->add = core;
++	retval = sync_prepare_execute();
++	if(retval == 0) {
++		colon_printf(_("Run wf-pacman again in order to finish the upgrade.\n"));
++	}
++	return retval;
++}
++
+ static int sync_trans(alpm_list_t *targets)
+ {
++	int found_core_updates = 0;
+ 	int retval = 0;
+ 	alpm_list_t *i;
+ 
+@@ -723,6 +770,12 @@ static int sync_trans(alpm_list_t *targe
+ 	}
+ 
+ 	if(config->op_s_upgrade) {
++		if((retval = core_update(&found_core_updates))) {
++			return retval;
++		}
++		if(found_core_updates) {
++			return retval;
++		}
+ 		if(!config->print) {
+ 			colon_printf(_("Starting full system upgrade...\n"));
+ 			alpm_logaction(config->handle, PACMAN_CALLER_PREFIX,

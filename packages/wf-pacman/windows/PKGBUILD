@@ -3,7 +3,7 @@
 # [Wonderful] pkgname
 pkgname=wf-pacman
 pkgver=7.0.0
-pkgrel=5
+pkgrel=6
 _git_patch_level_commit=c685ae6412af04cae1eaa5d6bda8c277c7ffb8c8
 # [Wonderful] pkgdesc
 pkgdesc="Wonderful toolchain build of the pacman package manager"
@@ -31,11 +31,13 @@ prepare() {
     git config core.symlinks true
     git checkout -- .
 
+    patch -p1 < /wf/packages/wf-pacman/pacman-7.0.0-core-update.patch
     patch -p1 < /wf/packages/wf-pacman/pacman-7.0.0-rootless.patch
     patch -p1 < /wf/packages/wf-pacman/pacman-7.0.0-soft-checkspace.patch
     patch -p1 < /wf/packages/wf-pacman/pacman-windows-friendly-epoch-separator.patch
     sed -i -e "s/Pacman v\%s - libalpm v\%s/Pacman v%s - libalpm v%s (wf-pacman)/" src/pacman/pacman.c
 
+    # MSYS2-specific patches
     patch -p1 < /wf/packages/wf-pacman/windows/msys2-0005-Remove-everything-related-to-sudo-fakeroot-file-perm.patch
     patch -p1 < /wf/packages/wf-pacman/windows/msys2-0006-fill_progress.patch
     patch -p1 < /wf/packages/wf-pacman/windows/msys2-0014-makepkg-avoid-creating-.tar-files-with-extended-attr.patch

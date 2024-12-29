@@ -16,7 +16,7 @@ _libarchive_ver=3.7.7
 _gpgerrorver=1.51
 _libassuanver=3.0.0
 _gpgmever=1.24.1
-pkgrel=5
+pkgrel=6
 # use annotated tag and patch level commit from release branch (can be empty for no patches)
 _git_tag=7.0.0
 _git_patch_level_commit=c685ae6412af04cae1eaa5d6bda8c277c7ffb8c8
@@ -130,6 +130,7 @@ prepare() {
     fi
 
     # [Wonderful]
+    patch -p1 < /wf/packages/wf-pacman/pacman-7.0.0-core-update.patch
     patch -p1 < /wf/packages/wf-pacman/pacman-7.0.0-rootless.patch
     patch -p1 < /wf/packages/wf-pacman/pacman-7.0.0-soft-checkspace.patch
     patch -p1 < /wf/packages/wf-pacman/pacman-windows-friendly-epoch-separator.patch
