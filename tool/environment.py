@@ -56,7 +56,10 @@ class ContainerLinuxEnvironment(Environment):
         if not self.container_built:
             # run synchronously
             tqdm.write(f"Updating {self.container_name} container...")
-            subprocess.run(f"podman build --arch {self.arch} -t wonderful-{self.container_name} .", shell=True, check=True,
+            arch = self.arch
+            if arch.startswith("arm"):
+                arch = "arm"
+            subprocess.run(f"podman build --arch {arch} -t wonderful-{self.container_name} .", shell=True, check=True,
                 stdout=subprocess.DEVNULL,
                 cwd=f"containers/{self.container_name}")
             self.container_built = True
