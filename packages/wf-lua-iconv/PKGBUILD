@@ -3,15 +3,15 @@
 # SPDX-FileContributor: Adrian "asie" Siekierka, 2023
 
 pkgname=(wf-lua-iconv)
-_pkgver=7
-pkgver=7.r87.b761918
+_pkgver=7.1
+pkgver=7.1.r101.5452834
 pkgrel=1
 epoch=
 pkgdesc="Lua iconv wrapper"
 arch=("i686" "x86_64" "armv6h" "aarch64")
-url="https://github.com/ittner/lua-iconv"
+url="https://github.com/lunarmodules/lua-iconv"
 license=("MIT")
-source=("$pkgname::git+https://github.com/ittner/lua-iconv#branch=master")
+source=("$pkgname::git+https://github.com/lunarmodules/lua-iconv#branch=master")
 depends=(wf-lua)
 makedepends=(wf-lua-dev)
 sha256sums=("SKIP")
@@ -65,7 +65,7 @@ package() {
 	cd "$pkgname"
 
 	mkdir -p "$pkgdir$WF_DESTDIR"/doc/wf-lua-iconv
-	cp -a README "$pkgdir$WF_DESTDIR"/doc/wf-lua-iconv/
+	cp -a README.md "$pkgdir$WF_DESTDIR"/doc/wf-lua-iconv/
 
 	mkdir -p "$pkgdir$WF_DESTDIR"/lib/lua/5.4
 	cp -a iconv"$WF_LIBRARY_SUFFIX" "$pkgdir$WF_DESTDIR"/lib/lua/5.4
