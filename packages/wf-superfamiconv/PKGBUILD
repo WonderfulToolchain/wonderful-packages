@@ -4,14 +4,14 @@
 
 pkgname=wf-superfamiconv
 _pkgver=0.11.0
-pkgver=0.11.0.r174.f42df62
+pkgver=0.11.0.r183.70f5379
 pkgrel=1
 epoch=
 pkgdesc="Flexible and composable tile graphics converter"
 arch=("i686" "x86_64" "armv6h" "aarch64")
 url="https://github.com/WonderfulToolchain/SuperFamiconv"
 license=("MIT")
-source=("$pkgname::git+https://github.com/WonderfulToolchain/SuperFamiconv#branch=master")
+source=("$pkgname::git+https://github.com/WonderfulToolchain/SuperFamiconv#branch=main")
 depends=(runtime-gcc-libs runtime-musl)
 makedepends=(runtime-musl-dev)
 sha256sums=('SKIP')
