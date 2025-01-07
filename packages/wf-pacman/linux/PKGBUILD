@@ -16,7 +16,7 @@ _libarchive_ver=3.7.7
 _gpgerrorver=1.51
 _libassuanver=3.0.0
 _gpgmever=1.24.1
-pkgrel=6
+pkgrel=7
 # use annotated tag and patch level commit from release branch (can be empty for no patches)
 _git_tag=7.0.0
 _git_patch_level_commit=c685ae6412af04cae1eaa5d6bda8c277c7ffb8c8
@@ -81,8 +81,6 @@ validpgpkeys+=('AC8E115BF73E2D8D47FA9908E98E9B2D19C6C8BD') #  Niibe Yutaka (GnuP
 source+=("https://github.com/libarchive/libarchive/releases/download/v${_libarchive_ver}/libarchive-${_libarchive_ver}.tar.xz"{,.asc})
 validpgpkeys+=('A5A45B12AD92D964B89EEE2DEC560C81CEC2276E'  # Martin Matuska <mm@FreeBSD.org>
               'DB2C7CF1B4C265FAEF56E3FC5848A18B8F14184B') # Martin Matuska <martin@matuska.org>
-# [Wonderful] group
-groups=("wonderful-base")
 
 sha512sums=('44e00c2bc259fe6a85de71f7fd8a43fcfd1b8fb7d920d2267bd5b347e02f1dab736b3d96e31faf7b535480398e2348f7c0b9914e51ca7e12bab2d5b8003926b4'
             'b544196c3b7a55faacd11700d11e2fe4f16a7418282c9abb24a668544a15293580fd1a2cc5f93367c8a17c7ee45335c6d2f5c68a72dd176d516fd033f203eeec'

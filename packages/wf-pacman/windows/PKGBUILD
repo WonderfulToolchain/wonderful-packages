@@ -3,7 +3,7 @@
 # [Wonderful] pkgname
 pkgname=wf-pacman
 pkgver=7.0.0
-pkgrel=6
+pkgrel=7
 _git_patch_level_commit=c685ae6412af04cae1eaa5d6bda8c277c7ffb8c8
 # [Wonderful] pkgdesc
 pkgdesc="Wonderful toolchain build of the pacman package manager"
@@ -15,8 +15,6 @@ options=('!emptydirs')
 source=("git+https://gitlab.archlinux.org/pacman/pacman.git#commit=${_git_patch_level_commit}")
 validpgpkeys=('6645B0A8C7005E78DB1D7864F99FFE0FEAE999BD'  # Allan McRae <allan@archlinux.org>
               'B8151B117037781095514CA7BBDFFC92306B1121') # Andrew Gregory (pacman) <andrew@archlinux.org>
-# [Wonderful] group
-groups=("wonderful-base")
 
 sha512sums=('57d7af624772ad0b5cf931d5d55f927e80e5ca5d77a1b2fb039e7ad309f5555cab1b37dee52b4811ac02aa8587214369c9440c0f297f8e89e146ecbf0e03d518')
 
