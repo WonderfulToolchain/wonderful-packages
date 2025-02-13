@@ -4,7 +4,7 @@
 
 pkgname=(wf-lua wf-lua-dev)
 pkgver=5.4.7
-pkgrel=1
+pkgrel=2
 epoch=
 pkgdesc="Lua scripting language"
 arch=("i686" "x86_64" "armv6h" "aarch64")
