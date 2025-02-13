@@ -4,19 +4,32 @@
 
 pkgname=(runtime-musl runtime-musl-dev)
 pkgver=1.2.5
-pkgrel=1
+pkgrel=2
 epoch=
 pkgdesc="musl runtime"
 arch=("i686" "x86_64" "armv6h" "aarch64")
 url="http://www.musl-libc.org"
 license=("MIT")
-source=("https://www.musl-libc.org/releases/musl-$pkgver.tar.gz")
-sha256sums=('a9a118bbe84d8764da0ea0d28b3ab3fae8477fc7e4085d90102b8596fc7c75e4')
+source=(
+	"https://www.musl-libc.org/releases/musl-$pkgver.tar.gz"
+	"0001_iconv_fix_erroneous_input_validation_in_EUC_KR_decod.patch"
+	"0002_iconv_harden_UTF_8_output_code_path_against_input_de.patch"
+)
+sha256sums=(
+	'a9a118bbe84d8764da0ea0d28b3ab3fae8477fc7e4085d90102b8596fc7c75e4'
+	'SKIP'
+	'SKIP'
+)
 
 . "/wf/config/runtime-env-vars.sh"
 
 prepare() {
 	mkdir -p "musl-$pkgver-build"
+
+	# https://www.openwall.com/lists/musl/2025/02/13/1
+	cd "musl-$pkgver"
+	patch -p1 <../0001_iconv_fix_erroneous_input_validation_in_EUC_KR_decod.patch
+	patch -p1 <../0002_iconv_harden_UTF_8_output_code_path_against_input_de.patch
 }
 
 build() {
