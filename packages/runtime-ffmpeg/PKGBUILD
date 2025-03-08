@@ -4,8 +4,8 @@
 
 # TODO: trim down decoder/parser/demuxer/bsf list
 pkgname=(runtime-ffmpeg runtime-ffmpeg-dev)
-pkgver=6.0
-pkgrel=2
+pkgver=7.1.1
+pkgrel=1
 epoch=
 pkgdesc="ffmpeg video library"
 arch=("i686" "x86_64" "armv6h" "aarch64")
@@ -13,12 +13,10 @@ url="http://www.ffmpeg.org"
 license=("MIT")
 source=(
 	"https://www.ffmpeg.org/releases/ffmpeg-$pkgver.tar.xz"
-	"https://github.com/FFmpeg/FFmpeg/commit/effadce6c756247ea8bae32dc13bb3e6f464f0eb.patch"
 )
 depends=(runtime-musl)
 makedepends=(runtime-musl-dev)
 sha256sums=(
-	"SKIP"
 	"SKIP"
 )
 
@@ -26,7 +24,6 @@ sha256sums=(
 
 prepare() {
 	cd "ffmpeg-$pkgver"
-	patch -p1 < ../effadce6c756247ea8bae32dc13bb3e6f464f0eb.patch
 }
 
 build() {
