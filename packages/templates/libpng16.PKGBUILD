@@ -3,7 +3,7 @@
 # SPDX-FileContributor: Adrian "asie" Siekierka, 2023
 
 pkgname=toolchain-$WF_TOOLCHAIN-libpng16
-pkgver=1.6.45
+pkgver=1.6.47
 epoch=
 pkgdesc="libpng for $WF_TOOLCHAIN"
 arch=(any)
@@ -21,7 +21,7 @@ depends=(
 )
 groups=(toolchain-$WF_TOOLCHAIN-extra)
 sha256sums=(
-	'926485350139ffb51ef69760db35f78846c805fef3d59bfdcb2fba704663f370'
+	'b213cb381fbb1175327bd708a77aab708a05adde7b471bc267bd15ac99893631'
 )
 options=(!strip)
 
