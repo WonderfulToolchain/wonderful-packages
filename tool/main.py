@@ -16,6 +16,7 @@ ctx = addict.Dict({
         "linux/x86_64",
         "linux/aarch64",
         "linux/armv6h",
+        "linux/riscv64",
         "windows/x86_64"
     ],
     "environments": {},
@@ -36,6 +37,7 @@ if platform.system() == "Windows" or platform.system().startswith("MSYS_NT"):
 elif platform.system() == "Linux":
     add_environment(ContainerLinuxEnvironment("x86_64", "x86_64"), platform.machine() == "AMD64" or platform.machine() == "x86_64")
     add_environment(ContainerLinuxEnvironment("aarch64", "aarch64"), not (platform.machine() == "AMD64" or platform.machine() == "x86_64"))
+    add_environment(ContainerLinuxEnvironment("riscv64", "riscv64"), False)
     add_environment(ContainerLinuxEnvironment("armv6h", "arm32v6"), False)
 
 if ctx.preferred_environment is None:

@@ -2,16 +2,22 @@
 
 Repository containing the build scripts and infrastructure for Wonderful's Pacman-based packaging.
 
-## Supported targets
+## Targets
 
-Listed from most to least supported.
+### Supported
 
 | Target | Description | Container |
 | - | - | - |
 | linux/x86_64 | Linux, x86_64 | x86_64 |
 | linux/aarch64 | Linux, AArch64 | aarch64 |
-| linux/armv6h | Linux, ARMv6+, hard float | arm32v6 |
 | windows/x86_64 | Windows, x86_64 | N/A | 
+
+### Unsupported
+
+| Target | Description | Container |
+| - | - | - |
+| linux/armv6h | Linux, ARMv6+, hard float | arm32v6 |
+| linux/riscv64 | Linux, RISC-V | riscv64 |
 
 ## Guide
 
