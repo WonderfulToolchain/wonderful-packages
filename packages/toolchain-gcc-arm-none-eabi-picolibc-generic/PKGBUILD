@@ -3,7 +3,7 @@
 # SPDX-FileContributor: Adrian "asie" Siekierka, 2023
 
 pkgname=toolchain-gcc-arm-none-eabi-picolibc-generic
-_pkgver=1.8.9
+_pkgver=1.8.10
 pkgver=1.8.9.r25050.ada8bd796
 pkgrel=1
 epoch=
