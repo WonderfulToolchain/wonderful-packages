@@ -61,7 +61,7 @@ build() {
 	../"$pkgname"/configure \
 		--prefix="$WF_PATH/toolchain/gcc-ia16-elf" \
 		--target=ia16-elf \
-		--with-bugurl="http://github.com/WonderfulToolchain/gcc-ia16/issues" \
+		--with-bugurl="$WF_BUGURL" \
 		--with-stage1-ldflags="$WF_RUNTIME_LDFLAGS" \
 		--without-headers \
 		--enable-languages=c,c++ \

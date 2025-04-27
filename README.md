@@ -84,8 +84,9 @@ On Arch Linux, this can be resolved using the following steps:
 
 As the Wonderful toolchain is open source, it can be forked to provide custom builds. While the licensing terms are formally binding, I would like to additionally request holding to the following guidelines when developing a fork:
 
-- Do not call your fork "Wonderful". It's okay to refer to it informatively as a fork of the Wonderful toolchain, but it's not okay to imply that your fork *is* the Wonderful toolchain.
-- If your fork breaks compatibility with the Wonderful toolchain (including porting to a platform or architecture not supported by the toolchain), please use a different `WONDERFUL_TOOLCHAIN` location than `/opt/wonderful`. This allows upstream to create its own version in the future without causing conflict between the two. This is achievable for the most part by changing `WF_LOCAL_PATH` in `config/runtime-env-vars.sh`, but it may require additional changes as well.
+- Do not call your fork "Wonderful". It's okay to refer to it informatively as a fork of the Wonderful toolchain, but it's not okay to imply that your fork *is* the Wonderful toolchain. To change the toolchain's brand name in built executables, edit `WF_NAME` in `config/runtime-env-vars.sh`.
+- Make sure to document it clearly that any issues with the fork should be reported to you and/or the maintainers of the fork. To change the bug report URL used by GCC and some other programs, change `WF_BUGURL` in `config/runtime-env-vars.sh`.
+- If your fork breaks compatibility with the Wonderful toolchain in **any** way (including porting to a platform or architecture not supported by the toolchain), please use a different `WONDERFUL_TOOLCHAIN` location than `/opt/wonderful`. This allows upstream to create its own version in the future without causing conflict between the two. This is achievable for the most part by changing `WF_LOCAL_PATH` in `config/runtime-env-vars.sh`, but it may require additional changes as well.
 
 ## License
 

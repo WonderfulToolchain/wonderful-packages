@@ -26,7 +26,7 @@ build() {
 	../"binutils-$pkgver"/configure \
 		--prefix="$WF_PATH"/toolchain/gcc-$GCC_TARGET \
 		--target=$GCC_TARGET \
-		--with-bugurl=https://github.com/WonderfulToolchain/wonderful-packages/issues \
+		--with-bugurl="$WF_BUGURL" \
 		--without-zstd \
 		--enable-64-bit-bfd \
 		--enable-colored-disassembly \

@@ -97,8 +97,8 @@ build() {
 	$configure_cmd \
 		--prefix="$WF_PATH/toolchain/gcc-$GCC_TARGET" \
 		--target=$GCC_TARGET \
-		--with-pkgversion="Wonderful toolchain" \
-		--with-bugurl="http://github.com/WonderfulToolchain/wonderful-packages/issues" \
+		--with-pkgversion="$WF_NAME" \
+		--with-bugurl="$WF_BUGURL" \
 		--with-stage1-ldflags="$WF_RUNTIME_LDFLAGS" \
 		--without-headers \
 		--enable-plugins \

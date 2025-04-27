@@ -1,8 +1,12 @@
 #!/bin/bash
 shopt -s extglob
 
-WF_PACMAN_CONFIG_PATH=$(dirname "$(realpath "${BASH_SOURCE[0]}" )")
+# Branding settings
 WF_LOCAL_PATH="opt/wonderful"
+WF_NAME="Wonderful toolchain"
+WF_BUGURL="https://github.com/WonderfulToolchain/wonderful-packages/issues"
+
+WF_PACMAN_CONFIG_PATH=$(dirname "$(realpath "${BASH_SOURCE[0]}" )")
 WF_PATH="/"$WF_LOCAL_PATH
 WF_DESTDIR="/"
 WF_USE_MUSL=true
