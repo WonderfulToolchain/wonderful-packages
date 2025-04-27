@@ -23,14 +23,14 @@ Repository containing the build scripts and infrastructure for Wonderful's Pacma
 
 As the packaging system is intended for internal use only, the list of tested setups is highly specific:
 
-* For Linux development, Arch Linux on an x86_64 or AArch64 machine is recommended. `python-poetry`, `podman`, `qemu-user-static` and `qemu-user-static-binfmt` should be installed, probably among some others.
+* For Linux development, Arch Linux on an x86_64 or AArch64 machine is recommended. `python-uv`, `podman`, `qemu-user-static` and `qemu-user-static-binfmt` should be installed, probably among some others.
 * For Windows development, MSYS2 should be installed. Unlike Linux, development is not containerized; as such, all packages' build dependencies must be installed by the user. Windows-specific instructions are provided at the end of the guide.
 
 ### Downloading repositories
 
-Before using `pkgtool` for the first time, one should initialize the Poetry-based virtual environment:
+Before using `pkgtool` for the first time, one should initialize the uv-based virtual environment:
 
-    $ poetry install
+    $ uv sync
 
 To start working with `pkgtool`, one must make mirrors of all the relevant repositories. This can be done by writing:
 
@@ -58,14 +58,14 @@ Installation instructions:
 
 1. The repository must be installed to `/wf`. While `pkgtool` is directory-agnostic, the `PKGBUILD` scripts are not.
 2. Use the UCRT64 environment to work with `pkgtool`.
-3. Install UCRT64 Python and SSL certificates (required for `mirror`): `pacman -S mingw-w64-ucrt-x86_64-ca-certificates mingw-w64-ucrt-x86_64-python mingw-w64-ucrt-x86_64-python-poetry`.
+3. Install UCRT64 Python and SSL certificates (required for `mirror`): `pacman -S mingw-w64-ucrt-x86_64-ca-certificates mingw-w64-ucrt-x86_64-python mingw-w64-ucrt-x86_64-python-uv`.
 4. Install build dependencies (this list is probably not 100% complete): `pacman -S autoconf auitoconf-archive automake base-devel bison flex git libtool lld mingw-w64-ucrt-x86_64-autotools mingw-w64-ucrt-x86_64-cmake mingw-w64-ucrt-x86_64-lua-luarocks mingw-w64-ucrt-x86_64-meson mingw-w64-ucrt-x86_64-toolchain nasm ninja`.
 5. Copy `misc/windows/makepkg.conf` to `/etc/makepkg.conf`.
 6. To fix `luarocks` not being able to create directories, you will need to `luarocks install luafilesystem` first, while creating all the erroring directories manually. See [MINGW-packages/#12002](https://github.com/msys2/MINGW-packages/pull/12002).
 
 Notes:
 
-* `wf-pacman` is built with MSYS rather than UCRT64. This currently appears to require a separate, manual installation of Poetry via pip.
+* `wf-pacman` is built with MSYS rather than UCRT64. This currently appears to require a separate, manual installation of uv via pip.
 * For an unknown reason, `wf-sox` expects `/msys64/usr/share/aclocal` to have the contents of `/usr/share/aclocal`.
 
 ## Known issues

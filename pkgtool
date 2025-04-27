@@ -10,5 +10,4 @@ case "$(uname -s)" in
 esac
 
 # Run pkgtool.
-poetry run python -m tool.main "$@"
-
+uv run python -m tool.main "$@"
