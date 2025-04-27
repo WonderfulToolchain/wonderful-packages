@@ -81,9 +81,9 @@ package() {
     install -dm755 etc
 
     cp -aRv /wf/packages/wf-pacman/config/* etc/
-    sed -i -e "s/%ARCH%/"$CARCH"/g" -e "s/%OS%/"$WF_HOST_OS"/g" etc/makepkg.conf
-    sed -i -e "s/%ARCH%/"$CARCH"/g" -e "s/%OS%/"$WF_HOST_OS"/g" etc/pacman.conf
-    sed -i -e "s/%ARCH%/"$CARCH"/g" -e "s/%OS%/"$WF_HOST_OS"/g" etc/pacman.d/*.*
+    sed -i -e "s/%ARCH%/"$CARCH"/g" -e "s/%OS%/"$WF_HOST_OS"/g" -e "s@%WF_PATH%@"$WF_PATH"@g" etc/makepkg.conf
+    sed -i -e "s/%ARCH%/"$CARCH"/g" -e "s/%OS%/"$WF_HOST_OS"/g" -e "s@%WF_PATH%@"$WF_PATH"@g" etc/pacman.conf
+    sed -i -e "s/%ARCH%/"$CARCH"/g" -e "s/%OS%/"$WF_HOST_OS"/g" -e "s@%WF_PATH%@"$WF_PATH"@g" etc/pacman.d/*.*
 
     install -dm755 lib
     install -dm755 lib/wf-pacman
@@ -103,8 +103,8 @@ package() {
 
     # [Wonderful] relocate helper binary references, remove dependency on pacman-conf
     sed -E -i -e "s/repo-add/wf-pacman-repo-add/g" -e "s/repo-remove/wf-pacman-repo-remove/g" -e "s/vercmp/wf-pacman-vercmp/g" bin/wf-pacman-repo-add
-    sed -E -i -e "s/-pacman/-wf-pacman/g" -e "s@confdir=.+@confdir='/opt/wonderful/etc'@" -e "s@\\$\\(pacman-conf DBPath\\)@/opt/wonderful/pacman/db@" bin/wf-makepkg
-    sed -E -i -e "s@^PACMAN_KEYRING_DIR=.+@PACMAN_KEYRING_DIR=/opt/wonderful/pacman/gnupg/@" bin/wf-pacman-key
+    sed -E -i -e "s/-pacman/-wf-pacman/g" -e "s@confdir=.+@confdir='"$WF_PATH"/etc'@" -e "s@\\$\\(pacman-conf DBPath\\)@"$WF_PATH"/pacman/db@" bin/wf-makepkg
+    sed -E -i -e "s@^PACMAN_KEYRING_DIR=.+@PACMAN_KEYRING_DIR="$WF_PATH"/pacman/gnupg/@" bin/wf-pacman-key
 
     rm -r opt
 

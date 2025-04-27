@@ -36,7 +36,7 @@ GIT_REPO_DIR=wf-picolibc
 
 build() {
 	cd picolibc-build
-	export PATH=/opt/wonderful/toolchain/gcc-arm-none-eabi/bin:$PATH
+	export PATH=$WF_PATH/toolchain/gcc-arm-none-eabi/bin:$PATH
 
 	meson setup \
 		--cross-file=../cross-thumb.txt \

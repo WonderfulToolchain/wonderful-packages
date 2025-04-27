@@ -13,7 +13,7 @@ diff -Nrup lua-5.4.6.orig/src/Makefile lua-5.4.6/src/Makefile
 diff -Nrup lua-5.4.6.orig/src/luaconf.h lua-5.4.6/src/luaconf.h
 --- lua-5.4.6.orig/src/luaconf.h	2023-09-03 06:09:08.824276300 +0100
 +++ lua-5.4.6/src/luaconf.h	2023-09-03 06:11:48.925515700 +0100
-@@ -202,29 +202,28 @@
+@@ -202,29 +202,27 @@
  ** In Windows, any exclamation mark ('!') in the path is replaced by the
  ** path of the directory of the executable file of the current process.
  */
@@ -44,7 +44,6 @@ diff -Nrup lua-5.4.6.orig/src/luaconf.h lua-5.4.6/src/luaconf.h
  
 -#define LUA_ROOT	"/usr/local/"
 -#define LUA_LDIR	LUA_ROOT "share/lua/" LUA_VDIR "/"
-+#define LUA_ROOT	"/opt/wonderful/"
 +#define LUA_LDIR	LUA_ROOT "local/lib/lua/" LUA_VDIR "/"
  #define LUA_CDIR	LUA_ROOT "lib/lua/" LUA_VDIR "/"
  

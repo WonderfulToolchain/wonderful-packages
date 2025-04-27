@@ -71,7 +71,7 @@ prepare() {
 }
 
 build() {
-	export PATH=/opt/wonderful/toolchain/gcc-$GCC_TARGET/bin:$PATH
+	export PATH=$WF_PATH/toolchain/gcc-$GCC_TARGET/bin:$PATH
 
 	if [ "x$GCC_IS_LIBSTDCXX" = "xyes" ]; then
 		build_libstdcxx_arg="--enable-libstdcxx"
@@ -92,7 +92,7 @@ build() {
 	# TODO: It's strange that --with-gnu-as/--with-gnu-ld is required for cross-compilation.
 	# I'd assume it would automatically check the target assembler/linker. I wonder what the issue is.
 	$configure_cmd \
-		--prefix="/opt/wonderful/toolchain/gcc-$GCC_TARGET" \
+		--prefix="$WF_PATH/toolchain/gcc-$GCC_TARGET" \
 		--target=$GCC_TARGET \
 		--with-pkgversion="Wonderful toolchain" \
 		--with-bugurl="http://github.com/WonderfulToolchain/wonderful-packages/issues" \

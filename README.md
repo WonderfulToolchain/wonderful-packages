@@ -80,6 +80,13 @@ On Arch Linux, this can be resolved using the following steps:
   * etc.
 2. Run `systemctl restart systemd-binfmt` to apply changes.
 
+## Forking
+
+As the Wonderful toolchain is open source, it can be forked to provide custom builds. While the licensing terms are formally binding, I would like to additionally request holding to the following guidelines when developing a fork:
+
+- Do not call your fork "Wonderful". It's okay to refer to it informatively as a fork of the Wonderful toolchain, but it's not okay to imply that your fork *is* the Wonderful toolchain.
+- If your fork breaks compatibility with the Wonderful toolchain (including porting to a platform or architecture not supported by the toolchain), please use a different `WONDERFUL_TOOLCHAIN` location than `/opt/wonderful`. This allows upstream to create its own version in the future without causing conflict between the two. This is achievable for the most part by changing `WF_LOCAL_PATH` in `config/runtime-env-vars.sh`, but it may require additional changes as well.
+
 ## License
 
 Unless otherwise specified, the build scripts (`config/`, `packages/`) are licensed under Creative Commons 0. I don't see why instructions on building otherwise libre toolchains should be restricted by copyright in any way.

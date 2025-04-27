@@ -49,7 +49,7 @@ prepare() {
 . "../templates/git-pkgver.PKGBUILD"
 
 build() {
-	export PATH=/opt/wonderful/toolchain/gcc-ia16-elf/bin:$PATH
+	export PATH=$WF_PATH/toolchain/gcc-ia16-elf/bin:$PATH
 
 	cd gcc-build
 
@@ -59,7 +59,7 @@ build() {
 	fi
 
 	../"$pkgname"/configure \
-		--prefix="/opt/wonderful/toolchain/gcc-ia16-elf" \
+		--prefix="$WF_PATH/toolchain/gcc-ia16-elf" \
 		--target=ia16-elf \
 		--with-bugurl="http://github.com/WonderfulToolchain/gcc-ia16/issues" \
 		--with-stage1-ldflags="$WF_RUNTIME_LDFLAGS" \

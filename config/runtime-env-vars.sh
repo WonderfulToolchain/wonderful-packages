@@ -2,7 +2,8 @@
 shopt -s extglob
 
 WF_PACMAN_CONFIG_PATH=$(dirname "$(realpath "${BASH_SOURCE[0]}" )")
-WF_PATH="/opt/wonderful"
+WF_LOCAL_PATH="opt/wonderful"
+WF_PATH="/"$WF_LOCAL_PATH
 WF_DESTDIR="/"
 WF_USE_MUSL=true
 WF_LIBRARY_SUFFIX=.so
@@ -66,17 +67,17 @@ WF_RUNTIME_PKG_CONFIG_PATH="$WF_PATH/lib/pkgconfig"
 # toolchain root directory.
 wf_relocate_path_to_destdir() {
 	if [ "$WF_DESTDIR" == "/" ]; then
-		if [ -d opt/wonderful ]; then
+		if [ -d "$WF_LOCAL_PATH" ]; then
 			mv opt _opt
-			mv _opt/wonderful/* .
+			mv _"$WF_LOCAL_PATH"/* .
 			rm -rf _opt
 		fi
 	else
-		if [ ! -d opt/wonderful ]; then
-			mkdir -p opt/wonderful
+		if [ ! -d "$WF_LOCAL_PATH" ]; then
+			mkdir -p "$WF_LOCAL_PATH"
 		fi
-		mv !(opt) opt/wonderful || true
-		cd opt/wonderful
+		mv !(opt) "$WF_LOCAL_PATH" || true
+		cd "$WF_LOCAL_PATH"
 	fi
 }
 
