@@ -8,7 +8,7 @@ readme = "README.md"
 license = "MIT"
 dependencies = [
     "addict>=2.4.0,<3",
-    "termcolor>=2.3.0,<3",
+    "termcolor>=3.0.1,<4",
     "tqdm>=4.66.1,<5",
 ]
 
