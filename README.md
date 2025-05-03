@@ -68,6 +68,10 @@ Notes:
 * `wf-pacman` is built with MSYS rather than UCRT64. This currently appears to require a separate, manual installation of uv via pip.
 * For an unknown reason, `wf-sox` expects `/msys64/usr/share/aclocal` to have the contents of `/usr/share/aclocal`.
 
+### Additional reading
+
+* [File system hierarchy](https://wonderful.asie.pl/wiki/doku.php?id=design:filesystem_hierarchy)
+
 ## Known issues
 
 ### sudo: effective uid is not 0, is /usr/bin/sudo on a file system with the 'nosuid' option set or an NFS file system without root privileges?
