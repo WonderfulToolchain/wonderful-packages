@@ -3,7 +3,7 @@
 # SPDX-FileContributor: Adrian "asie" Siekierka, 2023
 
 pkgname=wf-lua-posix
-pkgver=36.2.1
+pkgver=36.3
 pkgrel=1
 pkgrock=luaposix-"$pkgver"-1
 pkgdesc="Lua POSIX library"
