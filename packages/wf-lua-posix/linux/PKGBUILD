@@ -17,7 +17,7 @@ sha256sums=("SKIP")
 
 . "/wf/config/runtime-env-vars.sh"
 
-. "../templates/luarocks-package.PKGBUILD"
+. "../../templates/luarocks-package.PKGBUILD"
 
 build() {
 	cd "$pkgname-$pkgver"

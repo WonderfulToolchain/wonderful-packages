@@ -3,7 +3,7 @@
 # SPDX-FileContributor: Adrian "asie" Siekierka, 2023
 
 pkgname=wf-lua-posix
-pkgver=36.2.1
+pkgver=36.3
 pkgrel=1
 pkgrock=luaposix-"$pkgver"-1
 pkgdesc="Lua POSIX library"
@@ -17,7 +17,7 @@ sha256sums=("SKIP")
 
 . "/wf/config/runtime-env-vars.sh"
 
-. "../templates/luarocks-package.PKGBUILD"
+. "../../templates/luarocks-package.PKGBUILD"
 
 build() {
 	cd "$pkgname-$pkgver"
