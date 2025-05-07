@@ -50,7 +50,11 @@ def cmd_build(ctx, args):
             package_pairs.append((name, "any"))
         else:
             for target in targets:
-                package_pairs.append((name, target))
+                if target.split("/")[1] in srcinfo["arch"]:
+                    package_pairs.append((name, target))
+                else:
+                    tqdm.write(colored(f"[*] {package} not supported on {target}, skipping...", attrs=["bold"]))
+                    continue
 
     for package, target in tqdm(package_pairs):
         tqdm.write(colored(f"[*] Building {package} for {target}...", attrs=["bold"]))
