@@ -4,7 +4,7 @@
 
 pkgname=(runtime-gcc-libs)
 pkgver=0.1.0
-pkgrel=2
+pkgrel=3
 epoch=
 pkgdesc="MSYS/UCRT64 GCC runtime libraries"
 arch=("i686" "x86_64" "aarch64")
