@@ -65,7 +65,7 @@ Installation instructions:
 1. The repository must be installed to `/wf`. While `pkgtool` is directory-agnostic, the `PKGBUILD` scripts are not.
 2. Use the UCRT64 environment to work with `pkgtool`.
 3. Install UCRT64 Python and SSL certificates (required for `mirror`): `pacman -S mingw-w64-ucrt-x86_64-ca-certificates mingw-w64-ucrt-x86_64-python mingw-w64-ucrt-x86_64-python-uv`.
-4. Install build dependencies (this list is probably not 100% complete): `pacman -S autoconf auitoconf-archive automake base-devel bison flex git libtool lld mingw-w64-ucrt-x86_64-autotools mingw-w64-ucrt-x86_64-cmake mingw-w64-ucrt-x86_64-lua-luarocks mingw-w64-ucrt-x86_64-meson mingw-w64-ucrt-x86_64-toolchain nasm ninja`.
+4. Install build dependencies (this list is probably not 100% complete): `pacman -S autoconf autoconf-archive automake base-devel bison flex git libtool lld mingw-w64-ucrt-x86_64-autotools mingw-w64-ucrt-x86_64-cmake mingw-w64-ucrt-x86_64-lua-luarocks mingw-w64-ucrt-x86_64-meson mingw-w64-ucrt-x86_64-toolchain nasm ninja`.
 5. Copy `misc/windows/makepkg.conf` to `/etc/makepkg.conf`.
 6. To fix `luarocks` not being able to create directories, you will need to `luarocks install luafilesystem` first, while creating all the erroring directories manually. See [MINGW-packages/#12002](https://github.com/msys2/MINGW-packages/pull/12002).
 
