@@ -52,6 +52,12 @@ The Linux bootstraps are effectively self-contained repackagings of a pre-instal
 
 ### Installation details
 
+#### Linux
+
+Notes:
+
+* Make sure to install `qemu-user-static-binfmt` and not `qemu-user-binfmt`; otherwise, podman will error with `exec container process (missing dynamic library?) '/bin/sh': No such file or directory`.
+
 #### Windows
 
 Installation instructions:
