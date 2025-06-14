@@ -4,7 +4,7 @@
 
 pkgname=(wf-lua wf-lua-dev)
 pkgver=5.4.8
-pkgrel=1
+pkgrel=2
 epoch=
 pkgdesc="Lua scripting language"
 arch=("i686" "x86_64" "armv6h" "aarch64")
@@ -50,9 +50,9 @@ build() {
 	cd "lua-$pkgver"
 
 	if [ "$WF_HOST_OS" == "windows" ]; then
-		make mingw MYCFLAGS="$WF_RUNTIME_INCLUDES -DLUA_ROOT=\\\""$WF_PATH"\\\"" MYLDFLAGS="$WF_RUNTIME_LDFLAGS"
+		make mingw MYCFLAGS="$WF_RUNTIME_INCLUDES -DLUA_ROOT=\\\""$WF_PATH"/\\\"" MYLDFLAGS="$WF_RUNTIME_LDFLAGS"
 	else
-		make linux MYCFLAGS="$WF_RUNTIME_INCLUDES -DLUA_USE_LINENOISE -DLUA_ROOT=\\\""$WF_PATH"\\\"" MYLDFLAGS="$WF_RUNTIME_LDFLAGS" MYLIBS="-llinenoise"
+		make linux MYCFLAGS="$WF_RUNTIME_INCLUDES -DLUA_USE_LINENOISE -DLUA_ROOT=\\\""$WF_PATH"/\\\"" MYLDFLAGS="$WF_RUNTIME_LDFLAGS" MYLIBS="-llinenoise"
 	fi
 }
 
