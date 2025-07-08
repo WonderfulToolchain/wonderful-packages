@@ -3,7 +3,7 @@
 # SPDX-FileContributor: Adrian "asie" Siekierka, 2023
 
 pkgname=(runtime-gcc-libs)
-pkgver=0.3.19
+pkgver=0.3.22
 pkgrel=1
 epoch=
 pkgdesc="GCC runtime libraries"

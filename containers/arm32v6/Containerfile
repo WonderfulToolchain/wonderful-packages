@@ -1,6 +1,6 @@
 # If you change the OS version here, make sure to bump up and rebuild runtime-gcc-libs.
 # If the musl version changes drastically, it may also be a good idea to review runtime-musl.
-FROM docker.io/arm32v6/alpine:3.21
+FROM docker.io/arm32v6/alpine:3.22
 # Install packages:
 # - compiler/make/etc. [build-base]
 # - tools for building/installing packages [fakeroot git pacman pacman-makepkg curl xz zstd sudo cmake patchelf pkgconf coreutils autoconf automake gettext gettext-dev libtool]
