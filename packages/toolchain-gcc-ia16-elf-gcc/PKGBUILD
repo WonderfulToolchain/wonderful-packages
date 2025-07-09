@@ -16,9 +16,9 @@ arch=("x86_64" "aarch64")
 depends=(runtime-gcc-libs runtime-musl toolchain-gcc-ia16-elf-binutils)
 makedepends=(runtime-musl-dev)
 groups=(toolchain-gcc-ia16-elf)
-url="https://github.com/WonderfulToolchain/gcc-ia16"
+url="https://github.com/WonderfulToolchain/gcc"
 license=("GPL-3.0-or-later")
-source=("$pkgname::git+https://github.com/WonderfulToolchain/gcc-ia16#branch=wonderful-gcc-6.3.0-tkchia"
+source=("$pkgname::git+https://github.com/WonderfulToolchain/gcc#branch=wonderful/gcc-ia16-6.3.0"
         "http://gmplib.org/download/gmp/gmp-$_gmpver.tar.xz"
         "http://www.mpfr.org/mpfr-$_mpfrver/mpfr-$_mpfrver.tar.xz"
         "http://ftp.gnu.org/gnu/mpc/mpc-$_mpcver.tar.gz"
