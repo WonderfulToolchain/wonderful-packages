@@ -3,8 +3,8 @@
 # SPDX-FileContributor: Adrian "asie" Siekierka, 2023
 
 pkgname=(wf-lua-toml)
-_pkgver=0.4.0
-pkgver=0.4.0.r47.44a4056
+_pkgver=0.4.1
+pkgver=0.4.1.r49.f9ee400
 pkgrel=1
 epoch=
 pkgdesc="Lua TOML library"
