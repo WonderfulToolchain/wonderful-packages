@@ -3,22 +3,20 @@
 # SPDX-FileContributor: Adrian "asie" Siekierka, 2023
 
 pkgname=(wf-sox wf-sox-dev)
-_pkgver=14.4.2
-pkgver=14.4.2.r3246.5ec1b44f
-pkgrel=2
+_pkgver=14.6.0.4
+pkgver=14.6.0.4.r3753.3b5dd42c
+pkgrel=1
 epoch=
-pkgdesc="The Swiss Army knife of sound processing tools"
-arch=("i686" "x86_64" "armv6h" "aarch64")
-url="https://github.com/WonderfulToolchain/sox"
-license=("GPL2" "LGPL2.1")
+pkgdesc="The Swiss Army knife of sound processing tools (sox_ng fork)"
+arch=("x86_64" "aarch64")
+url="https://codeberg.org/sox_ng/sox_ng"
+license=("GPL2" "LGPL2.1" "BSD-3-Clause")
 source=(
-	"$pkgname::git+https://github.com/WonderfulToolchain/sox#branch=master"
-	"msys2-0001-ucrt-no-rewind-pipe.patch"
+	"$pkgname::git+https://codeberg.org/sox_ng/sox_ng.git#tag=sox_ng-$_pkgver"
 )
 depends=(runtime-gcc-libs runtime-musl)
 makedepends=(runtime-musl-dev)
 sha256sums=(
-	'SKIP'
 	'SKIP'
 )
 
@@ -29,9 +27,11 @@ sha256sums=(
 prepare() {
 	cd wf-sox
 
-	if [ "$WF_HOST_OS" == "windows" ]; then
-		patch -p1 <../msys2-0001-ucrt-no-rewind-pipe.patch
-	fi
+	# Ignore system-provided versions of libgsm and liblpc10.
+	sed -i \
+		-e 's/libgsm" = yes/libgsm" = never/' \
+		-e 's/liblpc10" = yes/liblpc10" = never/' \
+		configure.ac
 
 	autoreconf -vfi
 }
@@ -43,12 +43,10 @@ build() {
 	LDFLAGS="-static $WF_RUNTIME_LDFLAGS" \
 	./configure --prefix="$WF_PATH" \
 		--sysconfdir=/etc \
-		--with-dyn-default \
 		--without-libltdl --without-ladspa --without-magic --without-png \
-		--without-id3tag --without-libgsm --without-opencore-amrnb \
-		--without-opencore-amrwb --without-vo-amrwbenc --without-mad --without-lame \
-		--without-twolame --without-libsndfile \
-		--disable-formats --disable-symlinks \
+		--without-id3tag --without-mad --without-lame \
+		--without-twolame \
+		--disable-symlinks \
 		--with-distro="Wonderful Toolchain"
 	make all
 }
@@ -59,10 +57,10 @@ package_wf-sox() {
 	cd "$pkgdir"
 	wf_relocate_path_to_destdir
 
-	mv bin/sox$WF_EXECUTABLE_SUFFIX bin/wf-sox$WF_EXECUTABLE_SUFFIX
+	mv bin/sox_ng$WF_EXECUTABLE_SUFFIX bin/wf-sox$WF_EXECUTABLE_SUFFIX
 
 	rm -r include share
-	rm -r lib/libsox.a lib/libsox.la lib/pkgconfig
+	rm -r lib/libsox*.a lib/libsox*.la lib/pkgconfig
 }
 
 package_wf-sox-dev() {
