@@ -29,6 +29,7 @@ source=("http://ftp.gnu.org/gnu/gcc/gcc-$pkgver/gcc-$pkgver.tar.xz"
 	"https://libisl.sourceforge.io/isl-$_islver.tar.xz"
 	"file:///wf/patches/gcc15-poison-system-directories.patch"
 	"file:///wf/patches/gcc13-clang-MJ.patch"
+	"file:///wf/patches/gcc15-armv5-muldi3-optimization.patch"
 	"file:///wf/patches/gcc13-multilib-arm-elf"
 )
 sha256sums=(
@@ -37,6 +38,7 @@ sha256sums=(
 	'b67ba0383ef7e8a8563734e2e889ef5ec3c3b898a01d00fa0a6869ad81c6ce01'
 	'ab642492f5cf882b74aa0cb730cd410a81edcdbec895183ce930e706c1c759b8'
 	'6d8babb59e7b672e8cb7870e874f3f7b813b6e00e6af3f8b04f7579965643d5c'
+	'SKIP'
 	'SKIP'
 	'SKIP'
 	'SKIP'
@@ -59,6 +61,8 @@ prepare() {
 	# These patches are used by the toolchain, but only serve an optimization purpose.
 	# - Use custom multilib configuration on ARM.
 	cp ../gcc13-multilib-arm-elf gcc/config/arm/t-arm-elf
+	# - Use optimized __muldi3 for ARM <= v5, as well as Thumb1 (using MUL/MLA/UMULL instead of much larger Thumb code)
+	patch -p1 <../gcc15-armv5-muldi3-optimization.patch
 
 	# These patches aren't strictly necessary, but they are nice to have.
 	# - Poison system directories: emit warnings if they are mistakenly included.

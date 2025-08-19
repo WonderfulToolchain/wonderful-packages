@@ -1,0 +1,91 @@
+From: Adrian Siekierka <kontakt@asie.pl>
+
+This patches the __muldi3 and __mulvsi3 functions to be compiled using an ARM
+mode function for ARMv4/ARMv5/ARMv6 in Thumb mode. In those two specific cases,
+the ARM mode code is substnatially smaller and faster than the Thumb mode code;
+a precedent has already been made with __clzsi2. In addition, the code for
+__muldi3 has manually been adjusted in assembly to avoid an unnecessary mov.
+
+diff -Nrup gcc-15.2.0.orig/libgcc/config/arm/muldi3.S gcc-15.2.0/libgcc/config/arm/muldi3.S
+--- gcc-15.2.0.orig/libgcc/config/arm/muldi3.S	1970-01-01 01:00:00.000000000 +0100
++++ gcc-15.2.0/libgcc/config/arm/muldi3.S	2025-08-19 22:54:20.809896219 +0200
+@@ -0,0 +1,36 @@
++/* Copyright (C) 1995-2025 Free Software Foundation, Inc.
++
++This file is free software; you can redistribute it and/or modify it
++under the terms of the GNU General Public License as published by the
++Free Software Foundation; either version 3, or (at your option) any
++later version.
++
++This file is distributed in the hope that it will be useful, but
++WITHOUT ANY WARRANTY; without even the implied warranty of
++MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++General Public License for more details.
++
++Under Section 7 of GPL version 3, you are granted additional
++permissions described in the GCC Runtime Library Exception, version
++3.1, as published by the Free Software Foundation.
++
++You should have received a copy of the GNU General Public License and
++a copy of the GCC Runtime Library Exception along with this program;
++see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
++<http://www.gnu.org/licenses/>.  */
++
++/* Everything in this file should now use unified syntax.  */
++
++	.syntax unified
++
++	.global __aeabi_lmul
++	.type __aeabi_lmul, %function
++	.global __muldi3
++	.type __muldi3, %function
++__aeabi_lmul:
++__muldi3:
++	mul r1, r2, r1
++	mla r1, r3, r0, r1
++	umull r0, r3, r2, r0
++	add r1, r1, r3
++	bx lr
+diff -Nrup gcc-15.2.0.orig/libgcc/config/arm/t-arm gcc-15.2.0/libgcc/config/arm/t-arm
+--- gcc-15.2.0.orig/libgcc/config/arm/t-arm	2025-08-08 08:51:44.840420972 +0200
++++ gcc-15.2.0/libgcc/config/arm/t-arm	2025-08-19 23:27:34.630156230 +0200
+@@ -2,6 +2,16 @@ LIB1ASMSRC = arm/lib1funcs.S
+ LIB1ASMFUNCS = _thumb1_case_sqi _thumb1_case_uqi _thumb1_case_shi \
+ 	_thumb1_case_uhi _thumb1_case_si _speculation_barrier
+ 
++# Wonderful: Use optimized __aeabi_lmul on ARM
++ARM_ISA:=$(findstring __ARM_ARCH_ISA_ARM,$(shell $(gcc_compile_bare) -dM -E - </dev/null))
++THUMB2_ISA:=$(findstring __ARM_ARCH_ISA_THUMB 2,$(shell $(gcc_compile_bare) -dM -E - </dev/null))
++ifdef ARM_ISA
++ifndef THUMB2_ISA
++LIB2FUNCS_EXCLUDE += _muldi3
++LIB2ADD += $(srcdir)/config/arm/muldi3.S
++endif
++endif
++
+ HAVE_CMSE:=$(findstring __ARM_FEATURE_CMSE,$(shell $(gcc_compile_bare) -dM -E - </dev/null))
+ ifeq ($(shell $(gcc_compile_bare) -E -mcmse - </dev/null >/dev/null 2>/dev/null; echo $$?),0)
+ CMSE_OPTS:=-mcmse
+diff -Nrup gcc-15.2.0.orig/libgcc/libgcc2.c gcc-15.2.0/libgcc/libgcc2.c
+--- gcc-15.2.0.orig/libgcc/libgcc2.c	2025-08-08 08:51:44.918422274 +0200
++++ gcc-15.2.0/libgcc/libgcc2.c	2025-08-19 23:28:03.700328922 +0200
+@@ -148,6 +148,9 @@ __subvDI3 (DWtype a, DWtype b)
+ #endif
+ 
+ #ifdef L_mulvsi3
++#if defined(__arm__) && defined(__ARM_ARCH_ISA_ARM) && (!defined(__ARM_ARCH_ISA_THUMB) || __ARM_ARCH_ISA_THUMB < 2)
++__attribute__((target("arm")))
++#endif
+ Wtype
+ __mulvSI3 (Wtype a, Wtype b)
+ {
+@@ -159,6 +162,9 @@ __mulvSI3 (Wtype a, Wtype b)
+   return w;
+ }
+ #ifdef COMPAT_SIMODE_TRAPPING_ARITHMETIC
++#if defined(__arm__) && defined(__ARM_ARCH_ISA_ARM) && (!defined(__ARM_ARCH_ISA_THUMB) || __ARM_ARCH_ISA_THUMB < 2)
++__attribute__((target("arm")))
++#endif
+ SItype
+ __mulvsi3 (SItype a, SItype b)
+ {
