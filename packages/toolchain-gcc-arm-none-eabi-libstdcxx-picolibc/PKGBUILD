@@ -2,6 +2,7 @@
 #
 # SPDX-FileContributor: Adrian "asie" Siekierka, 2023
 
+pkgver=15.2.1.r220324.c5c83e531d6
 pkgrel=1
 arch=(any)
 
