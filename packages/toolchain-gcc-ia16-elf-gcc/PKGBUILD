@@ -18,7 +18,7 @@ makedepends=(runtime-musl-dev)
 groups=(toolchain-gcc-ia16-elf)
 url="https://github.com/WonderfulToolchain/gcc"
 license=("GPL-3.0-or-later")
-source=("$pkgname::git+https://github.com/WonderfulToolchain/gcc#branch=wonderful/gcc-ia16-6.3.0"
+source=("gcc::git+https://github.com/WonderfulToolchain/gcc#branch=wonderful/gcc-ia16-6.3.0"
         "http://gmplib.org/download/gmp/gmp-$_gmpver.tar.xz"
         "http://www.mpfr.org/mpfr-$_mpfrver/mpfr-$_mpfrver.tar.xz"
         "http://ftp.gnu.org/gnu/mpc/mpc-$_mpcver.tar.gz"
@@ -35,7 +35,7 @@ sha256sums=(
 
 prepare() {
 	mkdir -p "gcc-build"
-	cd "$pkgname"
+	cd gcc
 
 	# HACK: hijack RTEMS's libstdc++ crossconfig for our own purposes (which has the dynamic feature checks we want)
 	sed -i "s/\*-rtems\*/*-unknown*/" libstdc++-v3/configure
@@ -58,7 +58,7 @@ build() {
 		CPPFLAGS='-DWIN32_LEAN_AND_MEAN'
 	fi
 
-	../"$pkgname"/configure \
+	../gcc/configure \
 		--prefix="$WF_PATH/toolchain/gcc-ia16-elf" \
 		--target=ia16-elf \
 		--with-bugurl="$WF_BUGURL" \

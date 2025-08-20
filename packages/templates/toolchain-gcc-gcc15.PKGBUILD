@@ -11,8 +11,7 @@ else
 	depends=(runtime-gcc-libs runtime-musl toolchain-gcc-$GCC_TARGET-binutils)
 	arch=("x86_64" "aarch64")
 fi
-pkgver=15.2.0
-_gccver=15.2.0
+_pkgver=15.2.1
 _gmpver=6.3.0
 _mpfrver=4.2.2
 _mpcver=1.3.1
@@ -22,51 +21,28 @@ makedepends=(runtime-musl-dev)
 groups=(toolchain-gcc-$GCC_TARGET)
 url="https://gcc.gnu.org"
 license=("GPL-3.0-or-later")
-source=("http://ftp.gnu.org/gnu/gcc/gcc-$pkgver/gcc-$pkgver.tar.xz"
+source=("gcc::git+https://github.com/WonderfulToolchain/gcc#branch=wonderful/gcc-15"
         "http://gmplib.org/download/gmp/gmp-$_gmpver.tar.xz"
         "http://www.mpfr.org/mpfr-$_mpfrver/mpfr-$_mpfrver.tar.xz"
         "http://ftp.gnu.org/gnu/mpc/mpc-$_mpcver.tar.gz"
 	"https://libisl.sourceforge.io/isl-$_islver.tar.xz"
-	"file:///wf/patches/gcc15-poison-system-directories.patch"
-	"file:///wf/patches/gcc13-clang-MJ.patch"
-	"file:///wf/patches/gcc15-armv5-muldi3-optimization.patch"
-	"file:///wf/patches/gcc13-multilib-arm-elf"
 )
 sha256sums=(
-	'438fd996826b0c82485a29da03a72d71d6e3541a83ec702df4271f6fe025d24e'
+	'SKIP'
 	'a3c2b80201b89e68616f4ad30bc66aee4927c3ce50e33929ca819d5c43538898'
 	'b67ba0383ef7e8a8563734e2e889ef5ec3c3b898a01d00fa0a6869ad81c6ce01'
 	'ab642492f5cf882b74aa0cb730cd410a81edcdbec895183ce930e706c1c759b8'
 	'6d8babb59e7b672e8cb7870e874f3f7b813b6e00e6af3f8b04f7579965643d5c'
-	'SKIP'
-	'SKIP'
-	'SKIP'
-	'SKIP'
 )
 
 . "/wf/config/runtime-env-vars.sh"
 
+GIT_REPO_DIR=gcc
+. "../templates/git-pkgver.PKGBUILD"
+
 prepare() {
 	mkdir -p "gcc-build"
-	cd "gcc-$_gccver"
-
-	### Target patches
-
-	# These patches are used by the toolchain and most likely necessary.
-	# - HACK: hijack RTEMS's libstdc++ crossconfig for our own purposes (which has the dynamic feature checks we want)
-	sed -i "s/\*-rtems\*/*-unknown*/" libstdc++-v3/configure
-	# - Add -MJ compile_commands.json fragment emitter, matching Clang.
-	patch -p1 <../gcc13-clang-MJ.patch
-
-	# These patches are used by the toolchain, but only serve an optimization purpose.
-	# - Use custom multilib configuration on ARM.
-	cp ../gcc13-multilib-arm-elf gcc/config/arm/t-arm-elf
-	# - Use optimized __muldi3 for ARM <= v5, as well as Thumb1 (using MUL/MLA/UMULL instead of much larger Thumb code)
-	patch -p1 <../gcc15-armv5-muldi3-optimization.patch
-
-	# These patches aren't strictly necessary, but they are nice to have.
-	# - Poison system directories: emit warnings if they are mistakenly included.
-	patch -p1 <../gcc15-poison-system-directories.patch
+	cd gcc
 
 	ln -s ../"gmp-$_gmpver" gmp
 	ln -s ../"mpfr-$_mpfrver" mpfr
@@ -79,12 +55,12 @@ build() {
 
 	if [ "x$GCC_IS_LIBSTDCXX" = "xyes" ]; then
 		build_libstdcxx_arg="--enable-libstdcxx"
-		configure_cmd=../"gcc-$_gccver"/libstdc++-v3/configure
+		configure_cmd=../gcc/libstdc++-v3/configure
 
 		wf_disable_host_build
 	else
 		build_libstdcxx_arg="--disable-libstdcxx"
-		configure_cmd=../"gcc-$_gccver"/configure
+		configure_cmd=../gcc/configure
 	fi
 	cd gcc-build
 
@@ -132,13 +108,13 @@ package_toolchain-gcc-template-gcc() {
 	wf_relocate_path_to_destdir
 
 	rm toolchain/gcc-$GCC_TARGET/share/info/dir
-	rm toolchain/gcc-$GCC_TARGET/lib/gcc/$GCC_TARGET/$pkgver/include-fixed/README
+	rm toolchain/gcc-$GCC_TARGET/lib/gcc/$GCC_TARGET/$_pkgver/include-fixed/README
 
 	# HACK: As we don't build with a C library present, limits.h
 	# assumes no such library is present.
 
-	cd "$srcdir"/gcc-"$_gccver"/gcc
-	cat limitx.h glimits.h limity.h > "$pkgdir"/toolchain/gcc-$GCC_TARGET/lib/gcc/$GCC_TARGET/$pkgver/include/limits.h
+	cd "$srcdir"/gcc/gcc
+	cat limitx.h glimits.h limity.h > "$pkgdir"/toolchain/gcc-$GCC_TARGET/lib/gcc/$GCC_TARGET/$_pkgver/include/limits.h
 }
 
 package_toolchain-gcc-template-gcc-libs() {
