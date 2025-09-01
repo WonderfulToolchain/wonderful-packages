@@ -3,8 +3,8 @@
 # SPDX-FileContributor: Adrian "asie" Siekierka, 2025
 
 pkgname=wf-agbpack
-_pkgver=0.1.0
-pkgver=0.1.0.r5.1b38fd1
+_pkgver=0.3.0
+pkgver=0.3.0.r13.57ab959
 pkgrel=1
 epoch=
 pkgdesc="GBA multiboot image compression tool"
