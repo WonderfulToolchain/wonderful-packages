@@ -1,0 +1,46 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# SPDX-FileContributor: Adrian "asie" Siekierka, 2025
+
+pkgname=wf-agbpack
+_pkgver=0.1.0
+pkgver=0.1.0.r5.1b38fd1
+pkgrel=1
+epoch=
+pkgdesc="GBA multiboot image compression tool"
+arch=("i686" "x86_64" "armv6h" "aarch64")
+url="https://github.com/WonderfulToolchain/agbpack"
+license=("zlib")
+source=("$pkgname::git+https://github.com/WonderfulToolchain/agbpack#branch=main")
+depends=(runtime-musl)
+makedepends=(runtime-musl-dev)
+sha256sums=('SKIP')
+
+. "/wf/config/runtime-env-vars.sh"
+
+. "../templates/git-pkgver.PKGBUILD"
+
+prepare() {
+	cd "$pkgname"
+	git submodule update --init --recursive
+}
+
+build() {
+	cd "$pkgname"
+
+	PKG_CONFIG_PATH="$WF_RUNTIME_PKG_CONFIG_PATH" \
+	CFLAGS="$WF_RUNTIME_INCLUDES" \
+	LDFLAGS="$WF_RUNTIME_LDFLAGS" \
+	meson setup build \
+		--prefix="$WF_PATH" \
+		-Db_lto=true
+	cd build
+	meson compile
+}
+
+package() {
+	cd "$pkgname"/build
+
+	mkdir -p "$pkgdir$WF_DESTDIR"/bin
+	cp -a agbpack "$pkgdir$WF_DESTDIR"/bin/wf-agbpack
+}
