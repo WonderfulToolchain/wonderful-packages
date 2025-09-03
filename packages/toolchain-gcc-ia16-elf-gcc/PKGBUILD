@@ -4,8 +4,8 @@
 
 pkgname=(toolchain-gcc-ia16-elf-gcc toolchain-gcc-ia16-elf-gcc-libs)
 _pkgver=6.3.0
-pkgver=6.3.0.r147140.4f47aef6d53
-pkgrel=2
+pkgver=6.3.0.r147141.4cac029b8c6
+pkgrel=1
 _gmpver=6.1.2
 _mpfrver=3.1.5
 _mpcver=1.0.3
@@ -46,6 +46,7 @@ prepare() {
 	ln -s ../"isl-$_islver" isl
 }
 
+GIT_REPO_DIR=gcc
 . "../templates/git-pkgver.PKGBUILD"
 
 build() {

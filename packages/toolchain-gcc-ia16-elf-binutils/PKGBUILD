@@ -4,7 +4,7 @@
 
 pkgname=toolchain-gcc-ia16-elf-binutils
 _pkgver=2.43.1
-pkgver=2.43.1.r119446.b38b48f4420
+pkgver=2.43.1.r119450.cb9b8d4a0ad
 pkgrel=1
 epoch=
 pkgdesc="GNU binary utilities (IA-16 fork)"
@@ -32,7 +32,7 @@ build() {
 		--target=ia16-elf \
 		--enable-targets=ia16-elf \
 		--enable-x86-hpa-segelf=yes \
-		--with-bugurl=https://github.com/WonderfulToolchain/binutils-ia16/issues \
+		--with-bugurl="$WF_BUGURL" \
 		--without-zstd \
 		--enable-colored-disassembly \
 		--enable-gold=no \
