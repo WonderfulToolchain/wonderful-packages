@@ -4,7 +4,7 @@
 
 pkgname=wf-tools
 _pkgver=0.1.0
-pkgver=0.1.0.r141.23ddc17
+pkgver=0.1.0.r158.ca26483
 pkgrock=wf-tools-dev-1
 pkgrel=1
 epoch=
@@ -31,7 +31,7 @@ prepare() {
 
 build() {
 	cd "$pkgname"
-	build_luarocks
+	CC=g++ build_luarocks
 
 	mkdir bin || true
 	gcc -O2 -flto $WF_RUNTIME_INCLUDES $WF_RUNTIME_LDFLAGS \
