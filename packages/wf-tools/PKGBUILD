@@ -4,7 +4,7 @@
 
 pkgname=wf-tools
 pkgver=0.2.0
-pkgrel=1
+pkgrel=2
 epoch=
 pkgdesc="Wonderful Toolchain tools - metapackage"
 arch=(any)
@@ -19,6 +19,5 @@ depends=(
 )
 makedepends=()
 sha256sums=()
-install=wf-tools.install
 
 . "/wf/config/runtime-env-vars.sh"
