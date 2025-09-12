@@ -1,0 +1,55 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# SPDX-FileContributor: Adrian "asie" Siekierka, 2023
+
+pkgname=wf-tools-native
+_pkgver=0.1.0
+pkgver=0.1.0.r159.7e47f4c
+pkgrock=wf-tools-dev-1
+pkgrel=1
+epoch=
+pkgdesc="Wonderful Toolchain tools - native programs and libraries"
+arch=("i686" "x86_64" "armv6h" "aarch64")
+url="https://github.com/WonderfulToolchain/wf-tools"
+license=("MIT")
+source=("$pkgname::git+https://github.com/WonderfulToolchain/wf-tools#branch=main")
+groups=(wf-environment)
+depends=(runtime-musl wf-lua)
+makedepends=(runtime-musl-dev wf-lua-dev)
+sha256sums=('SKIP')
+
+. "/wf/config/runtime-env-vars.sh"
+
+. "../templates/git-pkgver.PKGBUILD"
+. "../templates/luarocks-package.PKGBUILD"
+
+prepare() {
+	cd "$pkgname"
+	sed -i -e 's@/opt/wonderful@'$WF_PATH'@g' lua/*.lua lua/wf/internal/path.lua
+}
+
+build() {
+	cd "$pkgname"
+	CC=g++ build_luarocks
+
+	mkdir bin || true
+	gcc -O2 -flto $WF_RUNTIME_INCLUDES $WF_RUNTIME_LDFLAGS \
+		-o bin/wf-compile-commands-merge src/cmd/wf-compile-commands-merge.c
+}
+
+package() {
+	cd "$pkgname"
+
+	# Package Lua natives
+	mkdir -p "$pkgdir$WF_DESTDIR"/lib/lua/5.4
+	cp -aR build/lib/lua/5.4/* "$pkgdir$WF_DESTDIR"/lib/lua/5.4/
+
+	# Package bin/
+	cd bin
+	mkdir -p "$pkgdir$WF_DESTDIR"/bin
+	for i in *; do
+		chmod 755 "$i"
+		cp -a "$i" "$pkgdir$WF_DESTDIR"/bin/
+	done
+	cd ..
+}
