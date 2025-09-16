@@ -4,15 +4,19 @@
 
 pkgname=wf-tools
 pkgver=0.2.0
-pkgrel=2
+pkgrel=3
 epoch=
 pkgdesc="Wonderful Toolchain tools - metapackage"
-arch=(any)
+arch=("i686" "x86_64" "armv6h" "aarch64")
 url="https://github.com/WonderfulToolchain/wf-tools"
 license=("MIT")
 source=()
 groups=(wf-environment)
+
+# HACK: wf-lua-posix is listed here, as this metapackage is platform-specific,
+# and we remove wf-lua-posix dependencies on Windows.
 depends=(
+	wf-lua-posix
 	wf-tools-lua
 	wf-tools-native
 	wf-pacman

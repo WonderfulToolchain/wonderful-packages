@@ -4,15 +4,15 @@
 
 pkgname=wf-tools-lua
 _pkgver=0.1.0
-pkgver=0.1.0.r159.7e47f4c
-pkgrel=3
+pkgver=0.1.0.r162.0ad7105
+pkgrel=2
 epoch=
 pkgdesc="Wonderful Toolchain tools - platform-independent Lua scripts"
 arch=(any)
 url="https://github.com/WonderfulToolchain/wf-tools"
 license=("MIT")
 source=("$pkgname::git+https://github.com/WonderfulToolchain/wf-tools#branch=main")
-depends=(wf-lua wf-lua-filesystem wf-lua-iconv wf-lua-penlight wf-lua-posix wf-lua-toml wf-pacman wf-tools-native)
+depends=(wf-lua wf-lua-filesystem wf-lua-iconv wf-lua-penlight wf-lua-toml wf-pacman wf-tools-native)
 sha256sums=('SKIP')
 install=wf-tools-lua.install
 
