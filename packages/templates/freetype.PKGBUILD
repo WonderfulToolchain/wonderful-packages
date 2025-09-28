@@ -3,7 +3,7 @@
 # SPDX-FileContributor: Adrian "asie" Siekierka, 2023
 
 pkgname=toolchain-$WF_TOOLCHAIN-freetype
-pkgver=2.13.3
+pkgver=2.14.1
 epoch=
 pkgdesc="freetype for $WF_TOOLCHAIN"
 arch=(any)
@@ -21,7 +21,7 @@ depends=(
 )
 groups=(toolchain-$WF_TOOLCHAIN-extra)
 sha256sums=(
-	'0550350666d427c74daeb85d5ac7bb353acba5f76956395995311a9c6f063289'
+	'32427e8c471ac095853212a37aef816c60b42052d4d9e48230bab3bdf2936ccc'
 	'SKIP'
 )
 options=(!strip)
@@ -38,7 +38,7 @@ build() {
 
 	cd freetype-$pkgver
 	./configure --prefix="$WF_TOOLCHAIN_PREFIX" --host=$WF_TARGET --disable-shared --enable-static \
-		--with-zlib=no --with-bzip2=no --with-png=no
+		--with-zlib=no --with-bzip2=no --with-png=no --with-harfbuzz=no --with-brotli=no --with-librsvg=no
 	make
 }
 
