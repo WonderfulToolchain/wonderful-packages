@@ -4,8 +4,8 @@
 
 pkgname=wf-tools-lua
 _pkgver=0.1.0
-pkgver=0.1.0.r162.0ad7105
-pkgrel=2
+pkgver=0.1.0.r165.ffcb2bd
+pkgrel=1
 epoch=
 pkgdesc="Wonderful Toolchain tools - platform-independent Lua scripts"
 arch=(any)
