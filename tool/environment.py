@@ -74,7 +74,7 @@ class ContainerEnvironment(Environment):
         if not ("skip_package_sync" in kwargs and kwargs["skip_package_sync"]):
             cmd = self.pacman + " -Syu && " + cmd
         clean_custom_keys(kwargs)
-        return subprocess.run(["podman", "run", "-i", "-v", f"{cwd}:/wf", f"wonderful-{self.container_name}", self.shell, "-c", cmd], **kwargs)
+        return subprocess.run(["podman", "run", "--userns=keep-id", "--user=root", "-i", "-v", f"{cwd}:/wf", f"wonderful-{self.container_name}", self.shell, "-c", cmd], **kwargs)
 
 class ContainerLinuxEnvironment(ContainerEnvironment):
     def __init__(self, arch, container_name):

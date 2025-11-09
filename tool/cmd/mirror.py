@@ -19,13 +19,14 @@ def clean_unused_packages(ctx, package_caches, file_list):
                     print(f"Removing {target_file.name}...")
                     target_file.unlink()
 
-def cmd_mirror(ctx, args):
-    targets = args.targets
+def download_repository_databases(ctx, targets=None, all=False):
     if targets is None or len(targets) == 0:
-        if args.all:
+        if all:
             targets = ctx.all_known_environments
         else:
             targets = list(ctx.environments.keys())
+
+    downloaded_repos = []
     package_caches = {}
 
     print(colored("[*] Downloading repository databases...", attrs=["bold"]))
@@ -33,7 +34,7 @@ def cmd_mirror(ctx, args):
     for target in tqdm(targets):
         target_path = Path(f"build/packages/{target}")
         target_path.mkdir(parents=True, exist_ok=True)
-        package_cache_valid = True
+        repo_files_valid = True
 
         for filename_dest_link in ["wonderful.db", "wonderful.files"]:
             tqdm.write(f"Downloading {filename_dest_link} for {target}...")
@@ -49,10 +50,18 @@ def cmd_mirror(ctx, args):
                 path_dest_link.symlink_to(filename_dest, target_is_directory=False)
             except Exception as e:
                 print(e)
-                package_cache_valid = False
+                repo_files_valid = False
 
-        if package_cache_valid:
-            package_caches[target] = PackageBinaryCache(target)
+        if repo_files_valid:
+            downloaded_repos.append(target)
+
+    return downloaded_repos
+
+def cmd_mirror(ctx, args):
+    downloaded_repos = download_repository_databases(ctx, args.targets, all=args.all)
+    package_caches = {}
+    for target in downloaded_repos:
+        package_caches[target] = PackageBinaryCache(target)
 
     print(colored("[*] Building package file list...", attrs=["bold"]))
     file_list = {}
