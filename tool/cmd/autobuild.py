@@ -7,7 +7,7 @@ from pathlib import Path
 from termcolor import colored
 from tqdm import tqdm
 from types import SimpleNamespace
-import os, subprocess
+import os, subprocess, sys
 
 def rev_get_current():
     result = subprocess.run(["git", "rev-parse", "HEAD"], check=True, stdout=subprocess.PIPE)
@@ -38,7 +38,7 @@ def cmd_autobuild(ctx, args):
     current_rev = rev_get_current()
     if previous_rev == current_rev:
         print("No changes found.")
-        os.exit(1)
+        sys.exit(55)
         return
 
     changed_packages = [x.split("/")[1] for x in filter(lambda x: x.startswith("packages/"), rev_get_changed_files(previous_rev, current_rev))]
