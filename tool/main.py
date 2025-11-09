@@ -3,7 +3,7 @@
 # SPDX-FileContributor: Adrian "asie" Siekierka, 2023
 
 from .cmd.autobuild import cmd_autobuild
-from .cmd.build import cmd_build
+from .cmd.build import cmd_build, cmd_bump
 from .cmd.build_bootstrap import cmd_build_bootstrap
 from .cmd.copy_anyarchs import cmd_copy_anyarchs
 from .cmd.mirror import cmd_mirror
@@ -62,6 +62,10 @@ argp_build.add_argument('packages', metavar='package', type=str, nargs='*', help
 argp_build.add_argument('-f', '--force', dest='force', action='store_true', help='Overwrite an existing build of the package.')
 argp_build.add_argument('-k', '--keep', dest='keep', action='store_true', help='Keep the old version of the package.')
 argp_build.set_defaults(func=cmd_build)
+
+argp_bump = subparsers.add_parser('bump', help='Bump packages.')
+argp_bump.add_argument('packages', metavar='package', type=str, nargs='*', help='Requested packages. Format: package_name[@target1[,target2...]]')
+argp_bump.set_defaults(func=cmd_bump)
 
 argp_autobuild = subparsers.add_parser('autobuild', help='Build all changed packages since last successful call to autobuild.')
 argp_autobuild.add_argument('-s', '--skip', dest='skip', action='store_true', help='Skip missing commits.')

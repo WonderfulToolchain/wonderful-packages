@@ -29,6 +29,42 @@ def parse_package_reference(name, all_targets):
     else:
         return name, all_targets
 
+def cmd_bump(ctx, args):
+    all_targets = list(ctx.environments.keys())
+    package_pairs = []
+    package_paths = {}
+    source_cache = PackageSourceCache(ctx.preferred_environment)
+
+    tqdm.write(colored(f"[*] Preparing...", attrs=["bold"]))
+
+    for name, targets in tqdm([parse_package_reference(package, all_targets) for package in args.packages]):
+        if name not in source_cache.get_package_names():
+            tqdm.write(colored(f"[*] {name} not found for {target}, skipping...", attrs=["bold"]))
+            continue
+        srcinfo = source_cache.get_package_by_name(name, targets[0])
+        if "any" in srcinfo["arch"]:
+            package_pairs.append((name, "any"))
+        else:
+            for target in targets:
+                if target.split("/")[1] in srcinfo["arch"]:
+                    package_pairs.append((name, target))
+                else:
+                    tqdm.write(colored(f"[*] {name} not supported on {target}, skipping...", attrs=["bold"]))
+                    continue
+
+    for package, target in tqdm(package_pairs):
+        tqdm.write(colored(f"[*] Bumping {package} for {target}...", attrs=["bold"]))
+        env = ctx.preferred_environment
+        package_path = str(resolve_package_path(package, env.path))
+
+        if package_path not in package_paths:
+            makepkg_args = ["cd", str(env.root / package_path), "&&", "makepkg", "-o", "-d", "--noconfirm", "--skippgpcheck"]
+            makepkg_args.append(package)
+
+            result = env.run(makepkg_args, check=True)
+
+            package_paths[package_path] = True
+
 def cmd_build(ctx, args):
     all_targets = list(ctx.environments.keys())
     package_caches = {}
