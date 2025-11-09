@@ -2,6 +2,7 @@
 #
 # SPDX-FileContributor: Adrian "asie" Siekierka, 2023
 
+from .cmd.autobuild import cmd_autobuild
 from .cmd.build import cmd_build
 from .cmd.build_bootstrap import cmd_build_bootstrap
 from .cmd.copy_anyarchs import cmd_copy_anyarchs
@@ -60,6 +61,9 @@ argp_build = subparsers.add_parser('build', help='Build packages.')
 argp_build.add_argument('packages', metavar='package', type=str, nargs='*', help='Requested packages. Format: package_name[@target1[,target2...]]')
 argp_build.add_argument('-k', '--keep', dest='keep', action='store_true', help='Keep the old version of the package.')
 argp_build.set_defaults(func=cmd_build)
+
+argp_autobuild = subparsers.add_parser('autobuild', help='Build all changed packages since last successful call to autobuild.')
+argp_autobuild.set_defaults(func=cmd_autobuild)
 
 argp_build_bootstrap = subparsers.add_parser('build-bootstrap', help='Build bootstraps.')
 argp_build_bootstrap.add_argument('targets', metavar='target', type=str, nargs='*', help='Requested targets.')
