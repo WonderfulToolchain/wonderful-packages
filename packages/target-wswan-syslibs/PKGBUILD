@@ -4,7 +4,7 @@
 
 pkgname=target-wswan-syslibs
 _pkgver=0.2.0
-pkgver=0.2.0.r230.db98aa5
+pkgver=0.2.0.r231.688baf0
 pkgrel=1
 epoch=
 pkgdesc="WSwan target system libraries"
@@ -19,7 +19,7 @@ options=(!strip)
 
 . "/wf/config/runtime-env-vars.sh"
 
-. "../templates/git-pkgver.PKGBUILD"
+. "/wf/packages/templates/git-pkgver.PKGBUILD"
 
 prepare() {
 	cd "$pkgname"

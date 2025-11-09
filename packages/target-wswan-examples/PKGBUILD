@@ -5,7 +5,7 @@
 target=wswan
 pkgname=target-wswan-examples
 _pkgver=0.2.0
-pkgver=0.2.0.r41.655f3f9
+pkgver=0.2.0.r42.9ea622b
 pkgrel=1
 epoch=
 pkgdesc="WSwan target examples"
@@ -19,5 +19,5 @@ options=(!strip)
 
 . "/wf/config/runtime-env-vars.sh"
 
-. "../templates/git-pkgver.PKGBUILD"
-. "../templates/wf-examples.PKGBUILD"
+. "/wf/packages/templates/git-pkgver.PKGBUILD"
+. "/wf/packages/templates/wf-examples.PKGBUILD"
