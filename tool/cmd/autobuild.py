@@ -46,7 +46,8 @@ def cmd_autobuild(ctx, args):
     unique_changed_packages = [x for x in changed_packages if x not in visited_packages and not visited_packages.add(x)]
     print(colored(f"[*] Found {len(unique_changed_packages)} changed packages.", attrs=["bold"]))
 
-    cmd_build(ctx, SimpleNamespace({"packages": unique_changed_packages}))
+    if not args.skip:
+        cmd_build(ctx, SimpleNamespace({"packages": unique_changed_packages}))
      
     print(colored(f"[*] Building complete!", attrs=["bold"]))    
     rev_update()

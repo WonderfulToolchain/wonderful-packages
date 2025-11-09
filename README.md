@@ -25,13 +25,16 @@ The build system is not well tested outside of my own computers, so the steps ma
 
 ### Linux (recommended)
 
-Arch Linux on an x86_64 or AArch64 machine is recommended. `python-uv`, `podman`, `qemu-user-static` and `qemu-user-static-binfmt` should be installed, probably among some others.
+Arch Linux on an x86_64 or AArch64 machine is recommended.
+
+* On Arch Linux, `python-uv`, `podman`, `qemu-user-static` and `qemu-user-static-binfmt` should be installed, probably among some others.
+* On Debian, `pipx` + `pipx install uv`, `qemu-user-binfmt`, `qemu-user-static`.
 
 Some additional configuration steps have to be undertaken:
 
 * Make sure to install `qemu-user-static-binfmt` and not `qemu-user-binfmt`; otherwise, podman will error with `exec container process (missing dynamic library?) '/bin/sh': No such file or directory`.
 * For building on non-native architectures, the QEMU static interpreter has to run with root permissions. Not doing so will lead to an `sudo: effective uid is not 0, is /usr/bin/sudo on a file system with the 'nosuid' option set or an NFS file system without root privileges?` error. On Arch Linux, this can be resolved using the following steps:
-  1. Edit the following files to replace the trailing flag `F` with `FC`, or `FP` with `FPC`:
+  1. Edit the following files to replace the trailing flag `F` with `FOC`, or `FP` with `FPOC`:
     * `/usr/lib/binfmt.d/qemu-arm-static.conf`
     * `/usr/lib/binfmt.d/qemu-aarch64-static.conf`
     * etc.

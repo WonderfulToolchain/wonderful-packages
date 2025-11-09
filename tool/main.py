@@ -63,6 +63,7 @@ argp_build.add_argument('-k', '--keep', dest='keep', action='store_true', help='
 argp_build.set_defaults(func=cmd_build)
 
 argp_autobuild = subparsers.add_parser('autobuild', help='Build all changed packages since last successful call to autobuild.')
+argp_autobuild.add_argument('-s', '--skip', dest='skip', action='store_true', help='Skip missing commits.')
 argp_autobuild.set_defaults(func=cmd_autobuild)
 
 argp_build_bootstrap = subparsers.add_parser('build-bootstrap', help='Build bootstraps.')
