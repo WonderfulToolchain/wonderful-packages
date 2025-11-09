@@ -7,6 +7,7 @@ from ..package import PackageBinaryCache, PackageSourceCache, resolve_package_pa
 from pathlib import Path
 import re
 import shutil
+import subprocess
 from termcolor import colored
 from tqdm import tqdm
 
@@ -29,15 +30,12 @@ def parse_package_reference(name, all_targets):
     else:
         return name, all_targets
 
-def cmd_bump(ctx, args):
+def prepare_package_pairs(ctx, packages, source_cache):
     all_targets = list(ctx.environments.keys())
     package_pairs = []
-    package_paths = {}
-    source_cache = PackageSourceCache(ctx.preferred_environment)
-
     tqdm.write(colored(f"[*] Preparing...", attrs=["bold"]))
 
-    for name, targets in tqdm([parse_package_reference(package, all_targets) for package in args.packages]):
+    for name, targets in tqdm([parse_package_reference(package, all_targets) for package in packages]):
         if name not in source_cache.get_package_names():
             tqdm.write(colored(f"[*] {name} not found for {target}, skipping...", attrs=["bold"]))
             continue
@@ -51,53 +49,52 @@ def cmd_bump(ctx, args):
                 else:
                     tqdm.write(colored(f"[*] {name} not supported on {target}, skipping...", attrs=["bold"]))
                     continue
+    
+    return package_pairs
+
+def cmd_bump(ctx, args):
+    all_targets = list(ctx.environments.keys())
+    source_cache = PackageSourceCache(ctx.preferred_environment)
+
+    package_pairs = prepare_package_pairs(ctx, args.packages, source_cache)
+    package_paths = {}
 
     for package, target in tqdm(package_pairs):
         tqdm.write(colored(f"[*] Bumping {package} for {target}...", attrs=["bold"]))
         env = ctx.preferred_environment
         package_path = str(resolve_package_path(package, env.path))
+        package_envpath = str(env.root / package_path)
 
         if package_path not in package_paths:
-            makepkg_args = ["cd", str(env.root / package_path), "&&", "makepkg", "-o", "-d", "--noconfirm", "--skippgpcheck"]
+            makepkg_args = ["cd", package_envpath, "&&", "makepkg", "-o", "-d", "--noconfirm", "--skippgpcheck"]
             makepkg_args.append(package)
 
-            result = env.run(makepkg_args, check=True)
+            env.run(makepkg_args, check=True)
+            subprocess.run(["git", "add", "--all", package_path], check=True)
 
             package_paths[package_path] = True
 
 def cmd_build(ctx, args):
     all_targets = list(ctx.environments.keys())
-    package_caches = {}
-    package_pairs = []
     source_cache = PackageSourceCache(ctx.preferred_environment)
+
+    package_pairs = prepare_package_pairs(ctx, args.packages, source_cache)
+    package_caches = {}
     repo_updates = {}
 
-    tqdm.write(colored(f"[*] Preparing...", attrs=["bold"]))
     for target in all_targets:
         package_caches[target] = PackageBinaryCache(target)
         if package_caches[target].init_db():
             repo_updates[target] = []
 
-    for name, targets in tqdm([parse_package_reference(package, all_targets) for package in args.packages]):
-        if name not in source_cache.get_package_names():
-            tqdm.write(colored(f"[*] {name} not found for {target}, skipping...", attrs=["bold"]))
-            continue
-        srcinfo = source_cache.get_package_by_name(name, targets[0])
-        if "any" in srcinfo["arch"]:
-            package_pairs.append((name, "any"))
-        else:
-            for target in targets:
-                if target.split("/")[1] in srcinfo["arch"]:
-                    package_pairs.append((name, target))
-                else:
-                    tqdm.write(colored(f"[*] {name} not supported on {target}, skipping...", attrs=["bold"]))
-                    continue
-
     for package, target in tqdm(package_pairs):
         tqdm.write(colored(f"[*] Building {package} for {target}...", attrs=["bold"]))
         env = ctx.preferred_environment if target == "any" else ctx.environments[target]
 
-        makepkg_args = ["cd", str(env.root / str(resolve_package_path(package, env.path))), "&&", "makepkg", "-C", "--clean", "--syncdeps", "--noconfirm", "--skippgpcheck"]
+        package_path = str(resolve_package_path(package, env.path))
+        package_envpath = str(env.root / package_path)
+
+        makepkg_args = ["cd", package_envpath, "&&", "makepkg", "-C", "--clean", "--syncdeps", "--noconfirm", "--skippgpcheck"]
         if args.force:
             makepkg_args.append("-f")
         makepkg_args.append(package)
