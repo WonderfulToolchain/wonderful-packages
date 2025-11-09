@@ -60,7 +60,19 @@ def cmd_build(ctx, args):
     for package, target in tqdm(package_pairs):
         tqdm.write(colored(f"[*] Building {package} for {target}...", attrs=["bold"]))
         env = ctx.preferred_environment if target == "any" else ctx.environments[target]
-        result = env.run(["cd", str(env.root / str(resolve_package_path(package, env.path))), "&&", "makepkg", "-C", "--clean", "--syncdeps", "--force", "--noconfirm", "--skippgpcheck", package], check=True)
+
+        makepkg_args = ["cd", str(env.root / str(resolve_package_path(package, env.path))), "&&", "makepkg", "-C", "--clean", "--syncdeps", "--noconfirm", "--skippgpcheck"]
+        if args.force:
+            makepkg_args.append("-f")
+        makepkg_args.append(package)
+
+        result = env.run(makepkg_args)
+        if result.returncode != 0:
+            # Ignore the "already built" error code
+            if result.returncode == 13:
+                continue
+            raise Exception(f"makepkg returned non-zero exit status {result.returncode}")
+
         package_names = source_cache.get_package_by_name(package, target)["names"]
 
         for package_name in package_names:

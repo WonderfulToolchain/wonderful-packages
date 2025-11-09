@@ -59,6 +59,7 @@ argp_mirror.set_defaults(func=cmd_mirror)
 
 argp_build = subparsers.add_parser('build', help='Build packages.')
 argp_build.add_argument('packages', metavar='package', type=str, nargs='*', help='Requested packages. Format: package_name[@target1[,target2...]]')
+argp_build.add_argument('-f', '--force', dest='force', action='store_true', help='Overwrite an existing build of the package.')
 argp_build.add_argument('-k', '--keep', dest='keep', action='store_true', help='Keep the old version of the package.')
 argp_build.set_defaults(func=cmd_build)
 
