@@ -50,6 +50,6 @@ RUN sed -E -i -e "s/-pacman/-\/opt\/wonderful\/bin\/wf-pacman.exe/g" /root/.wine
 RUN mkdir -p /root/.wine/drive_c/msys64/opt/wonderful/
 ADD https://wonderful.asie.pl/bootstrap/wf-bootstrap-windows-x86_64.tar.gz /root/.wine/drive_c/msys64/opt/wonderful/
 RUN cd /root/.wine/drive_c/msys64/opt/wonderful/ && \
-    tar xzvf wf-bootstrap-windows-x86_64.tar.gz && \
+    tar xzf wf-bootstrap-windows-x86_64.tar.gz --no-same-owner && \
     rm wf-bootstrap-windows-x86_64.tar.gz
 RUN msys2 -c "/opt/wonderful/bin/wf-pacman.exe -Syu --noconfirm"
