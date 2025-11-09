@@ -16,6 +16,7 @@ def build_package(name, targets):
 def parse_package_reference(name, all_targets):
     if "@" in name:
         name, named_targets = name.split("@")
+        named_targets = named_targets.split(",")
         filtered_targets = []
         for target in all_targets:
             if target in named_targets:

@@ -40,6 +40,16 @@ WORKDIR /root/.wine/drive_c/msys64/home/root
 CMD ["msys2"]
 
 # Wonderful toolchain additions
+## Install dependencies
 RUN msys2 -c "pacman.exe -Sy --noconfirm mingw-w64-ucrt-x86_64-ca-certificates mingw-w64-ucrt-x86_64-python mingw-w64-ucrt-x86_64-python-uv autoconf autoconf-archive automake base-devel bison flex git libtool lld mingw-w64-ucrt-x86_64-autotools mingw-w64-ucrt-x86_64-cmake mingw-w64-ucrt-x86_64-lua-luarocks mingw-w64-ucrt-x86_64-meson mingw-w64-ucrt-x86_64-toolchain nasm ninja"
+## Configure package build environment
 COPY misc/windows/makepkg.conf /root/.wine/drive_c/msys64/etc
 RUN ln -s /wf /root/.wine/drive_c/msys64/wf
+RUN sed -E -i -e "s/-pacman/-\/opt\/wonderful\/bin\/wf-pacman.exe/g" /root/.wine/drive_c/msys64/usr/bin/makepkg
+## Install Wonderful
+RUN mkdir -p /root/.wine/drive_c/msys64/opt/wonderful/
+ADD https://wonderful.asie.pl/bootstrap/wf-bootstrap-windows-x86_64.tar.gz /root/.wine/drive_c/msys64/opt/wonderful/
+RUN cd /root/.wine/drive_c/msys64/opt/wonderful/ && \
+    tar xzvf wf-bootstrap-windows-x86_64.tar.gz && \
+    rm wf-bootstrap-windows-x86_64.tar.gz
+RUN msys2 -c "/opt/wonderful/bin/wf-pacman.exe -Syu --noconfirm"

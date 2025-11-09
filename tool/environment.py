@@ -47,12 +47,13 @@ class NativeLinuxEnvironment(Environment):
         return subprocess.run(args, user="wfbuilder", **kwargs)
         
 class ContainerEnvironment(Environment):
-    def __init__(self, os, arch, container_name, user, shell):
+    def __init__(self, os, arch, container_name, user, shell, pacman):
         super().__init__(os, arch, "/wf")
         self.container_name = container_name
         self.container_built = False
         self.user = user
         self.shell = shell
+        self.pacman = pacman
 
     def run(self, args, **kwargs):
         if not self.container_built:
@@ -71,14 +72,14 @@ class ContainerEnvironment(Environment):
             if not ("as_root" in kwargs and kwargs["as_root"]):
                 cmd = cmd + " " + self.user
         if not ("skip_package_sync" in kwargs and kwargs["skip_package_sync"]):
-            cmd = "pacman -Syu && " + cmd
+            cmd = self.pacman + " -Syu && " + cmd
         clean_custom_keys(kwargs)
         return subprocess.run(["podman", "run", "-i", "-v", f"{cwd}:/wf", f"wonderful-{self.container_name}", self.shell, "-c", cmd], **kwargs)
 
 class ContainerLinuxEnvironment(ContainerEnvironment):
     def __init__(self, arch, container_name):
-        super().__init__("linux", arch, container_name, "wfbuilder", "sh")
+        super().__init__("linux", arch, container_name, "wfbuilder", "sh", "pacman")
 
 class ContainerWindowsEnvironment(ContainerEnvironment):
     def __init__(self, arch, container_name):
-        super().__init__("windows", arch, container_name, None, "msys2")
+        super().__init__("windows", arch, container_name, None, "msys2", "/opt/wonderful/bin/wf-pacman.exe")
