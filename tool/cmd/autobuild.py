@@ -47,7 +47,7 @@ def cmd_autobuild(ctx, args):
     print(colored(f"[*] Found {len(unique_changed_packages)} changed packages.", attrs=["bold"]))
 
     if not args.skip:
-        cmd_build(ctx, SimpleNamespace({"packages": unique_changed_packages}))
+        cmd_build(ctx, SimpleNamespace({"packages": unique_changed_packages, "force": False, "keep": False}))
      
     print(colored(f"[*] Building complete!", attrs=["bold"]))    
     rev_update()
