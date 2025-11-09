@@ -1,6 +1,6 @@
 # If you change the OS version here, make sure to bump up and rebuild runtime-gcc-libs.
 # If the musl version changes drastically, it may also be a good idea to review runtime-musl.
-FROM docker.io/riscv64/alpine:3.22
+FROM alpine:3.22
 # Install packages:
 # - compiler/make/etc. [build-base]
 # - tools for building/installing packages [fakeroot git pacman pacman-makepkg curl xz zstd sudo cmake patchelf pkgconf coreutils autoconf automake gettext gettext-dev libtool]
@@ -16,9 +16,9 @@ FROM docker.io/riscv64/alpine:3.22
 RUN apk add --no-cache build-base fakeroot git pacman pacman-makepkg curl xz zstd sudo cmake patchelf pkgconf coreutils autoconf automake gettext gettext-dev libtool nasm texinfo bison flex meson linux-headers lld ninja freeimage-dev autoconf-archive luarocks5.4 python3 py3-pillow
 # Configure pacman/makepkg
 RUN mkdir -p /opt/wonderful/pacman/db
-COPY makepkg.conf pacman.conf /etc
+COPY containers/linux/x86_64/makepkg.conf containers/linux/x86_64/pacman.conf /etc
 # Patch makepkg to fix git clone bug
-COPY pacman-7.0.0-makepkg-fix-git.patch /tmp
+COPY containers/linux/pacman-7.0.0-makepkg-fix-git.patch /tmp
 RUN patch -d /usr/share/makepkg -p3 -i /tmp/pacman-7.0.0-makepkg-fix-git.patch
 RUN rm /tmp/pacman-7.0.0-makepkg-fix-git.patch
 # wf-pacman/gpgme workaround: if no pkgconfig directory exists in any of the library

@@ -8,23 +8,54 @@ Repository containing the build scripts and infrastructure for Wonderful's Pacma
 
 | Target | Description | Container |
 | - | - | - |
-| linux/x86_64 | Linux, x86_64 | x86_64 |
-| linux/aarch64 | Linux, AArch64 | aarch64 |
-| windows/x86_64 | Windows, x86_64 | N/A | 
+| linux/x86_64 | Linux, x86_64 | linux/x86_64 |
+| linux/aarch64 | Linux, AArch64 | linux/aarch64 |
+| windows/x86_64 | Windows, x86_64 | windows/x86_64 | 
 
 ### Unsupported
 
 | Target | Description | Container |
 | - | - | - |
-| linux/armv6h | Linux, ARMv6+, hard float | arm32v6 |
-| linux/riscv64 | Linux, RISC-V | riscv64 |
+| linux/armv6h | Linux, ARMv6+, hard float | linux/arm32v6 |
+| linux/riscv64 | Linux, RISC-V | linux/riscv64 |
 
-## Guide
+## Installation
 
-As the packaging system is intended for internal use only, the list of tested setups is highly specific:
+The build system is not well tested outside of my own computers, so the steps may not be fully complete. Caveat emptor.
 
-* For Linux development, Arch Linux on an x86_64 or AArch64 machine is recommended. `python-uv`, `podman`, `qemu-user-static` and `qemu-user-static-binfmt` should be installed, probably among some others.
-* For Windows development, MSYS2 should be installed. Unlike Linux, development is not containerized; as such, all packages' build dependencies must be installed by the user. Windows-specific instructions are provided at the end of the guide.
+### Linux (recommended)
+
+Arch Linux on an x86_64 or AArch64 machine is recommended. `python-uv`, `podman`, `qemu-user-static` and `qemu-user-static-binfmt` should be installed, probably among some others.
+
+Some additional configuration steps have to be undertaken:
+
+* Make sure to install `qemu-user-static-binfmt` and not `qemu-user-binfmt`; otherwise, podman will error with `exec container process (missing dynamic library?) '/bin/sh': No such file or directory`.
+* For building on non-native architectures, the QEMU static interpreter has to run with root permissions. Not doing so will lead to an `sudo: effective uid is not 0, is /usr/bin/sudo on a file system with the 'nosuid' option set or an NFS file system without root privileges?` error. On Arch Linux, this can be resolved using the following steps:
+  1. Edit the following files to replace the trailing flag `F` with `FC`, or `FP` with `FPC`:
+    * `/usr/lib/binfmt.d/qemu-arm-static.conf`
+    * `/usr/lib/binfmt.d/qemu-aarch64-static.conf`
+    * etc.
+  2. Run `systemctl restart systemd-binfmt` to apply changes.
+* For building on MSYS2 via WINE and Docker on recent CPUs, the Linux kernel has to be launched with PKU/PKRU disabled due to a Cygwin bug by passing `nopku` on its command line. See [msys2-runtime/#295](https://github.com/msys2/msys2-runtime/issues/295) for more information.
+
+### Windows
+
+Manual installation instructions:
+
+1. Install the latest version of MSYS2.
+2. The repository must be installed to `/wf`. While `pkgtool` is directory-agnostic, the `PKGBUILD` scripts are not.
+3. Use the UCRT64 environment to work with `pkgtool`.
+4. Install UCRT64 Python and SSL certificates (required for `mirror`): `pacman -S mingw-w64-ucrt-x86_64-ca-certificates mingw-w64-ucrt-x86_64-python mingw-w64-ucrt-x86_64-python-uv`.
+5. Install build dependencies (this list is probably not 100% complete): `pacman -S autoconf autoconf-archive automake base-devel bison flex git libtool lld mingw-w64-ucrt-x86_64-autotools mingw-w64-ucrt-x86_64-cmake mingw-w64-ucrt-x86_64-lua-luarocks mingw-w64-ucrt-x86_64-meson mingw-w64-ucrt-x86_64-toolchain nasm ninja`.
+6. Copy `misc/windows/makepkg.conf` to `/etc/makepkg.conf`.
+7. To fix `luarocks` not being able to create directories, you will need to `luarocks install luafilesystem` first, while creating all the erroring directories manually. See [MINGW-packages/#12002](https://github.com/msys2/MINGW-packages/pull/12002).
+
+Notes:
+
+* `wf-pacman` is built with MSYS rather than UCRT64. This currently appears to require a separate, manual installation of uv via pip.
+* For an unknown reason, `wf-sox` expects `/msys64/usr/share/aclocal` to have the contents of `/usr/share/aclocal`.
+
+## Usage
 
 ### Downloading repositories
 
@@ -46,51 +77,21 @@ Example call:
 
 The `@x86_64` suffix can be used to narrow down a build to specific architectures. This is useful for quicker building and testing of in-development packages.
 
-### Building Linux bootstraps
+### Upgrading core components
+
+#### MSYS2
+
+After upgrading MSYS2, `runtime-gcc-libs` usually has to be updated. Failure to do so will lead to failures on trying to run EXEs in user installations.
+
+#### wf-pacman
 
 The Linux bootstraps are effectively self-contained repackagings of a pre-installed `wf-pacman` package, allowing easy end user installation.
 
     $ ./pkgtool build-bootstrap [targets...]
 
-### Installation details
-
-#### Linux
-
-Notes:
-
-* Make sure to install `qemu-user-static-binfmt` and not `qemu-user-binfmt`; otherwise, podman will error with `exec container process (missing dynamic library?) '/bin/sh': No such file or directory`.
-
-#### Windows
-
-Installation instructions:
-
-1. The repository must be installed to `/wf`. While `pkgtool` is directory-agnostic, the `PKGBUILD` scripts are not.
-2. Use the UCRT64 environment to work with `pkgtool`.
-3. Install UCRT64 Python and SSL certificates (required for `mirror`): `pacman -S mingw-w64-ucrt-x86_64-ca-certificates mingw-w64-ucrt-x86_64-python mingw-w64-ucrt-x86_64-python-uv`.
-4. Install build dependencies (this list is probably not 100% complete): `pacman -S autoconf autoconf-archive automake base-devel bison flex git libtool lld mingw-w64-ucrt-x86_64-autotools mingw-w64-ucrt-x86_64-cmake mingw-w64-ucrt-x86_64-lua-luarocks mingw-w64-ucrt-x86_64-meson mingw-w64-ucrt-x86_64-toolchain nasm ninja`.
-5. Copy `misc/windows/makepkg.conf` to `/etc/makepkg.conf`.
-6. To fix `luarocks` not being able to create directories, you will need to `luarocks install luafilesystem` first, while creating all the erroring directories manually. See [MINGW-packages/#12002](https://github.com/msys2/MINGW-packages/pull/12002).
-
-Notes:
-
-* `wf-pacman` is built with MSYS rather than UCRT64. This currently appears to require a separate, manual installation of uv via pip.
-* For an unknown reason, `wf-sox` expects `/msys64/usr/share/aclocal` to have the contents of `/usr/share/aclocal`.
-
 ### Additional reading
 
 * [File system hierarchy](https://wonderful.asie.pl/wiki/doku.php?id=design:filesystem_hierarchy)
-
-## Known issues
-
-### sudo: effective uid is not 0, is /usr/bin/sudo on a file system with the 'nosuid' option set or an NFS file system without root privileges?
-
-On Arch Linux, this can be resolved using the following steps:
-
-1. Edit the following files to replace the trailing flag `F` with `FOC`, or `FP` with `FPOC`:
-  * `/usr/lib/binfmt.d/qemu-arm-static.conf`
-  * `/usr/lib/binfmt.d/qemu-aarch64-static.conf`
-  * etc.
-2. Run `systemctl restart systemd-binfmt` to apply changes.
 
 ## Forking
 

@@ -46,11 +46,13 @@ class NativeLinuxEnvironment(Environment):
         clean_custom_keys(kwargs)
         return subprocess.run(args, user="wfbuilder", **kwargs)
         
-class ContainerLinuxEnvironment(Environment):
-    def __init__(self, arch, container_name):
-        super().__init__("linux", arch, "/wf")
+class ContainerEnvironment(Environment):
+    def __init__(self, os, arch, container_name, user, shell):
+        super().__init__(os, arch, "/wf")
         self.container_name = container_name
         self.container_built = False
+        self.user = user
+        self.shell = shell
 
     def run(self, args, **kwargs):
         if not self.container_built:
@@ -59,16 +61,24 @@ class ContainerLinuxEnvironment(Environment):
             arch = self.arch
             if arch.startswith("arm"):
                 arch = "arm"
-            subprocess.run(f"podman build --arch {arch} -t wonderful-{self.container_name} .", shell=True, check=True,
-                stdout=subprocess.DEVNULL,
-                cwd=f"containers/{self.container_name}")
+            subprocess.run(f"podman build --arch {arch} -t wonderful-{self.container_name} -f containers/{self.container_name}/Containerfile .", shell=True, check=True,
+                stdout=subprocess.DEVNULL)
             self.container_built = True
         cwd = os.getcwd()
         cmd = " ".join(args)
-        cmd = "su -c '" + cmd + "'"
-        if not ("as_root" in kwargs and kwargs["as_root"]):
-            cmd = cmd + " wfbuilder"
+        if self.user is not None:
+            cmd = "su -c '" + cmd + "'"
+            if not ("as_root" in kwargs and kwargs["as_root"]):
+                cmd = cmd + " " + self.user
         if not ("skip_package_sync" in kwargs and kwargs["skip_package_sync"]):
             cmd = "pacman -Syu && " + cmd
         clean_custom_keys(kwargs)
-        return subprocess.run(["podman", "run", "-i", "-v", f"{cwd}:/wf", f"wonderful-{self.container_name}", "sh", "-c", cmd], **kwargs)
+        return subprocess.run(["podman", "run", "-i", "-v", f"{cwd}:/wf", f"wonderful-{self.container_name}", self.shell, "-c", cmd], **kwargs)
+
+class ContainerLinuxEnvironment(ContainerEnvironment):
+    def __init__(self, arch, container_name):
+        super().__init__("linux", arch, container_name, "wfbuilder", "sh")
+
+class ContainerWindowsEnvironment(ContainerEnvironment):
+    def __init__(self, arch, container_name):
+        super().__init__("windows", arch, container_name, None, "msys2")

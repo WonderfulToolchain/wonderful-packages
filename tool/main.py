@@ -6,7 +6,7 @@ from .cmd.build import cmd_build
 from .cmd.build_bootstrap import cmd_build_bootstrap
 from .cmd.copy_anyarchs import cmd_copy_anyarchs
 from .cmd.mirror import cmd_mirror
-from .environment import NativeLinuxEnvironment, NativeWindowsEnvironment, ContainerLinuxEnvironment
+from .environment import NativeLinuxEnvironment, NativeWindowsEnvironment, ContainerLinuxEnvironment, ContainerWindowsEnvironment
 import addict
 import argparse
 import platform
@@ -35,10 +35,11 @@ if platform.system() == "Windows" or platform.system().startswith("MSYS_NT"):
     if platform.machine() == "AMD64" or platform.machine() == "x86_64":
         add_environment(NativeWindowsEnvironment("x86_64"), True)
 elif platform.system() == "Linux":
-    add_environment(ContainerLinuxEnvironment("x86_64", "x86_64"), platform.machine() == "AMD64" or platform.machine() == "x86_64")
-    add_environment(ContainerLinuxEnvironment("aarch64", "aarch64"), not (platform.machine() == "AMD64" or platform.machine() == "x86_64"))
-    add_environment(ContainerLinuxEnvironment("riscv64", "riscv64"), False)
-    add_environment(ContainerLinuxEnvironment("armv6h", "arm32v6"), False)
+    add_environment(ContainerLinuxEnvironment("x86_64", "linux/x86_64"), platform.machine() == "AMD64" or platform.machine() == "x86_64")
+    add_environment(ContainerWindowsEnvironment("x86_64", "windows/x86_64"), False)
+    add_environment(ContainerLinuxEnvironment("aarch64", "linux/aarch64"), not (platform.machine() == "AMD64" or platform.machine() == "x86_64"))
+    add_environment(ContainerLinuxEnvironment("riscv64", "linux/riscv64"), False)
+    add_environment(ContainerLinuxEnvironment("armv6h", "linux/arm32v6"), False)
 
 if ctx.preferred_environment is None:
     raise Exception("unsupported platform: " + platform.system() + "/" + platform.machine())
