@@ -5,7 +5,7 @@
 target=wswan
 pkgname=target-wswan-examples
 _pkgver=0.2.0
-pkgver=0.2.0.r42.9ea622b
+pkgver=0.2.0.r43.d3d4320
 pkgrel=1
 epoch=
 pkgdesc="WSwan target examples"
