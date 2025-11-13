@@ -9,6 +9,9 @@ from tqdm import tqdm
 from types import SimpleNamespace
 import os, subprocess, sys
 
+def is_valid_package(pkgname):
+    return (Path("packages") / pkgname / "PKGBUILD").exists()
+
 def rev_get_current():
     result = subprocess.run(["git", "rev-parse", "HEAD"], check=True, stdout=subprocess.PIPE)
     return result.stdout.decode("utf-8").strip()
@@ -43,7 +46,7 @@ def cmd_autobuild(ctx, args):
 
     changed_packages = [x.split("/")[1] for x in filter(lambda x: x.startswith("packages/"), rev_get_changed_files(previous_rev, current_rev))]
     visited_packages = set()
-    unique_changed_packages = [x for x in changed_packages if x not in visited_packages and not visited_packages.add(x)]
+    unique_changed_packages = [x for x in changed_packages if x not in visited_packages and not visited_packages.add(x) and is_valid_package(x)]
     print(colored(f"[*] Found {len(unique_changed_packages)} changed packages.", attrs=["bold"]))
 
     if not args.skip:
