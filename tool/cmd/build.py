@@ -98,6 +98,7 @@ def cmd_build(ctx, args):
         if args.force:
             makepkg_args.append("-f")
         makepkg_args.append(package)
+        makepkg_args += ["&&", "(", "rm", "-r", "pkg", "||", "true", ")"]
 
         result = env.run(makepkg_args)
         if result.returncode != 0:
