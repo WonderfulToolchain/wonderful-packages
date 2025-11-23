@@ -2,6 +2,7 @@
 #
 # SPDX-FileContributor: Adrian "asie" Siekierka, 2023
 
+lastchange=20251122
 pkgrel=1
 WF_TOOLCHAIN=gcc-arm-none-eabi
 WF_TARGET=arm-none-eabi
