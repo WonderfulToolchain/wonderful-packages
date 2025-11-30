@@ -1,0 +1,46 @@
+# SPDX-License-Identifier: CC0-1.0
+#
+# SPDX-FileContributor: Adrian "asie" Siekierka, 2023
+
+pkgname=target-wswan-athenaos
+_pkgver=0.2.0
+pkgver=0.1.3.r172.183353b
+pkgrel=1
+epoch=
+pkgdesc="WWitch compatible OS files"
+arch=(any)
+url="https://github.com/OpenWitch/AthenaOS"
+license=("zlib")
+source=("$pkgname::git+https://github.com/OpenWitch/AthenaOS#branch=main")
+depends=()
+makedepends=(toolchain-gcc-ia16-elf-binutils toolchain-gcc-ia16-elf-gcc toolchain-gcc-ia16-elf-gcc-libs wf-tools target-wswan-syslibs)
+sha256sums=('SKIP')
+options=(!strip)
+
+. "/wf/config/runtime-env-vars.sh"
+
+. "/wf/packages/templates/git-pkgver.PKGBUILD"
+
+athenaos_variants=(rom smallrom)
+
+prepare() {
+	cd "$pkgname"
+	git submodule update --init --recursive
+}
+
+build() {
+	CFLAGS=""
+	cd "$pkgname"
+	for variant in "${athenaos_variants[@]}"; do
+		make CONFIG=config/config."$variant".mk
+	done
+}
+
+package() {
+	cd "$pkgname"
+	mkdir -p "$pkgdir$WF_DESTDIR"/target/wwitch/fbin
+	for variant in "${athenaos_variants[@]}"; do
+		cp dist/AthenaBIOS-*-"$variant".raw "$pkgdir$WF_DESTDIR"/target/wwitch/fbin/athenabios."$variant".raw
+		cp dist/AthenaOS-*-"$variant".raw "$pkgdir$WF_DESTDIR"/target/wwitch/fbin/athenaos."$variant".raw
+	done
+}
