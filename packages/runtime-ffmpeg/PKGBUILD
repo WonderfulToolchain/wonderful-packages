@@ -4,7 +4,7 @@
 
 # TODO: trim down decoder/parser/demuxer/bsf list
 pkgname=(runtime-ffmpeg runtime-ffmpeg-dev)
-pkgver=7.1.1
+pkgver=8.0.1
 pkgrel=1
 epoch=
 pkgdesc="ffmpeg video library"
@@ -17,7 +17,7 @@ source=(
 depends=(runtime-musl)
 makedepends=(runtime-musl-dev)
 sha256sums=(
-	"SKIP"
+	"05ee0b03119b45c0bdb4df654b96802e909e0a752f72e4fe3794f487229e5a41"
 )
 
 . "/wf/config/runtime-env-vars.sh"
@@ -42,7 +42,7 @@ build() {
 		--disable-programs --disable-network \
 		--disable-autodetect --disable-iconv \
 		--disable-doc \
-		--disable-avfilter --disable-postproc \
+		--disable-avfilter \
 		--disable-everything \
 		--enable-decoder=ffv1,ffvhuff,huffyuv,vp8,vp9 \
 		--enable-decoder=mjpeg,bmp,gif,png,flac,vorbis,theora \
