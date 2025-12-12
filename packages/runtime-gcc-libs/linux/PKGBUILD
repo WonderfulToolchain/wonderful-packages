@@ -3,8 +3,8 @@
 # SPDX-FileContributor: Adrian "asie" Siekierka, 2023
 
 pkgname=(runtime-gcc-libs)
-pkgver=0.3.22
-pkgrel=2
+pkgver=0.3.23
+pkgrel=1
 epoch=
 pkgdesc="GCC runtime libraries"
 arch=("i686" "x86_64" "armv6h" "aarch64")
