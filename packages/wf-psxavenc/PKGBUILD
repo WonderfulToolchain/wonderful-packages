@@ -3,8 +3,8 @@
 # SPDX-FileContributor: Adrian "asie" Siekierka, 2023
 
 pkgname=wf-psxavenc
-_pkgver=0.3.0
-pkgver=0.3.0.r34.ed4821f
+_pkgver=0.3.1
+pkgver=0.3.1.r42.bdc24e8
 pkgrel=1
 epoch=
 pkgdesc="PS1 audio/video encoding tool"
