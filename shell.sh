@@ -6,7 +6,5 @@
 PKGARCH=$1
 ROOT_DIR=$(pwd)
 
-pushd containers/"$PKGARCH"/
-podman build -t wonderful-"$PKGARCH" .
+podman build -t wonderful-"$PKGARCH" -f containers/"$PKGARCH"/Containerfile .
 podman run -it -v "$ROOT_DIR":/wf wonderful-"$PKGARCH" bash
-popd
