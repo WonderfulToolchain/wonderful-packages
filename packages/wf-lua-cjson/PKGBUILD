@@ -3,9 +3,9 @@
 # SPDX-FileContributor: Adrian "asie" Siekierka, 2023
 
 pkgname=(wf-lua-cjson)
-_pkgver=2.10.12
-pkgver=2.10.12.r303.2bfad8f
-pkgrock=lua-cjson-2.1.0.12-1
+_pkgver=2.10.14
+pkgver=2.10.14.r310.35bac3c
+pkgrock=lua-cjson-2.1.0.14-1
 pkgrel=1
 epoch=
 pkgdesc="Lua JSON library"
@@ -21,11 +21,6 @@ sha256sums=("SKIP")
 
 . "../templates/git-pkgver.PKGBUILD"
 . "../templates/luarocks-package.PKGBUILD"
-
-prepare() {
-	cd "$pkgname"
-	sed -i -e "s/2\.1\.0\.11/2.1.0.12/g" "$pkgrock".rockspec
-}
 
 build() {
 	cd "$pkgname"
